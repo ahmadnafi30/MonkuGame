@@ -1,8 +1,8 @@
 package Entity.Monster;
 import java.util.*;
+import Entity.Battle;
 
-public abstract class Monster {
-
+public abstract class Monster implements Battle{
     // Attributes
     private String name;
     private int level;
@@ -56,23 +56,30 @@ public abstract class Monster {
         }
     }
     public void getAttacked(String attackType, Monster monster, ElementalAttack elementalAttack) {
+        /*
+         * "basic" for basic attack
+         * "special" for special attack
+         * "elemental" for elemental attack
+         */
+
+        int dmg = 0;
         switch (attackType.toLowerCase()) {
             case "basic":
-                healthPoint -= dmgFormula(monster, attackPower, attackType, null);
+                healthPoint -= dmg = dmgFormula(monster, attackPower, attackType, null);
                 break;
             
             case "special":
-                healthPoint -= dmgFormula(monster, spcAttackPower, attackType, null);
+                healthPoint -= dmg = dmgFormula(monster, spcAttackPower, attackType, null);
                 break;
             
             case "elemental":
-                healthPoint -= dmgFormula(monster, elemAttackPower, attackType, elementalAttack);
+                healthPoint -= dmg = dmgFormula(monster, elemAttackPower, attackType, elementalAttack);
                 break;
 
             default:
                 break;
         }
-        System.out.println(name + " took " + dmgFormula(monster, attackPower, attackType, null) + " damage!");
+        System.out.println(name + " took " + dmg + " damage!");
     }
 
     public void setAttributesMax(int monsterPhase){

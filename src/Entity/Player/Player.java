@@ -10,17 +10,10 @@ import javax.tools.JavaFileManager.Location;
 
 import Entity.Battle;
 import Entity.ItemInteract;
-import Entity.Item.BuffPotion;
-import Entity.Item.DefensivePotion;
-import Entity.Item.HealthPotion;
-import Entity.Item.Item;
-import Entity.Item.PoisonPotion;
-import Entity.Item.Teleportation;
+import Entity.Item.*;
 import Entity.Locations.HomeBase;
-import Entity.Monster.Monster;
-import Entity.NPC.ItemSeller;
-import Entity.NPC.NPC;
-import Entity.NPC.ProfessorPokemon;
+import Entity.Monster.*;
+import Entity.NPC.*;
 
 public class Player implements ItemInteract, Battle {
 
@@ -156,19 +149,19 @@ public class Player implements ItemInteract, Battle {
     }
 
     @Override
-    public void basicAttack() {
+    public void basicAttack(Monster enemy) {
         System.out.println("Player " + name + " uses a basic attack!");
         // Implementation of basic attack
     }
 
     @Override
-    public void specialAttack() {
+    public void specialAttack(Monster enemy) {
         System.out.println("Player " + name + " uses a special attack!");
         // Implementation of special attacksssssss
     }
 
     @Override
-    public void elementalAttack() {
+    public void elementalAttack(Monster enemy, ElementalAttack elementalAttack) {
         System.out.println("Player " + name + " uses an elemental attack!");
         // Implementation of elemental attack
     }

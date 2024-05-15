@@ -1,5 +1,7 @@
 package Entity.Monster;
 
+import Entity.Item.Item;
+
 public class AirType extends Monster {
 
     public AirType(String name, int monsterPhase, int maxMonsterPhase) {
@@ -39,5 +41,31 @@ public class AirType extends Monster {
     // New ability: Fly
     public void fly() {
         elementalAttacks.add(new ElementalAttack("Fly", 90, ElementType.AIR));
+    }
+
+    @Override
+    public void basicAttack(Monster enemy) {
+        enemy.getAttacked("basic", enemy, null);
+    }
+
+    @Override
+    public void specialAttack(Monster enemy) {
+        enemy.getAttacked("special", enemy, null);
+    }
+
+    @Override
+    public void elementalAttack(Monster enemy, ElementalAttack elementalAttack) {
+        enemy.getAttacked("elemental", enemy, elementalAttack);
+    }
+    @Override
+    public void useItem(Item item) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'useItem'");
+    }
+
+    @Override
+    public void flee() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'flee'");
     }
 }

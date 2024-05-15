@@ -1,4 +1,5 @@
 package Entity.Monster;
+import Entity.Item.Item;
 
 public class WaterType extends Monster {
 
@@ -44,5 +45,32 @@ public class WaterType extends Monster {
     // New ability: Scald
     public void scald() {
         elementalAttacks.add(new ElementalAttack("Scald", 80, ElementType.WATER));
+    }
+
+    @Override
+    public void basicAttack(Monster enemy) {
+        enemy.getAttacked("basic", enemy, null);
+    }
+
+    @Override
+    public void specialAttack(Monster enemy) {
+        enemy.getAttacked("special", enemy, null);
+    }
+
+    @Override
+    public void elementalAttack(Monster enemy, ElementalAttack elementalAttack) {
+        enemy.getAttacked("elemental", enemy, elementalAttack);
+    }
+
+    @Override
+    public void useItem(Item item) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'useItem'");
+    }
+
+    @Override
+    public void flee() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'flee'");
     }
 }

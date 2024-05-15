@@ -1,5 +1,7 @@
 package Entity.Monster;
 
+import Entity.Item.Item;
+
 public class FireType extends Monster {
 
     public FireType(String name, int monsterPhase, int maxMonsterPhase) {
@@ -44,5 +46,32 @@ public class FireType extends Monster {
     // New ability: Overheat
     public void overheat() {
         elementalAttacks.add(new ElementalAttack("Overheat", 130, ElementType.FIRE));
+    }
+
+    @Override
+    public void basicAttack(Monster enemy) {
+        enemy.getAttacked("basic", enemy, null);
+    }
+
+    @Override
+    public void specialAttack(Monster enemy) {
+        enemy.getAttacked("special", enemy, null);
+    }
+
+    @Override
+    public void elementalAttack(Monster enemy, ElementalAttack elementalAttack) {
+        enemy.getAttacked("elemental", enemy, elementalAttack);
+    }
+
+    @Override
+    public void useItem(Item item) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'useItem'");
+    }
+
+    @Override
+    public void flee() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'flee'");
     }
 }

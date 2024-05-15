@@ -1,6 +1,8 @@
 package Entity.Monster;
-public class IceType extends Monster{
 
+import Entity.Item.Item;
+
+public class IceType extends Monster{
     
     public IceType(String name, int monsterPhase, int maxMonsterPhase) {
         super(name, monsterPhase, "ICE", maxMonsterPhase);
@@ -48,5 +50,29 @@ public class IceType extends Monster{
     // New ability: Ice Shard
     public void iceShard() {
         elementalAttacks.add(new ElementalAttack("Ice Shard", 40, ElementType.ICE)); // Typically a priority move
+    }
+    @Override
+    public void basicAttack(Monster enemy) {
+        enemy.getAttacked("basic", enemy, null);
+    }
+
+    @Override
+    public void specialAttack(Monster enemy) {
+        enemy.getAttacked("special", enemy, null);
+    }
+
+    @Override
+    public void elementalAttack(Monster enemy, ElementalAttack elementalAttack) {
+        enemy.getAttacked("elemental", enemy, elementalAttack);
+    }
+    @Override
+    public void useItem(Item item) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'useItem'");
+    }
+    @Override
+    public void flee() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'flee'");
     }
 }

@@ -1,5 +1,7 @@
 package Entity.Monster;
 
+import Entity.Item.Item;
+
 public class EarthType extends Monster {
 
     public EarthType(String name, int monsterPhase, int maxMonsterPhase) {
@@ -44,5 +46,32 @@ public class EarthType extends Monster {
     // New ability: Earth Power
     public void earthPower() {
         elementalAttacks.add(new ElementalAttack("Earth Power", 90, ElementType.EARTH));
+    }
+
+    @Override
+    public void basicAttack(Monster enemy) {
+        enemy.getAttacked("basic", enemy, null);
+    }
+
+    @Override
+    public void specialAttack(Monster enemy) {
+        enemy.getAttacked("special", enemy, null);
+    }
+
+    @Override
+    public void elementalAttack(Monster enemy, ElementalAttack elementalAttack) {
+        enemy.getAttacked("elemental", enemy, elementalAttack);
+    }
+
+    @Override
+    public void useItem(Item item) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'useItem'");
+    }
+
+    @Override
+    public void flee() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'flee'");
     }
 }
