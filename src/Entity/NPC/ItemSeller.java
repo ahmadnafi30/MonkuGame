@@ -23,4 +23,22 @@ public class ItemSeller extends NPC implements ItemInteract {
     public void buyItem(String item) {
         // Logic to buy the item
     }
+
+    @Override
+    public void checkInventory() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'checkInventory'");
+    }
+
+    @Override
+    public void sellItem(Item itemsell, int quantity) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'sellItem'");
+    }
+
+    @Override
+    public void buyItem(Item itembuy, int quantity) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'buyItem'");
+    }
 }

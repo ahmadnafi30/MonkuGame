@@ -5,17 +5,26 @@ package Entity.NPC;
  */
 public abstract class NPC {
     
-    public String name;
-    public String job;
+    protected String name;
+    protected String job;
+
+    public String getName() {
+        return this.name;
+    }    
+
+    public String getJob() {
+        return this.job;
+    }
+
 
     public NPC(String name, String job) {
         this.name = name;
         this.job = job;
     }
 
-    public void doJob(){
+    // public void doJob(){
 
-    }
+    // };
 
     
 }
