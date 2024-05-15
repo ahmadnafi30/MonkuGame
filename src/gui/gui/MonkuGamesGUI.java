@@ -1,16 +1,19 @@
+package gui;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MonkuGamesGUI {
-    public static void main(String[] args) {
-        // Membuat frame utama
+
+    public MonkuGamesGUI() {
         JFrame frame = new JFrame("Monku Games");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1450, 850);
 
-        // Panel utama dengan layout null untuk posisi bebas
         JPanel panel = new JPanel(null);
-        panel.setBackground(new Color(135, 206, 235)); // Warna latar belakang langit
+        panel.setBackground(new Color(135, 206, 235)); 
 
         String imagePath = "asset/Blue Green Yellow Video.png"; 
         ImageIcon originalIcon = new ImageIcon(imagePath);
@@ -26,33 +29,54 @@ public class MonkuGamesGUI {
             background.setBounds(0, 0, width, height);
             panel.add(background);
 
-            // Lebar dan tinggi tombol
+        
             int buttonWidth = 200;
             int buttonHeight = 50;
-            int spacing = 20; // Jarak antara tombol
+            int spacing = 20; 
 
-            // Menghitung posisi x untuk menempatkan tombol di tengah frame
             int totalButtonWidth = buttonWidth * 2 + spacing;
             int xStart = (frame.getWidth() - totalButtonWidth) / 2;
-            int yPosition = height - buttonHeight - 200 ; // Menempatkan tombol sedikit di atas bagian bawah frame
+            int yPosition = height - buttonHeight - 200;
 
-            // Tombol New Games
             JButton newGameButton = new JButton("NEW GAMES");
             newGameButton.setBounds(xStart, yPosition, buttonWidth, buttonHeight);
-            newGameButton.setFont(new Font("Arial", Font.BOLD, 18)); // Ganti dengan font yang sesuai
+            newGameButton.setFont(new Font("Arial", Font.BOLD, 18)); 
             newGameButton.setBackground(Color.WHITE);
             newGameButton.setForeground(Color.BLACK);
             background.add(newGameButton);
 
-            // Tombol Load Games
             JButton loadGameButton = new JButton("LOAD GAMES");
             loadGameButton.setBounds(xStart + buttonWidth + spacing, yPosition, buttonWidth, buttonHeight);
-            loadGameButton.setFont(new Font("Arial", Font.BOLD, 18)); // Ganti dengan font yang sesuai
+            loadGameButton.setFont(new Font("Arial", Font.BOLD, 18)); 
             loadGameButton.setBackground(Color.WHITE);
             loadGameButton.setForeground(Color.BLACK);
             background.add(loadGameButton);
 
-            // Menambahkan panel ke frame
+            JButton aboutus = new JButton("ABOUT US");
+            int xAboutUs = frame.getWidth() - 150; 
+            int yAboutUs = 20; 
+            aboutus.setBounds(xAboutUs, yAboutUs, 100, 25);
+            aboutus.setFont(new Font("Arial", Font.BOLD, 10)); 
+            aboutus.setBackground(Color.WHITE);
+            aboutus.setForeground(Color.BLACK);
+            background.add(aboutus);
+
+            aboutus.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String aboutMessage = """
+                            Nama Games : Monku (Monster Kusayang)
+                            Nama Pembuat : Ahmad Nafi Mubarok dan Muhammad Raka Fadhillah
+                            Prodi : Teknik Informatika Universitas Brawijaya
+                            
+                            Tujuan dibuat game ini adalah merupakan tugas akhir dari pembelajaran OOP 
+                            bersama guru tersayang Bapak Budi bismiilah dapet A
+                            """;;
+                    JOptionPane.showMessageDialog(frame, aboutMessage, "About Us", JOptionPane.INFORMATION_MESSAGE);
+                }
+            });
+
+            // Add panel to frame
             frame.setContentPane(panel);
             frame.setVisible(true);
         }

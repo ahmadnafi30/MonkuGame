@@ -11,7 +11,7 @@ import javax.tools.JavaFileManager.Location;
 import Entity.Battle;
 import Entity.ItemInteract;
 import Entity.Item.*;
-import Entity.Locations.HomeBase;
+// import Entity.Locations.HomeBase;
 import Entity.Monster.*;
 import Entity.NPC.*;
 
@@ -37,7 +37,6 @@ public class Player implements ItemInteract, Battle {
         this.monsters = new ArrayList<>();
         this.timePlayed = Duration.ZERO;
         this.startTime = Instant.now();
-        this.locationPlayer = (Location) new HomeBase(name);
     }
 
     public Duration updateTimePlayed() {
