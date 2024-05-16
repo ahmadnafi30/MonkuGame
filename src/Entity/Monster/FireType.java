@@ -50,17 +50,17 @@ public class FireType extends Monster {
 
     @Override
     public void basicAttack(Monster enemy) {
-        enemy.getAttacked("basic", enemy, null);
+        enemy.getAttacked("basic", this, null);
     }
 
     @Override
     public void specialAttack(Monster enemy) {
-        enemy.getAttacked("special", enemy, null);
+        enemy.getAttacked("special", this, null);
     }
 
     @Override
     public void elementalAttack(Monster enemy, ElementalAttack elementalAttack) {
-        enemy.getAttacked("elemental", enemy, elementalAttack);
+        enemy.getAttacked("elemental", this, elementalAttack);
     }
 
     @Override

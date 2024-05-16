@@ -42,20 +42,65 @@ public abstract class Monster implements Battle{
         this.defensePower = maxDefensePower / 2;
     }
 
+    // cek jika attacker memimiliki elemen yang efektif dengan musuh
+    public boolean checkWeakness(ElementType elementType) {
+        switch (elementType) {
+            case WATER:
+                if(this.elementType[0] == ElementType.FIRE) {
+                    return true;
+                } else return false;
+            case FIRE:
+                if(this.elementType[0] == ElementType.ICE) {
+                    return true;
+                } else return false;
+            case ICE:
+                if(this.elementType[0] == ElementType.AIR) {
+                    return true;
+                } else return false;
+            case AIR:
+                if(this.elementType[0] == ElementType.EARTH) {
+                    return true;
+                } else return false;
+            case EARTH:
+                if(this.elementType[0] == ElementType.WATER) {
+                    return true;
+                } else return false;
+            default:
+                break;
+        }
+        return false;
+    }
+
     //will be critical if 2 and 1 if not
-    public int dmgFormula(Monster monster, int critikal, String attackType, ElementalAttack elementalAttack) {
+    //monster yang dimaksud adalah monster yang memberikan dmg (attacker)
+    public int dmgFormula(Monster attacker, int critikal, String attackType, ElementalAttack elementalAttack) {
+        Random rand = new Random();
+        double dmg = 0;
+        int random = rand.nextInt(10);
+        int multiplier = 1;
+        if(checkWeakness(elementalAttack.element)) {
+            System.out.println(elementalAttack.nama +" is Effective!");
+            multiplier = 2;
+        }
         switch (attackType) {
-            case "basic":
-                return (((((monster.level * critikal)/5 + 2) * monster.attackPower * 1/monster.defensePower) + 2)/50);
+            case "basic": 
+                dmg = (((((2*attacker.level*critikal)+2)/5)*attacker.attackPower*(1/attacker.defensePower))/50)+2;
+                System.out.println(dmg);
+                return (int)dmg * random;
             case "special":
-                return (((((monster.level * critikal)/5 + 2) * monster.spcAttackPower * 1/monster.defensePower) + 2)/50);
+                dmg = (((((2*attacker.level*critikal)+2)/5)*attacker.spcAttackPower*(1/attacker.defensePower))/50)+2;
+                return (int)dmg * random;
             case "elemental":
-                return (((((monster.level * critikal)/5 + 2) * elementalAttack.power * 1/monster.defensePower) + 2)/50);        
+                dmg = (((((2*attacker.level*critikal)+2)/5)*elementalAttack.power*(1/attacker.defensePower))/50)+2;
+                return (int)dmg * random * multiplier;        
             default:
                 return -1;
         }
     }
-    public void getAttacked(String attackType, Monster monster, ElementalAttack elementalAttack) {
+
+    //Si monster di kelas ini yang terkena damage
+    //return true jika monster meninggal
+    public boolean getAttacked(String attackType, Monster attacker, ElementalAttack elementalAttack) {
         /*
          * "basic" for basic attack
          * "special" for special attack
@@ -63,23 +108,37 @@ public abstract class Monster implements Battle{
          */
 
         int dmg = 0;
+        int critical = 1;
+        Random rand = new Random();
+        if(rand.nextInt(100) < 35) {    
+            critical = 2;
+        }
         switch (attackType.toLowerCase()) {
             case "basic":
-                healthPoint -= dmg = dmgFormula(monster, attackPower, attackType, null);
+                dmg = dmgFormula(attacker, critical, attackType, null);
+                healthPoint -= dmg; 
                 break;
             
             case "special":
-                healthPoint -= dmg = dmgFormula(monster, spcAttackPower, attackType, null);
+                healthPoint -= dmg = dmgFormula(attacker, critical, attackType, null);
                 break;
             
             case "elemental":
-                healthPoint -= dmg = dmgFormula(monster, elemAttackPower, attackType, elementalAttack);
+                healthPoint -= dmg = dmgFormula(attacker, critical, attackType, elementalAttack);
                 break;
 
             default:
                 break;
         }
+        if(critical == 2) {
+            System.out.println("Critical hit!");
+        }
         System.out.println(name + " took " + dmg + " damage!");
+        if(healthPoint <= 0) {
+            System.out.println(name + " has been defeated!");
+            return true;
+        }
+        return false;
     }
 
     public void setAttributesMax(int monsterPhase){
