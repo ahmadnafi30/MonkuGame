@@ -8,8 +8,8 @@ public class BuffPotion extends Item {
     private int attackPowerAmount;
     private int oldAttackPower;
 
-    public BuffPotion(String name, int price, String rarity, int duration) {
-        super(name, "Gives you bonus attack power", price, rarity, duration);
+    public BuffPotion(String name, String rarity) {
+        super(name, "Gives you bonus attack power", 0, rarity, 0);
         switch (super.rarity) {
             case COMMON:
                 attackPowerAmount = 5;
@@ -37,12 +37,12 @@ public class BuffPotion extends Item {
     public void printDetailItemm() {
         System.out.println("""
                 Name: """ + super.name + """
-                Rarity: """ + super.rarity + """
-                Functionality: """ + super.functionality + """
-                Price: """ + super.price + """
-                Attack Power: """ + attackPowerAmount + """
-                Duration: """ + duration + """
-                Price: """ + price + """
+                \nRarity: """ + super.rarity + """
+                \nFunctionality: """ + super.functionality + """
+                \nPrice: """ + super.price + """
+                \nAttack Power: """ + attackPowerAmount + """
+                \nDuration: """ + duration + """
+                \nPrice: """ + price + """
                 """);
     }
 

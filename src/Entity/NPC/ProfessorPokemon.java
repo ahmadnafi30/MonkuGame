@@ -1,34 +1,49 @@
 package Entity.NPC;
 
+import java.util.Scanner;
+
 import Entity.Monster.Monster;
 import Entity.Player.Player;
 
-public class ProfessorPokemon extends NPC{
+public class ProfessorPokemon extends NPC {
 
     public ProfessorPokemon(String name, String job) {
         super(name, job);
-        //TODO Auto-generated constructor stub
     }
 
-    public void dialogWithPlayer(){
-        System.out.println("Hello, aku professor " +  name + " apa yang bisa kami bantu?");
+    public void dialogWithPlayer() {
+        System.out.println("Hello, I am Professor " + name + ". How can I assist you?");
     }
 
-    // public void healPokemon(Player player, String monster){
-    //     for (Monster monster1 : player.getMonsters()) {
-    //         if (monster1.getName().equals(monster)) {
-    //             monster1.healingHp();
-    //             System.out.println("Professor " + name + ": Sekarang monster " + monster1.getName() +" sudah pulih");
-    //             return;
-    //         }
-    //     }
+    public void healPokemon(Player player, String monsterName) {
+        for (Monster monster : player.getMonsters()) {
+            if (monster.getName().equals(monsterName)) {
+                monster.setHealthPoint(monster.getMaxHealthPoint());
+                System.out.println("Professor " + name + ": Your monster " + monster.getName() + " is now fully healed.");
+                return;
+            }
+        }
+        System.out.println("Professor " + name + ": No such monster in your inventory.");
+    }
 
-    //     System.out.println("Professor " + name +": Tidak ada monster di inventory mu");
-    // }
+    public void healPokemon(Monster monster) {
+        monster.setHealthPoint(monster.getMaxHealthPoint());
+        System.out.println("Professor " + name + ": Your monster " + monster.getName() + " is now fully healed.");
+    }
 
+    public void evolvePokemon(Monster monster) {
+        Scanner in = new Scanner(System.in);
+        String berubah = in.nextLine();
+        if (monster.evolution(berubah)) {
+            monster.evolution(job);
+            System.out.println("Professor " + name + ": Your monster " + monster.getName() + " has evolved!");
+        } else {
+            System.out.println("Professor " + name + ": This monster cannot evolve.");
+        }
+    }
 
+    // @Override
     public void doJob() {
-        
+        // Implementation of professor's job, if necessary
     }
-    
 }

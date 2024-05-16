@@ -2,11 +2,10 @@ package Entity.Locations;
 
 import java.util.Scanner;
 
-import Entity.Monster.*;
+import Entity.Monster.Monster;
 import Entity.NPC.ProfessorPokemon;
 import Entity.Player.Player;
 
-//buat method cari pokemon
 public class HomeBase extends Locations {
     private ProfessorPokemon professor;
 
@@ -18,57 +17,102 @@ public class HomeBase extends Locations {
     @Override
     public void printDetailLocation() {
         System.out.println("Home Base: " + locationName);
-        System.out.println("Professor:");
-        // professor.displayDetailProfessor();
+        System.out.println("This is your safe haven where you can rest, recover, and prepare for your next adventure.");
+        System.out.println("Professor Oak is here to assist you with anything you need.");
     }
 
     public void interactWithPlayer(Player player) {
         Scanner scanner = new Scanner(System.in);
         String choice;
-        
-        System.out.println("Professor: Selamat datang, " + player.getName() + "! Ada yang bisa saya bantu?");
-        System.out.println("1. Memulihkan Monster");
-        System.out.println("2. Meningkatkan Level Monster");
-        System.out.println("3. Menyimpan Permainan");
-        System.out.println("4. Keluar");
-        System.out.print("Pilihan Anda: ");
-        
+
+        System.out.println("Professor: Welcome, " + player.getName() + "! How can I assist you today?");
+        System.out.println("1. Heal Monsters");
+        System.out.println("2. Evolve Monsters");
+        System.out.println("3. Save Game");
+        System.out.println("4. Search for Pokémon");
+        System.out.println("5. Exit");
+        System.out.print("Your choice: ");
+
         choice = scanner.nextLine();
-        
+
         switch (choice) {
             case "1":
-            System.out.println("Professor: Silahkan pilih monster yang ingin Anda pulihkan:");
-            player.checkMonsters();
-            System.out.print("Pilih monster: ");
-            String monster = scanner.nextLine();
-            healMonsters(player, monster);
-            break;
+                System.out.println("Professor: Please select the monster you want to heal:");
+                player.checkMonsters();
+                System.out.print("Select monster: ");
+                int monsterIndex = scanner.nextInt();
+                scanner.nextLine(); // consume newline
+                healMonsters(player, monsterIndex);
+                break;
             case "2":
+                System.out.println("Professor: Please select the monster you want to evolve:");
+                player.checkMonsters();
+                System.out.print("Select monster: ");
+                monsterIndex = scanner.nextInt();
+                scanner.nextLine(); // consume newline
+                evolveMonsters(player, monsterIndex);
+                break;
+            case "3":
                 saveGame(player);
                 break;
+            case "4":
+                searchForPokemon(player);
+                break;
+            case "5":
+                System.out.println("Professor: Take care, and come back anytime you need help!");
+                break;
             default:
-                System.out.println("Pilihan tidak valid.");
+                System.out.println("Invalid choice. Please try again.");
                 break;
         }
     }
-    
-    //mungkin parameternya lebih baik menggunakan kelas Monster deh biar akses monsternya lebih gampang
-    private void healMonsters(Player player, String monster) {
-        System.out.println("Professor: Sedang menyembuhkan monster...");
-        // professor.healPokemon(player, monster);
-        // System.out.println("Professor: Monster Anda sekarang dalam kondisi sehat.");
+
+    private void healMonsters(Player player, int monsterIndex) {
+        if (monsterIndex >= 0 && monsterIndex < player.getMonsters().size()) {
+            Monster monster = player.getMonsters().get(monsterIndex);
+            professor.healPokemon(monster);
+            System.out.println("Professor: Your monster " + monster.getName() + " is now fully healed.");
+        } else {
+            System.out.println("Professor: Invalid monster selection.");
+        }
     }
 
-    // iterasi monster yang ingin evolusi, lalu lakukan evolusi
-    // private void EvolveMonsters(Player player) {
-        //     System.out.println("Professor: Sedang meningkatkan level monster...");
-    //     // Implementasi peningkatan level monster
-    //     System.out.println("Professor: Level monster Anda telah ditingkatkan.");
-    // }
+    private void evolveMonsters(Player player, int monsterIndex) {
+        if (monsterIndex >= 0 && monsterIndex < player.getMonsters().size()) {
+            Monster monster = player.getMonsters().get(monsterIndex);
+            professor.evolvePokemon(monster);
+            System.out.println("Professor: Your monster " + monster.getName() + " has evolved!");
+        } else {
+            System.out.println("Professor: Invalid monster selection.");
+        }
+    }
 
     private void saveGame(Player player) {
-        System.out.println("Professor: Menyimpan permainan...");
-        // Implementasi penyimpanan permainan
-        System.out.println("Professor: Permainan Anda berhasil disimpan.");
+        System.out.println("Professor: Saving your game...");
+        // Implement game saving logic
+        System.out.println("Professor: Your game has been saved successfully.");
+    }
+
+    private void searchForPokemon(Player player) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Professor: Let's search for some Pokémon!");
+        System.out.print("Enter the type of Pokémon you are looking for: ");
+        String pokemonType = scanner.nextLine();
+
+        // Simulate searching for Pokémon
+        System.out.println("Professor: Searching for " + pokemonType + " type Pokémon...");
+        try {
+            Thread.sleep(2000); // Simulate a delay in searching
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        boolean found = new java.util.Random().nextBoolean(); // Randomly decide if a Pokémon is found
+        if (found) {
+            System.out.println("Professor: Congratulations! You found a rare " + pokemonType + " Pokémon!");
+            // Add logic to add the found Pokémon to the player's collection
+        } else {
+            System.out.println("Professor: Sorry, no " + pokemonType + " type Pokémon were found. Try again later.");
+        }
     }
 }

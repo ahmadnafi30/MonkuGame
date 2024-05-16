@@ -16,6 +16,8 @@ public class Test {
         // Access the attributes
 
         for(int i = 0; i < 5; i++){
+            monster.basicAttack(enemy);
+            enemy.basicAttack(monster);
             enemy.elementalAttack(monster, enemy.elementalAttacks.get(0));
             System.out.println(enemy.getHealthPoint());
         }

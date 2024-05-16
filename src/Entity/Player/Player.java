@@ -7,11 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import javax.tools.JavaFileManager.Location;
-
 import Entity.Battle;
 import Entity.ItemInteract;
 import Entity.Item.*;
+import Entity.Locations.Locations;
 // import Entity.Locations.HomeBase;
 import Entity.Monster.*;
 import Entity.NPC.*;
@@ -27,9 +26,9 @@ public class Player implements ItemInteract, Battle {
     private final int MAX_CAPACITY = 15;
     private Duration timePlayed;
     private Instant startTime;
-    private Location locationPlayer;
+    private Locations locationPlayer;
 
-    public Player(String name) {
+    public Player(String name, Locations locationPlayer) {
         this.name = name;
         this.level = 1;
         this.coin = 100;
@@ -38,7 +37,25 @@ public class Player implements ItemInteract, Battle {
         this.monsters = new ArrayList<>();
         this.timePlayed = Duration.ZERO;
         this.startTime = Instant.now();
+        this.locationPlayer = locationPlayer;
     }
+
+    public void enterLocation(Locations enter){
+        this.locationPlayer = enter;
+    }
+
+
+        public void getReward(Item reward) {
+            if (inventoryIsFull() || inventorySize() + 1 > MAX_CAPACITY) {
+                System.out.println("Inventory penuh. Tidak bisa mendapatkan item.");
+            } else {
+                inventory.put(reward, inventory.getOrDefault(reward, 0) + 1);
+                System.out.println("Item " + reward.name + " berhasil ditambahkan ke inventory.");
+                printItemDetails(reward);
+            }
+        }
+        
+    
 
     public Duration updateTimePlayed() {
         this.timePlayed = Duration.between(this.startTime, Instant.now());
@@ -128,80 +145,37 @@ public class Player implements ItemInteract, Battle {
 
     public void catchMonster(Monster monster) {
         this.monsters.add(monster);
-        // System.out.println("Monster " + monster.getName() + " berhasil dijinakkan");
+        System.out.println("Monster " + monster.getName() + " berhasil dijinakkan");
         monster.displayDetailMonster();
     }
 
+    public Monster deployMonster(int nomor){
+        if(monsters.isEmpty()) {
+            System.out.println("Tidak ada monster yang dapat digunakan.");
+        } else {
+            monsters.forEach(Monster::displayDetailMonster);
+        }
 
-       // public void battle(Monster enemy) {
-    //     System.out.println("A battle begins between " + name + " and " + enemy.getName() + "!");
-    //     while (true) {
-    //         // Player's turn
-    //         if (!enemy.isDefeated()) {
-    //             int choice = chooseAction();
-    //             switch (choice) {
-    //                 case 1:
-    //                     basicAttack(enemy);
-    //                     break;
-    //                 case 2:
-    //                     specialAttack(enemy);
-    //                     break;
-    //                 case 3:
-    //                     ElementalAttack elementalAttack = chooseElementalAttack();
-    //                     elementalAttack(enemy, elementalAttack);
-    //                     break;
-    //                 case 4:
-    //                     useItem();
-    //                     break;
-    //                 case 5:
-    //                     flee();
-    //                     return;
-    //                 default:
-    //                     System.out.println("Invalid choice!");
-    //             }
-    //         } else {
-    //             winBattle();
-    //             break;
-    //         }
+        Monster depoloy = monsters.get(nomor);
 
-    //         // Monster's turn
-    //         if (!isDefeated()) {
-    //             int monsterChoice = enemy.chooseAction();
-    //             switch (monsterChoice) {
-    //                 case 1:
-    //                     enemy.basicAttack(this);
-    //                     break;
-    //                 case 2:
-    //                     enemy.specialAttack(this);
-    //                     break;
-    //                 case 3:
-    //                     enemy.elementalAttack(this, enemy.chooseElementalAttack());
-    //                     break;
-    //                 default:
-    //                     System.out.println(enemy.getName() + " chooses to do nothing.");
-    //             }
-    //         } else {
-    //             System.out.println("Player " + name + " is defeated!");
-    //             break;
-    //         }
-    //     }
-    // }
-
-    // Method untuk memilih aksi oleh player
-    private int chooseAction() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose your action:");
-        System.out.println("1. Basic Attack");
-        System.out.println("2. Special Attack");
-        System.out.println("3. Elemental Attack");
-        System.out.println("4. Use Item");
-        System.out.println("5. Flee");
-        System.out.print("Enter your choice: ");
-        return scanner.nextInt();
+        return depoloy;
     }
 
-    
 
+    // // Method untuk memilih aksi oleh player
+    // private int chooseAction() {
+    //     Scanner scanner = new Scanner(System.in);
+    //     System.out.println("Choose your action:");
+    //     System.out.println("1. Basic Attack");
+    //     System.out.println("2. Special Attack");
+    //     System.out.println("3. Elemental Attack");
+    //     System.out.println("4. Use Item");
+    //     System.out.println("5. Flee");
+    //     System.out.print("Enter your choice: ");
+    //     return scanner.nextInt();
+    // }
+
+    
     @Override
     public void sellItem(Item itemsell, int quantity) {
         if (inventory.containsKey(itemsell) && inventory.get(itemsell) >= quantity) {
@@ -232,9 +206,9 @@ public class Player implements ItemInteract, Battle {
 
     @Override
     public void elementalAttack(Monster enemy, ElementalAttack elementalAttack) {
-        System.out.println("Player " + name + " uses an elemental attack!");
-        // Implementation of elemental attack
     }
+
+    
 
     @Override
     public void useItem(Item item) {
@@ -270,9 +244,8 @@ public class Player implements ItemInteract, Battle {
         System.out.println("Coins: " + coin);
         System.out.println("Time Played: " + updateTimePlayed().toMinutes() + " minutes");
         System.out.println("Inventory Size: " + inventorySize() + "/" + MAX_CAPACITY);
-        checkInventory();
-        System.out.println("Monsters:");
-        checkMonsters();
+        System.out.println("Monsters: " +  monsters.size());
+    
     }
     
     public void printDialogWithNPC(NPC npc){
@@ -321,7 +294,7 @@ public class Player implements ItemInteract, Battle {
         return startTime;
     }
 
-    public Location getLocationPlayer() {
+    public Locations getLocationPlayer() {
         return locationPlayer;
     }
 }

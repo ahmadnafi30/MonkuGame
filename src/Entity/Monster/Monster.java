@@ -78,6 +78,7 @@ public abstract class Monster implements Battle{
         double dmg = 0;
         int random = rand.nextInt(10);
         int multiplier = 1;
+        if(elementalAttack != null)
         if(checkWeakness(elementalAttack.element)) {
             System.out.println(elementalAttack.nama +" is Effective!");
             multiplier = 2;
@@ -214,15 +215,16 @@ public abstract class Monster implements Battle{
         }
     }
 
+
     // Method to handle evolution
-    public void evolution(String element) {
+    public boolean evolution(String element) {
         if (monsterPhase >= maxMonsterPhase){ 
             System.out.println("Monster sudah mencapai fase maksimal!");
-            return;
+            return false;
         }
         if(level < 20){
             System.out.println("Level monster tidak mencukupi untuk melakukan evolusi!");
-            return;
+            return false;
         }
         changeElementType(element);
         setAttributesMax(monsterPhase);
@@ -245,6 +247,7 @@ public abstract class Monster implements Battle{
         setAttributesMax(monsterPhase);
         monsterPhase++;
         experiencePoint = 0;
+        return true;
     }
 
     private void evolveAttributes(double minMultiplier, double maxMultiplier) {
@@ -322,6 +325,10 @@ public abstract class Monster implements Battle{
     }
 
     // Getter and setter methods
+
+    public int getMaxHealthPoint(){
+        return maxHealthPoint;
+    }
 
     public String getName() {
         return this.name;

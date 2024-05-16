@@ -13,4 +13,7 @@ public class ElementalAttack {
         this.element = element;
     }
 
+    // @Override
+    // public void toString(){}
+
 }

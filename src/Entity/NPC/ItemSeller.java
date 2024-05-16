@@ -2,6 +2,7 @@ package Entity.NPC;
 
 import Entity.ItemInteract;
 import Entity.Item.Item;
+import Entity.Player.Player;
 
 public class ItemSeller extends NPC implements ItemInteract {
     Item[] items;
@@ -15,13 +16,13 @@ public class ItemSeller extends NPC implements ItemInteract {
     }
 
     // Method to sell an item
-    public void sellItem(String item) {
-        // Logic to sell the item
+    public void sellItem(int item, Player player, int quantity) {
+        player.buyItem(items[item-1], quantity);
     }
 
     // Method to buy an item
-    public void buyItem(String item) {
-        // Logic to buy the item
+    public void buyItem(int item, Player player, int quantity) {
+        player.sellItem(items[item-1], quantity);
     }
 
     @Override
@@ -41,4 +42,12 @@ public class ItemSeller extends NPC implements ItemInteract {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'buyItem'");
     }
+
+    // public void buyItem(int item, int quantity) {
+    //     items[item-1];
+    
+    //     throw new UnsupportedOperationException("Unimplemented method 'buyItem'");
+    // }
+
+
 }

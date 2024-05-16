@@ -8,9 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
 
-public class MonkuGamesGUI {
+public class Homepage {
 
-    public MonkuGamesGUI() {
+    public Homepage() {
         JFrame frame = new JFrame("Monku Games");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 750);
