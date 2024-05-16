@@ -44,7 +44,14 @@ public class Teleportation extends Item{
 
     @Override
     public void useItem(Monster monster, int turn, Player player) {
-        
+        Random rand = new Random();
+        boolean success = (rand.nextInt(100) <= chance ? true : false);
+        if(!success) {
+            System.out.println("Teleportation failed");
+            return;
+        } else{
+            // player.tp;
+        }
     }
 
     @Override
