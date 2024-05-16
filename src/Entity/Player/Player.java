@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.tools.JavaFileManager.Location;
 
@@ -131,7 +132,74 @@ public class Player implements ItemInteract, Battle {
         monster.displayDetailMonster();
     }
 
-    //memilih pokemon yang ingin bertarung
+
+       // public void battle(Monster enemy) {
+    //     System.out.println("A battle begins between " + name + " and " + enemy.getName() + "!");
+    //     while (true) {
+    //         // Player's turn
+    //         if (!enemy.isDefeated()) {
+    //             int choice = chooseAction();
+    //             switch (choice) {
+    //                 case 1:
+    //                     basicAttack(enemy);
+    //                     break;
+    //                 case 2:
+    //                     specialAttack(enemy);
+    //                     break;
+    //                 case 3:
+    //                     ElementalAttack elementalAttack = chooseElementalAttack();
+    //                     elementalAttack(enemy, elementalAttack);
+    //                     break;
+    //                 case 4:
+    //                     useItem();
+    //                     break;
+    //                 case 5:
+    //                     flee();
+    //                     return;
+    //                 default:
+    //                     System.out.println("Invalid choice!");
+    //             }
+    //         } else {
+    //             winBattle();
+    //             break;
+    //         }
+
+    //         // Monster's turn
+    //         if (!isDefeated()) {
+    //             int monsterChoice = enemy.chooseAction();
+    //             switch (monsterChoice) {
+    //                 case 1:
+    //                     enemy.basicAttack(this);
+    //                     break;
+    //                 case 2:
+    //                     enemy.specialAttack(this);
+    //                     break;
+    //                 case 3:
+    //                     enemy.elementalAttack(this, enemy.chooseElementalAttack());
+    //                     break;
+    //                 default:
+    //                     System.out.println(enemy.getName() + " chooses to do nothing.");
+    //             }
+    //         } else {
+    //             System.out.println("Player " + name + " is defeated!");
+    //             break;
+    //         }
+    //     }
+    // }
+
+    // Method untuk memilih aksi oleh player
+    private int chooseAction() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose your action:");
+        System.out.println("1. Basic Attack");
+        System.out.println("2. Special Attack");
+        System.out.println("3. Elemental Attack");
+        System.out.println("4. Use Item");
+        System.out.println("5. Flee");
+        System.out.print("Enter your choice: ");
+        return scanner.nextInt();
+    }
+
     
 
     @Override
