@@ -1,7 +1,8 @@
 package app;
 
-import gui.gui.*;  
+
 import javax.swing.SwingUtilities;
+import gui.*;
 
 public class Monku {
     public static void main(String[] args) {

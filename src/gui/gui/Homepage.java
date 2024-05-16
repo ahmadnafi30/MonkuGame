@@ -1,4 +1,6 @@
-package gui.gui;
+package gui;
+
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
+
 
 public class Homepage {
 
@@ -21,7 +24,7 @@ public class Homepage {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon originalIcon = new ImageIcon("asset/Blue Green Yellow Video.png");
+                ImageIcon originalIcon = new ImageIcon("asset/Blue Green Yellow Video.gif");
                 Image originalImage = originalIcon.getImage();
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
@@ -81,6 +84,15 @@ public class Homepage {
                         bersama guru tersayang Bapak Budi bismillah dapat A
                         """;
                 JOptionPane.showMessageDialog(frame, aboutMessage, "About Us", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
+
+    private void addPlayGameActionListener(JButton newGameButton, JFrame frame) {
+        newGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
             }
         });
     }
