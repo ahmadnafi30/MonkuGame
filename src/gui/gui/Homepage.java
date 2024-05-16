@@ -1,19 +1,20 @@
 package gui;
 
-
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
-
 
 public class Homepage {
 
-    public Homepage() {
+    public Homepage() throws IOException {
         JFrame frame = new JFrame("Monku Games");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 750);
@@ -39,18 +40,27 @@ public class Homepage {
         int xStart = (frame.getWidth() - totalButtonWidth) / 2;
         int yPosition = frame.getHeight() - buttonHeight - 200;
 
-        JButton newGameButton = new JButton("NEW GAME");
+        BufferedImage buttonIcon = ImageIO.read(new File("asset/toppng.com-text-box-pixel-art-cupcake-601x211.png"));
+        Image scaledButtonImage = buttonIcon.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+        JButton newGameButton = new JButton("NEW GAME", new ImageIcon(scaledButtonImage));
         newGameButton.setBounds(xStart, yPosition, buttonWidth, buttonHeight);
-        newGameButton.setFont(new Font("Arial", Font.BOLD, 18));
-        newGameButton.setBackground(Color.WHITE);
+        newGameButton.setFont(new Font("Purisa Bold", Font.BOLD, 18));
+        newGameButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        newGameButton.setVerticalTextPosition(SwingConstants.CENTER);
+        newGameButton.setBorder(BorderFactory.createEmptyBorder());
         newGameButton.setForeground(Color.BLACK);
+        newGameButton.setContentAreaFilled(false);
         panel.add(newGameButton);
 
-        JButton loadGameButton = new JButton("LOAD GAME");
+        JButton loadGameButton = new JButton("LOAD GAME", new ImageIcon(scaledButtonImage));
         loadGameButton.setBounds(xStart + buttonWidth + spacing, yPosition, buttonWidth, buttonHeight);
-        loadGameButton.setFont(new Font("Arial", Font.BOLD, 18));
-        loadGameButton.setBackground(Color.WHITE);
+        loadGameButton.setFont(new Font("Purisa Bold", Font.BOLD, 18));
+        loadGameButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        loadGameButton.setVerticalTextPosition(SwingConstants.CENTER);
+        loadGameButton.setIconTextGap(-buttonWidth / 2); // Adjust icon-text gap
+        loadGameButton.setBorder(BorderFactory.createEmptyBorder());
         loadGameButton.setForeground(Color.BLACK);
+        loadGameButton.setContentAreaFilled(false);
         panel.add(loadGameButton);
 
         JButton aboutUsButton = new JButton("ABOUT US");
@@ -63,6 +73,7 @@ public class Homepage {
         panel.add(aboutUsButton);
 
         addAboutUsActionListener(aboutUsButton, frame);
+        addPlayGameActionListener(newGameButton, frame);
         addButtonHoverEffects(newGameButton);
         addButtonHoverEffects(loadGameButton);
         addButtonHoverEffects(aboutUsButton);
@@ -93,6 +104,7 @@ public class Homepage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
+                SwingUtilities.invokeLater(() -> new HomeBase());;
             }
         });
     }
@@ -156,5 +168,4 @@ public class Homepage {
             }
         });
     }
-
 }

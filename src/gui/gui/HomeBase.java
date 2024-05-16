@@ -29,53 +29,8 @@ public class HomeBase {
         };
         panel.setBackground(new Color(135, 206, 235));
 
-        int buttonWidth = 150;
-        int buttonHeight = 40;
-        int spacing = 20;
-
-        int totalButtonWidth = buttonWidth * 2 + spacing;
-        int xStart = (frame.getWidth() - totalButtonWidth) / 2;
-        int yPosition = frame.getHeight() - buttonHeight - 200;
-
-        JButton newGameButton = new JButton("NEW GAME");
-        newGameButton.setBounds(xStart, yPosition, buttonWidth, buttonHeight);
-        newGameButton.setFont(new Font("Arial", Font.BOLD, 18));
-        newGameButton.setBackground(Color.WHITE);
-        newGameButton.setForeground(Color.BLACK);
-        panel.add(newGameButton);
-
-        JButton loadGameButton = new JButton("LOAD GAME");
-        loadGameButton.setBounds(xStart + buttonWidth + spacing, yPosition, buttonWidth, buttonHeight);
-        loadGameButton.setFont(new Font("Arial", Font.BOLD, 18));
-        loadGameButton.setBackground(Color.WHITE);
-        loadGameButton.setForeground(Color.BLACK);
-        panel.add(loadGameButton);
-
-        JButton aboutUsButton = new JButton("ABOUT US");
-        int xAboutUs = frame.getWidth() - 150;
-        int yAboutUs = 20;
-        aboutUsButton.setBounds(xAboutUs, yAboutUs, 100, 25);
-        aboutUsButton.setFont(new Font("Arial", Font.BOLD, 10));
-        aboutUsButton.setBackground(Color.WHITE);
-        aboutUsButton.setForeground(Color.BLACK);
-        panel.add(aboutUsButton);
-
-        addAboutUsActionListener(aboutUsButton, frame);
-
         frame.setContentPane(panel);
         frame.setVisible(true);
-    }
-
-    private void addAboutUsActionListener(JButton aboutUsButton, JFrame frame) {
-        aboutUsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String aboutMessage = """
-                        Silahkan memilih 
-                        """;
-                JOptionPane.showMessageDialog(frame, aboutMessage, "About Us", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
     }
 
 
