@@ -1,16 +1,54 @@
 package Entity.Item;
 
+import Entity.Monster.Monster;
+import Entity.Player.*;
+import Entity.Locations.*;
+import java.util.*;
+
 public class Teleportation extends Item{
 
-    public Teleportation(String name, String functionality, int price, String rarity) {
-        super(name, functionality, price, rarity);
-        //TODO Auto-generated constructor stub
+    private Locations destination;
+    private int chance;
+    
+    public Teleportation(String name, int price, String rarity, int duration, Locations location) {
+        super(name, "Can Teleport You Anywhere", price, rarity, duration);
+        switch (super.rarity) {
+            case COMMON:
+                chance = 20;
+                price = 7;
+                break;
+            
+            case RARE:
+                chance = 50;
+                price = 39;
+                break;
+            
+            case EPIC:
+                chance = 99;
+                price = 88;
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public void printDetailItemm() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'printDetailItemm'");
+        System.out.println("""
+                Name: """ + super.name + """
+                Rarity: """ + super.rarity + """
+                Functionality: """ + super.functionality + """
+                Price: """ + super.price + """
+                """);
     }
 
+    @Override
+    public void useItem(Monster monster, int turn, Player player) {
+        
+    }
+
+    @Override
+    public void itemRanOut(Monster monster, Player player) {
+        
+    }
 }

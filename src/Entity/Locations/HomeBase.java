@@ -2,11 +2,11 @@ package Entity.Locations;
 
 import java.util.Scanner;
 
-import Entity.Monster.Monster;
-// import Entity.Monster.Monster;
+import Entity.Monster.*;
 import Entity.NPC.ProfessorPokemon;
 import Entity.Player.Player;
 
+//buat method cari pokemon
 public class HomeBase extends Locations {
     private ProfessorPokemon professor;
 
@@ -37,12 +37,12 @@ public class HomeBase extends Locations {
         
         switch (choice) {
             case "1":
-                System.out.println("Professor: Silahkan pilih monster yang ingin Anda pulihkan:");
-                player.checkMonsters();
-                System.out.print("Pilih monster: ");
-                String monster = scanner.nextLine();
-                healMonsters(player, monster);
-                break;
+            System.out.println("Professor: Silahkan pilih monster yang ingin Anda pulihkan:");
+            player.checkMonsters();
+            System.out.print("Pilih monster: ");
+            String monster = scanner.nextLine();
+            healMonsters(player, monster);
+            break;
             case "2":
                 saveGame(player);
                 break;
@@ -51,15 +51,17 @@ public class HomeBase extends Locations {
                 break;
         }
     }
-
+    
+    //mungkin parameternya lebih baik menggunakan kelas Monster deh biar akses monsternya lebih gampang
     private void healMonsters(Player player, String monster) {
         System.out.println("Professor: Sedang menyembuhkan monster...");
         // professor.healPokemon(player, monster);
         // System.out.println("Professor: Monster Anda sekarang dalam kondisi sehat.");
     }
 
-    // private void levelUpMonsters(Player player) {
-    //     System.out.println("Professor: Sedang meningkatkan level monster...");
+    // iterasi monster yang ingin evolusi, lalu lakukan evolusi
+    // private void EvolveMonsters(Player player) {
+        //     System.out.println("Professor: Sedang meningkatkan level monster...");
     //     // Implementasi peningkatan level monster
     //     System.out.println("Professor: Level monster Anda telah ditingkatkan.");
     // }

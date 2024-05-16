@@ -9,16 +9,15 @@ public class Test {
         monster.displayDetailMonster();
 
         System.out.println();
-        Monster monster2 = new FireType("Raka", 1, 4);
-        ((FireType) monster2).ember();
-        ((FireType) monster2).flameThrower();
-        monster2.displayDetailMonster();
+        Monster enemy = new FireType("Raka", 1, 4);
+        ((FireType) enemy).ember();
+        ((FireType) enemy).flameThrower();
+        enemy.displayDetailMonster();
         // Access the attributes
 
         for(int i = 0; i < 5; i++){
-            monster2.basicAttack(monster2);
-            monster.displayDetailMonster();
-            monster2.displayDetailMonster();
+            enemy.elementalAttack(monster, enemy.elementalAttacks.get(0));
+            System.out.println(enemy.getHealthPoint());
         }
     }           
 }
