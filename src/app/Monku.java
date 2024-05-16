@@ -1,6 +1,6 @@
 package app;
 
-import gui.MonkuGamesGUI;  
+import gui.gui.*;  
 import javax.swing.SwingUtilities;
 
 public class Monku {
