@@ -216,7 +216,14 @@ public abstract class Monster implements Battle{
 
     // Method to handle evolution
     public void evolution(String element) {
-        if (monsterPhase >= maxMonsterPhase) return;
+        if (monsterPhase >= maxMonsterPhase){ 
+            System.out.println("Monster sudah mencapai fase maksimal!");
+            return;
+        }
+        if(level < 20){
+            System.out.println("Level monster tidak mencukupi untuk melakukan evolusi!");
+            return;
+        }
         changeElementType(element);
         setAttributesMax(monsterPhase);
         switch (monsterPhase) {
@@ -353,6 +360,13 @@ public abstract class Monster implements Battle{
     }
 
     public void setHealthPoint(int healthPoint) {
+        if(healthPoint > maxHealthPoint){
+            this.healthPoint = maxHealthPoint;
+            return;
+        } else if(healthPoint < 0) {
+            healthPoint = 0;
+            return;
+        }
         this.healthPoint = healthPoint;
     }
 

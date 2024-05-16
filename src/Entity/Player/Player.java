@@ -131,6 +131,9 @@ public class Player implements ItemInteract, Battle {
         monster.displayDetailMonster();
     }
 
+    //memilih pokemon yang ingin bertarung
+    
+
     @Override
     public void sellItem(Item itemsell, int quantity) {
         if (inventory.containsKey(itemsell) && inventory.get(itemsell) >= quantity) {
@@ -168,7 +171,7 @@ public class Player implements ItemInteract, Battle {
     @Override
     public void useItem(Item item) {
         if (inventory.containsKey(item) && inventory.get(item) > 0) {
-            // System.out.println("Player " + name + " uses " + item.getName() + "!");
+            System.out.println("Player " + name + " uses " + item.name + "("+ item.rarity +")" + "!");
             inventory.put(item, inventory.get(item) - 1);
         } else {
             System.out.println("Item not available in inventory.");
