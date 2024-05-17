@@ -257,6 +257,10 @@ public class Player implements ItemInteract, Battle {
         }
     } 
 
+    public String playerProperty(){
+        return name + "\n" + level + "\n" + exp + "\n" + coin + "\n" + updateTimePlayed().toMinutes() + "\n" + inventorySize() + "\n" + monsters;
+    }
+
     // Getters
     public String getName() {
         return name;

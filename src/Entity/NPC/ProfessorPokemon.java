@@ -31,10 +31,8 @@ public class ProfessorPokemon extends NPC {
         System.out.println("Professor " + name + ": Your monster " + monster.getName() + " is now fully healed.");
     }
 
-    public void evolvePokemon(Monster monster) {
-        Scanner in = new Scanner(System.in);
-        String berubah = in.nextLine();
-        if (monster.evolution(berubah)) {
+    public void evolvePokemon(Monster monster, String element) {
+        if (monster.evolution(element)) {
             monster.evolution(job);
             System.out.println("Professor " + name + ": Your monster " + monster.getName() + " has evolved!");
         } else {

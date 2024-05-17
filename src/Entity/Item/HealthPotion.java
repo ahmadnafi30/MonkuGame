@@ -7,8 +7,8 @@ public class HealthPotion extends Item {
 
     private int healthAmount;
 
-    public HealthPotion(String name, int price, String rarity, int duration) {
-        super(name, "Gives you bonus health", price, rarity, duration);
+    public HealthPotion(String name, String rarity) {
+        super(name, "Gives you bonus health", 0, rarity, 0);
         switch (super.rarity) {
             case COMMON:
                 healthAmount = 4;

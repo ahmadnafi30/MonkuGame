@@ -9,8 +9,8 @@ public class DefensivePotion extends Item{
     private int oldDefencePower;
     
 
-    public DefensivePotion(String name, int price, String rarity, int duration) {
-        super(name, "Gives you bonus attack power", price, rarity, duration);
+    public DefensivePotion(String name, String rarity) {
+        super(name, "Gives you bonus attack power", 0, rarity, 0);
         switch (super.rarity) {
             case COMMON:
                 defencePowerAmount = 3;
