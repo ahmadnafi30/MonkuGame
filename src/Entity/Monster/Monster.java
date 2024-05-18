@@ -2,7 +2,7 @@ package Entity.Monster;
 import java.util.*;
 import Entity.Battle;
 
-public abstract class Monster implements Battle{
+public abstract class Monster implements Battle {
     // Attributes
     private String name;
     private int level;
@@ -21,6 +21,37 @@ public abstract class Monster implements Battle{
     private int maxDefensePower;
     private int monsterPhase; 
     private int maxMonsterPhase;
+    private int currentMaxHealthPoint;
+    private int currentMaxAttackPower;
+    private int currentMaxSpcAttackPower;
+    private int currentMaxElemAttackPower;
+    private int currentMaxDefensePower;
+
+    // Constructor for loading game
+    public Monster(String name, int level, int experiencePoint, ElementType[] elementType, List<ElementalAttack> elementalAttacks, int healthPoint, int attackPower, int spcAttackPower, int elemAttackPower, int defensePower, int maxHealthPoint, int maxAttackPower, int maxSpcAttackPower, int maxElemAttackPower, int maxDefensePower, int monsterPhase, int maxMonsterPhase, int currentMaxHealthPoint, int currentMaxAttackPower, int currentMaxSpcAttackPower, int currentMaxElemAttackPower, int currentMaxDefensePower) {
+        this.name = name;
+        this.level = level;
+        this.experiencePoint = experiencePoint;
+        this.elementType = elementType;
+        //this.elementalAttacks = new ArrayList<>().addAll();;
+        this.healthPoint = healthPoint;
+        this.attackPower = attackPower;
+        this.spcAttackPower = spcAttackPower;
+        this.elemAttackPower = elemAttackPower;
+        this.defensePower = defensePower;
+        this.maxHealthPoint = maxHealthPoint;
+        this.maxAttackPower = maxAttackPower;
+        this.maxSpcAttackPower = maxSpcAttackPower;
+        this.maxElemAttackPower = maxElemAttackPower;
+        this.maxDefensePower = maxDefensePower;
+        this.monsterPhase = monsterPhase;
+        this.maxMonsterPhase = maxMonsterPhase;
+        this.currentMaxHealthPoint = currentMaxHealthPoint;
+        this.currentMaxAttackPower = currentMaxAttackPower;
+        this.currentMaxSpcAttackPower = currentMaxSpcAttackPower;
+        this.currentMaxElemAttackPower = currentMaxElemAttackPower;
+        this.currentMaxDefensePower = currentMaxDefensePower;
+    }
 
     public Monster(String name, int monsterPhase, String elementType, int maxMonsterPhase) {
         this.elementalAttacks = new ArrayList<>();
@@ -34,10 +65,15 @@ public abstract class Monster implements Battle{
         setAttributesMax(monsterPhase);
 
         this.healthPoint = maxHealthPoint / 2;
+        this.currentMaxHealthPoint = maxHealthPoint / 2;
         this.attackPower = maxAttackPower / 2;
+        this.currentMaxAttackPower = maxAttackPower / 2;
         this.spcAttackPower = maxSpcAttackPower / 2;
+        this.currentMaxSpcAttackPower = maxSpcAttackPower / 2;
         this.elemAttackPower = maxElemAttackPower / 2;
+        this.currentMaxElemAttackPower = maxElemAttackPower / 2;
         this.defensePower = maxDefensePower / 2;
+        this.currentMaxDefensePower = maxDefensePower / 2;
     }
 
     // cek jika attacker memimiliki elemen yang efektif dengan musuh
@@ -71,7 +107,7 @@ public abstract class Monster implements Battle{
 
 
     //monster yang dimaksud adalah monster yang memberikan dmg (attacker)
-    public int dmgFormula(Monster attacker, int critikal, String attackType, ElementalAttack elementalAttack) {
+    private int dmgFormula(Monster attacker, int critikal, String attackType, ElementalAttack elementalAttack) {
         Random rand = new Random();
         double dmg = 0;
         int random = rand.nextInt(10);
@@ -90,7 +126,7 @@ public abstract class Monster implements Battle{
                 dmg = (((((2*attacker.level*critikal)+2)/5)*attacker.spcAttackPower*(1/attacker.defensePower))/50)+2;
                 return (int)dmg * random;
             case "elemental":
-                dmg = (((((2*attacker.level*critikal)+2)/5)*elementalAttack.power*(1/attacker.defensePower))/50)+2;
+                dmg = (((((2*attacker.level*critikal)+2)/5)*(elementalAttack.power*(attacker.elemAttackPower/5))*(1/attacker.defensePower))/50)+2;
                 return (int)dmg * random * multiplier;        
             default:
                 return -1;
@@ -140,7 +176,7 @@ public abstract class Monster implements Battle{
         return false;
     }
 
-    public void setAttributesMax(int monsterPhase){
+    private void setAttributesMax(int monsterPhase){
         if(monsterPhase == maxMonsterPhase) {
             return;
         }
@@ -187,8 +223,8 @@ public abstract class Monster implements Battle{
         }
     }
 
-    public void changeElementType(String elementType) {
-        switch (elementType) {
+    private void changeElementType(String elementType) {
+        switch (elementType.toUpperCase()) {
             case "ICE":
                 this.elementType = new ElementType[]{ElementType.ICE};
                 break;
@@ -212,7 +248,6 @@ public abstract class Monster implements Battle{
                 break;
         }
     }
-
 
     // Method to handle evolution
     public boolean evolution(String element) {
@@ -293,12 +328,12 @@ public abstract class Monster implements Battle{
             System.out.println("You already have full health!");
             return;
         }
-        this.healthPoint = Math.min(this.healthPoint + amountHeal, maxHealthPoint);
+        this.healthPoint = Math.min(this.healthPoint + amountHeal, currentMaxHealthPoint);
     }
 
     // Method to display details of the Pokemon
     public void displayDetailMonster() {
-        System.out.println("Name: " + name);
+        System.out.println("Name: " + name + " (" + elementType[0] +")");
         System.out.println("Level: " + level);
         System.out.println("Experience Point: " + experiencePoint);
         System.out.println("Health Point: " + healthPoint);
@@ -352,8 +387,8 @@ public abstract class Monster implements Battle{
         this.experiencePoint = experiencePoint;
     }
 
-    public ElementType[] getElementType() {
-        return this.elementType;
+    public ElementType getElementType() {
+        return this.elementType[0];
     }
 
     public void setElementType(ElementType[] elementType) {
@@ -365,8 +400,8 @@ public abstract class Monster implements Battle{
     }
 
     public void setHealthPoint(int healthPoint) {
-        if(healthPoint > maxHealthPoint){
-            this.healthPoint = maxHealthPoint;
+        if(healthPoint > currentMaxHealthPoint){
+            this.healthPoint = currentMaxHealthPoint;
             return;
         } else if(healthPoint < 0) {
             healthPoint = 0;
@@ -413,5 +448,104 @@ public abstract class Monster implements Battle{
 
     public void setMonsterPhase(int monsterPhase) {
         this.monsterPhase = monsterPhase;
+    }
+
+    public int getMaxAttackPower() {
+        return maxAttackPower;
+    }
+
+    public int getMaxSpcAttackPower() {
+        return maxSpcAttackPower;
+    }
+
+    public int getMaxElemAttackPower() {
+        return maxElemAttackPower;
+    }
+
+    public int getMaxDefensePower() {
+        return maxDefensePower;
+    }
+
+    public int getMaxMonsterPhase() {
+        return maxMonsterPhase;
+    }
+
+    public int getCurrentMaxHealthPoint() {
+        return currentMaxHealthPoint;
+    }
+
+    public int getCurrentMaxAttackPower() {
+        return currentMaxAttackPower;
+    }
+
+    public int getCurrentMaxSpcAttackPower() {
+        return currentMaxSpcAttackPower;
+    }
+
+    public int getCurrentMaxElemAttackPower() {
+        return currentMaxElemAttackPower;
+    }
+
+    public int getCurrentMaxDefensePower() {
+        return currentMaxDefensePower;
+    }
+
+    public void setCurrentMaxHealthPoint(int currentMaxHealthPoint) {
+        this.currentMaxHealthPoint = currentMaxHealthPoint;
+    }
+
+    public void setCurrentMaxAttackPower(int currentMaxAttackPower) {
+        this.currentMaxAttackPower = currentMaxAttackPower;
+    }
+
+    public void setCurrentMaxSpcAttackPower(int currentMaxSpcAttackPower) {
+        this.currentMaxSpcAttackPower = currentMaxSpcAttackPower;
+    }
+
+    public void setCurrentMaxElemAttackPower(int currentMaxElemAttackPower) {
+        this.currentMaxElemAttackPower = currentMaxElemAttackPower;
+    }
+
+    public void setCurrentMaxDefensePower(int currentMaxDefensePower) {
+        this.currentMaxDefensePower = currentMaxDefensePower;
+    }
+
+    public String monsterProperty() {
+        StringBuilder properties = new StringBuilder();
+        Object[] attributes = {
+            getName(),
+            getLevel(),
+            getExperiencePoint(),
+            getElementType().toString(),
+            getHealthPoint(),
+            getAttackPower(),
+            getSpcAttackPower(),
+            getElemAttackPower(),
+            getDefensePower(),
+            getMaxHealthPoint(),
+            getMaxAttackPower(),
+            getMaxSpcAttackPower(),
+            getMaxElemAttackPower(),
+            getMaxDefensePower(),
+            getMonsterPhase(),
+            getMaxMonsterPhase(),
+            getCurrentMaxHealthPoint(),
+            getCurrentMaxAttackPower(),
+            getCurrentMaxSpcAttackPower(),
+            getCurrentMaxElemAttackPower(),
+            getCurrentMaxDefensePower()
+        };
+
+        for (Object attribute : attributes) {
+            properties.append(attribute).append("\n");
+        }
+
+        for (ElementalAttack attack : elementalAttacks) {
+            properties.append(attack.getNama()).append("\n")
+                      .append(attack.getPower()).append("\n")
+                      .append(attack.getElement()).append("\n");
+        }
+
+        return properties.toString();
     }
 }

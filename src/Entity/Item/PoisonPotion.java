@@ -8,8 +8,8 @@ public class PoisonPotion extends Item{
     private int poisonAmount;
     
 
-    public PoisonPotion(String name, int price, String rarity, int duration) {
-        super(name, "Give enemy passive damage", price, rarity, duration);
+    public PoisonPotion(String name, String rarity) {
+        super(name, "Give enemy passive damage", 0, rarity, 0);
         switch (super.rarity) {
             case COMMON:
                 poisonAmount = 3;

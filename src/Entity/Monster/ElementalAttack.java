@@ -13,6 +13,18 @@ public class ElementalAttack {
         this.element = element;
     }
 
+    public String getNama() {
+        return this.nama;
+    }
+
+    public int getPower() {
+        return this.power;
+    }
+
+    public ElementType getElement() {
+        return this.element;
+    }
+
     // @Override
     // public void toString(){}
 

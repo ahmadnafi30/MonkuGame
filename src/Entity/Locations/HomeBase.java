@@ -80,7 +80,7 @@ public class HomeBase extends Locations {
     private void evolveMonsters(Player player, int monsterIndex) {
         if (monsterIndex >= 0 && monsterIndex < player.getMonsters().size()) {
             Monster monster = player.getMonsters().get(monsterIndex);
-            professor.evolvePokemon(monster);
+            professor.evolvePokemon(monster, monster.getElementType()[0].toString());
             System.out.println("Professor: Your monster " + monster.getName() + " has evolved!");
         } else {
             System.out.println("Professor: Invalid monster selection.");
