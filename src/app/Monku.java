@@ -16,9 +16,14 @@ import gui.*;
 public class Monku {
     public static void main(String[] args) throws IOException {
         
-        Player p = new Player("Raka", new HomeBase("junction"));
-        p.catchMonster(new FireType("Barok", 1, 4));
-        progressManagement file = new progressManagement("./save_files/save.txt");
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new Homepage();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
     }
-    
+
 }

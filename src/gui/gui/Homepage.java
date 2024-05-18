@@ -18,6 +18,7 @@ public class Homepage {
         JFrame frame = new JFrame("Monku Games");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 750);
+        frame.setLocationRelativeTo(null);
         ImageIcon icon = new ImageIcon("asset/Screenshot 2024-05-15 192702.png");
         frame.setIconImages(Collections.singletonList(icon.getImage()));
 
