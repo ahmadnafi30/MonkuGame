@@ -58,7 +58,7 @@ public class HomeBase extends JFrame implements ActionListener{
             }
         };
         dialogBox.setBounds(3, 450, 980, 265);
-        dialogTextPanel.setBounds(80, 500, dialogBox.getWidth() - 160, 265);
+        dialogTextPanel.setBounds(120, 500, dialogBox.getWidth() - 160, 265);
         dialogTextPanel.setOpaque(false);
         createDialogCard("<html><p style=\"margin-left: 20px\">Halo Kamu!</p>Siapa namamu?</html>");
         createDialogCard("Ini adalah dialog 2");
