@@ -1,6 +1,6 @@
 package Error;
 
-public class BuyException extends RuntimeException {
+public class BuyException extends IndexOutOfBoundsException {
 
     public BuyException(String message) {
         super(message);

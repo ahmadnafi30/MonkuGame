@@ -19,7 +19,6 @@ public class Monku {
         Player p = new Player("Raka", new HomeBase("junction"));
         p.catchMonster(new FireType("Barok", 1, 4));
         progressManagement file = new progressManagement("./save_files/save.txt");
-        file.savingProgress();
     }
 
 }

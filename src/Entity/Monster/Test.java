@@ -8,37 +8,42 @@ import Entity.Monster.*;
 
 public class Test {
     public static void main(String[] args) {
-        // Create an instance of the Monster class
-        Monster monster = new IceType("Nafi", 1, 4);
+        Monster monster = new FireType("Raka", 1, 4);
+        ((FireType)monster).ember();
         monster.setLevel(20);
         monster.displayDetailMonster();
-        ((IceType) monster).iceBeam();
-        ((IceType) monster).hydroPump();
-        monster.evolution("Fire");
-        monster.displayDetailMonster();
-        System.out.println();
-        Monster enemy = new FireType("Raka", 1, 4);
-        ((FireType) enemy).ember();
-        ((FireType) enemy).flameThrower();
-        enemy.displayDetailMonster();
-        // Access the attributes
-
-        for(int i = 0; i < 5; i++){
-            monster.basicAttack(enemy);
-            enemy.basicAttack(monster);
-            enemy.elementalAttack(monster, enemy.elementalAttacks.get(0));
-            System.out.println(enemy.getHealthPoint());
+        String[] properties = monster.monsterProperty().split("\n");
+        for(int i = 0 ; i < properties.length ; i++){
+            System.out.println(i + "  "+properties[i]);
         }
-
-        monster.healingHp(1000);
-        monster.setLevel(20);
+        monster.evolution("air");
         monster.displayDetailMonster();
-        String elementNow = monster.getElementType().toString();
-        monster.evolution(elementNow);
-        String[] monsterProperties = monster.monsterProperty().split("\n");
-        for(int i = 0 ; i < monsterProperties.length ; i++){
-            System.out.println(i + "  "+monsterProperties[i]);
-        }
+        // Monster monster2 = new 
+        // monster.evolution("Fire");
+        // monster.displayDetailMonster();
+        // System.out.println();
+        // Monster enemy = new FireType("Raka", 1, 4);
+        // ((FireType) enemy).ember();
+        // ((FireType) enemy).flameThrower();
+        // enemy.displayDetailMonster();
+        // // Access the attributes
+
+        // for(int i = 0; i < 5; i++){
+        //     monster.basicAttack(enemy);
+        //     enemy.basicAttack(monster);
+        //     enemy.elementalAttack(monster, enemy.elementalAttacks.get(0));
+        //     System.out.println(enemy.getHealthPoint());
+        // }
+
+        // monster.healingHp(1000);
+        // monster.setLevel(20);
+        // monster.displayDetailMonster();
+        // String elementNow = monster.getElementType().toString();
+        // monster.evolution(elementNow);
+        // String[] monsterProperties = monster.monsterProperty().split("\n");
+        // for(int i = 0 ; i < monsterProperties.length ; i++){
+        //     System.out.println(i + "  "+monsterProperties[i]);
+        // }
         
     }           
 

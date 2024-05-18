@@ -27,30 +27,29 @@ public abstract class Monster implements Battle {
     private int currentMaxElemAttackPower;
     private int currentMaxDefensePower;
 
-    // Constructor for loading game
-    public Monster(String name, int level, int experiencePoint, ElementType[] elementType, List<ElementalAttack> elementalAttacks, int healthPoint, int attackPower, int spcAttackPower, int elemAttackPower, int defensePower, int maxHealthPoint, int maxAttackPower, int maxSpcAttackPower, int maxElemAttackPower, int maxDefensePower, int monsterPhase, int maxMonsterPhase, int currentMaxHealthPoint, int currentMaxAttackPower, int currentMaxSpcAttackPower, int currentMaxElemAttackPower, int currentMaxDefensePower) {
-        this.name = name;
-        this.level = level;
-        this.experiencePoint = experiencePoint;
-        this.elementType = elementType;
-        //this.elementalAttacks = new ArrayList<>().addAll();;
-        this.healthPoint = healthPoint;
-        this.attackPower = attackPower;
-        this.spcAttackPower = spcAttackPower;
-        this.elemAttackPower = elemAttackPower;
-        this.defensePower = defensePower;
-        this.maxHealthPoint = maxHealthPoint;
-        this.maxAttackPower = maxAttackPower;
-        this.maxSpcAttackPower = maxSpcAttackPower;
-        this.maxElemAttackPower = maxElemAttackPower;
-        this.maxDefensePower = maxDefensePower;
-        this.monsterPhase = monsterPhase;
-        this.maxMonsterPhase = maxMonsterPhase;
-        this.currentMaxHealthPoint = currentMaxHealthPoint;
-        this.currentMaxAttackPower = currentMaxAttackPower;
-        this.currentMaxSpcAttackPower = currentMaxSpcAttackPower;
-        this.currentMaxElemAttackPower = currentMaxElemAttackPower;
-        this.currentMaxDefensePower = currentMaxDefensePower;
+    public Monster(Monster monster){
+        name = monster.name;
+        level = monster.level;
+        experiencePoint = monster.experiencePoint;
+        elementType = monster.elementType;
+        elementalAttacks = monster.elementalAttacks;
+        healthPoint = monster.healthPoint;
+        attackPower = monster.attackPower;
+        spcAttackPower = monster.spcAttackPower;
+        elemAttackPower = monster.elemAttackPower;
+        defensePower = monster.defensePower;
+        maxHealthPoint = monster.maxHealthPoint;
+        maxAttackPower = monster.maxAttackPower;
+        maxSpcAttackPower = monster.maxSpcAttackPower;
+        maxElemAttackPower = monster.maxElemAttackPower;
+        maxDefensePower = monster.maxDefensePower;
+        monsterPhase = monster.monsterPhase;
+        maxMonsterPhase = monster.maxMonsterPhase;
+        currentMaxHealthPoint = monster.currentMaxHealthPoint;
+        currentMaxAttackPower = monster.currentMaxAttackPower;
+        currentMaxSpcAttackPower = monster.currentMaxSpcAttackPower;
+        currentMaxElemAttackPower = monster.currentMaxElemAttackPower;
+        currentMaxDefensePower = monster.currentMaxDefensePower;
     }
 
     public Monster(String name, int monsterPhase, String elementType, int maxMonsterPhase) {
@@ -64,6 +63,7 @@ public abstract class Monster implements Battle {
         this.maxMonsterPhase = maxMonsterPhase;
         setAttributesMax(monsterPhase);
 
+        // Initialize the current values to some defaults if needed, e.g., halfway between min and max
         this.healthPoint = maxHealthPoint / 2;
         this.currentMaxHealthPoint = maxHealthPoint / 2;
         this.attackPower = maxAttackPower / 2;
@@ -105,7 +105,7 @@ public abstract class Monster implements Battle {
         return false;
     }
 
-
+    //will be critical if 2 and 1 if not
     //monster yang dimaksud adalah monster yang memberikan dmg (attacker)
     private int dmgFormula(Monster attacker, int critikal, String attackType, ElementalAttack elementalAttack) {
         Random rand = new Random();
@@ -248,6 +248,11 @@ public abstract class Monster implements Battle {
                 break;
         }
     }
+    
+    // public Monster transformTo(Class<? extends Monster> newType) throws Exception {//ElementType[] elementType, List<ElementalAttack>
+    //     return newType.getDeclaredConstructor(String.class, int.class, int.class, ElementType[].class, List.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class)
+    //                   .newInstance(this.name, this.level, this.experiencePoint, this.elementType, this.elementalAttacks, this.healthPoint, this.attackPower, this.spcAttackPower, this.elemAttackPower, this.defensePower, this.maxHealthPoint, this.maxAttackPower, this.maxSpcAttackPower, this.maxElemAttackPower, this.maxDefensePower, this.monsterPhase, this.maxMonsterPhase, this.currentMaxHealthPoint, this.currentMaxAttackPower, this.currentMaxSpcAttackPower, this.currentMaxElemAttackPower, this.currentMaxDefensePower);
+    // }
 
     // Method to handle evolution
     public boolean evolution(String element) {
@@ -258,6 +263,39 @@ public abstract class Monster implements Battle {
         if(level < 20){
             System.out.println("Level monster tidak mencukupi untuk melakukan evolusi!");
             return false;
+        }
+        switch (element.toUpperCase()) {
+            case "ICE":
+                if(!this.elementType[0].equals(ElementType.WATER) && !this.elementType[0].equals(ElementType.EARTH)){
+                    System.out.println("Monster tidak dapat melakukan evolusi ke element type ICE!");
+                    return false;
+                }
+                break;
+            case "EARTH":
+                if(!this.elementType[0].equals(ElementType.ICE) && !this.elementType[0].equals(ElementType.FIRE)){
+                    System.out.println("Monster tidak dapat melakukan evolusi ke element type EARTH!");
+                    return false;
+                }
+                break;
+            case "FIRE":
+                if(!this.elementType[0].equals(ElementType.EARTH) && !this.elementType[0].equals(ElementType.AIR)){
+                    System.out.println("Monster tidak dapat melakukan evolusi ke element type FIRE!");
+                    return false;
+                }
+                break;
+            case "AIR":
+                if(!this.elementType[0].equals(ElementType.FIRE) && !this.elementType[0].equals(ElementType.WATER)){
+                    System.out.println("Monster tidak dapat melakukan evolusi ke element type AIR!");
+                    return false;
+                }
+                break;
+            case "WATER":
+                if(!this.elementType[0].equals(ElementType.ICE) && !this.elementType[0].equals(ElementType.AIR)){
+                    System.out.println("Monster tidak dapat melakukan evolusi ke element type WATER!");
+                    return false;
+                }
+            default:
+                break;
         }
         changeElementType(element);
         setAttributesMax(monsterPhase);
@@ -280,6 +318,7 @@ public abstract class Monster implements Battle {
         setAttributesMax(monsterPhase);
         monsterPhase++;
         experiencePoint = 0;
+        level = 0;
         return true;
     }
 
@@ -510,6 +549,10 @@ public abstract class Monster implements Battle {
         this.currentMaxDefensePower = currentMaxDefensePower;
     }
 
+    public List<ElementalAttack> getElementalAttacks() {
+        return this.elementalAttacks;
+    }
+
     public String monsterProperty() {
         StringBuilder properties = new StringBuilder();
         Object[] attributes = {
@@ -517,6 +560,7 @@ public abstract class Monster implements Battle {
             getLevel(),
             getExperiencePoint(),
             getElementType().toString(),
+            getElementalAttacks(),
             getHealthPoint(),
             getAttackPower(),
             getSpcAttackPower(),
@@ -538,12 +582,6 @@ public abstract class Monster implements Battle {
 
         for (Object attribute : attributes) {
             properties.append(attribute).append("\n");
-        }
-
-        for (ElementalAttack attack : elementalAttacks) {
-            properties.append(attack.getNama()).append("\n")
-                      .append(attack.getPower()).append("\n")
-                      .append(attack.getElement()).append("\n");
         }
 
         return properties.toString();
