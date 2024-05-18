@@ -20,5 +20,5 @@ public class Monku {
         p.catchMonster(new FireType("Barok", 1, 4));
         progressManagement file = new progressManagement("./save_files/save.txt");
     }
-
+    
 }

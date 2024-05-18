@@ -76,6 +76,9 @@ public abstract class Monster implements Battle {
         this.currentMaxDefensePower = maxDefensePower / 2;
     }
 
+    public Monster getMonster(){
+        return this;
+    }
     // cek jika attacker memimiliki elemen yang efektif dengan musuh
     public boolean checkWeakness(ElementType elementType) {
         switch (elementType) {
@@ -447,6 +450,10 @@ public abstract class Monster implements Battle {
             return;
         }
         this.healthPoint = healthPoint;
+    }
+
+    public String getELementTypeStr(){
+        return this.elementType[0].toString();
     }
 
     public int getAttackPower() {

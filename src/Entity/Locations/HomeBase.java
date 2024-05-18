@@ -65,6 +65,8 @@ public class HomeBase extends Locations {
                 System.out.println("Invalid choice. Please try again.");
                 break;
         }
+
+        scanner.close();
     }
 
     private void healMonsters(Player player, int monsterIndex) {
@@ -80,7 +82,7 @@ public class HomeBase extends Locations {
     private void evolveMonsters(Player player, int monsterIndex) {
         if (monsterIndex >= 0 && monsterIndex < player.getMonsters().size()) {
             Monster monster = player.getMonsters().get(monsterIndex);
-            professor.evolvePokemon(monster, monster.getElementType()[0].toString());
+            professor.evolvePokemon(monster, monster.getELementTypeStr());
             System.out.println("Professor: Your monster " + monster.getName() + " has evolved!");
         } else {
             System.out.println("Professor: Invalid monster selection.");
@@ -114,5 +116,6 @@ public class HomeBase extends Locations {
         } else {
             System.out.println("Professor: Sorry, no " + pokemonType + " type Pokémon were found. Try again later.");
         }
+        scanner.close();
     }
 }

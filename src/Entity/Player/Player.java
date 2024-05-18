@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import Error.*;
 import Entity.Battle;
 import Entity.ItemInteract;
 import Entity.Item.*;
@@ -87,18 +88,28 @@ public class Player implements ItemInteract, Battle {
     }
 
     @Override
-    public void buyItem(Item itembuy, int quantity) {
+    public void buyItem(Item itembuy, int quantity, Object seller) {
         if (itembuy.price * quantity > coin) {
-            System.out.println("Koin tidak cukup");
+            BuyException.throwItemBuyException("Tidak ada koin yang cukup untuk membeli item ini.");
+            return;
         } else if (inventoryIsFull() || inventorySize() + quantity > MAX_CAPACITY) {
+            BuyException.throwFullInventoryException(" Inventory penuh. Tidak bisa membeli item.");
             int availableSpace = MAX_CAPACITY - inventorySize();
-            System.out.println("Inventory penuh. Hanya bisa membeli " + availableSpace + " item.");
-        } else {
+            System.out.println("Hanya bisa membeli " + availableSpace + " item.");
+            return;
+        }
+        if(seller instanceof ItemSeller) {
+            ItemSeller itemSeller = (ItemSeller) seller;
+            if(!itemSeller.hasItem(itembuy)) {
+                BuyException.throwEmptyItemException("Tidak ada item yang tersedia untuk dibeli.");
+                return;
+            }
+            itemSeller.setItemQuantity(itembuy, -quantity);
             coin -= itembuy.price * quantity;
             inventory.put(itembuy, inventory.getOrDefault(itembuy, 0) + quantity);
             System.out.println("Item " + itembuy.name + " berhasil dibeli dan ditambahkan ke inventory");
             System.out.println("Sisa koin saat ini: " + coin);
-
+    
             printItemDetails(itembuy);
             incrementExp(5); // Add exp for buying item
         }
@@ -179,8 +190,13 @@ public class Player implements ItemInteract, Battle {
 
     
     @Override
-    public void sellItem(Item itemsell, int quantity) {
+    public void sellItem(Item itemsell, int quantity, Object buyer) {
         if (inventory.containsKey(itemsell) && inventory.get(itemsell) >= quantity) {
+            if(buyer instanceof ItemSeller) {
+                ItemSeller itemSeller = (ItemSeller) buyer;
+                itemSeller.setItemQuantity(itemsell, quantity);
+                itemSeller.setCoin(itemsell.price * quantity);
+            }
             inventory.put(itemsell, inventory.get(itemsell) - quantity);
             coin += itemsell.price * quantity;
             if (inventory.get(itemsell) == 0) {

@@ -10,8 +10,8 @@ public class Teleportation extends Item{
     private Locations destination;
     private int chance;
     
-    public Teleportation(String name, int price, String rarity, int duration, Locations location) {
-        super(name, "Can Teleport You Anywhere", price, rarity, duration);
+    public Teleportation(String name, Locations location) {
+        super(name, "Can Teleport You Anywhere", 0, "EPIC", 0);
         switch (super.rarity) {
             case COMMON:
                 chance = 20;
