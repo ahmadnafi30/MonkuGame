@@ -27,8 +27,9 @@ public class Player implements ItemInteract, Battle {
     private Duration timePlayed;
     private Instant startTime;
     private Locations locationPlayer;
+    private String image;
 
-    public Player(String name, Locations locationPlayer) {
+    public Player(String name, Locations locationPlayer, String image) {
         this.name = name;
         this.level = 1;
         this.coin = 100;
@@ -38,6 +39,7 @@ public class Player implements ItemInteract, Battle {
         this.timePlayed = Duration.ZERO;
         this.startTime = Instant.now();
         this.locationPlayer = locationPlayer;
+        this.image = image;
     }
 
     public void enterLocation(Locations enter){

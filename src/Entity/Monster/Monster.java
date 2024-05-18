@@ -22,7 +22,6 @@ public abstract class Monster implements Battle{
     private int monsterPhase; 
     private int maxMonsterPhase;
 
-    // Constructor
     public Monster(String name, int monsterPhase, String elementType, int maxMonsterPhase) {
         this.elementalAttacks = new ArrayList<>();
         this.name = name;
@@ -34,7 +33,6 @@ public abstract class Monster implements Battle{
         this.maxMonsterPhase = maxMonsterPhase;
         setAttributesMax(monsterPhase);
 
-        // Initialize the current values to some defaults if needed, e.g., halfway between min and max
         this.healthPoint = maxHealthPoint / 2;
         this.attackPower = maxAttackPower / 2;
         this.spcAttackPower = maxSpcAttackPower / 2;
@@ -71,7 +69,7 @@ public abstract class Monster implements Battle{
         return false;
     }
 
-    //will be critical if 2 and 1 if not
+
     //monster yang dimaksud adalah monster yang memberikan dmg (attacker)
     public int dmgFormula(Monster attacker, int critikal, String attackType, ElementalAttack elementalAttack) {
         Random rand = new Random();
