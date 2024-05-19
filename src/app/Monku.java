@@ -15,19 +15,20 @@ import gui.*;
 
 public class Monku {
 
-    Player player;
-    Monster monku;
-    NPC professor;
-    NPC shopKeeper;
-    Locations loc;
-    Item item;
-    ProgressManagement progress;
+    public static Player player;
+    public static Monster monku;
+    public static NPC professor;
+    public static NPC shopKeeper;
+    public static Locations loc;
+    public static Item item;
+    public static ProgressManagement progress;
 
     public static void main(String[] args) throws IOException {
-        
+        //TODO: bikin konstruktor kosong buat setiap kelas
+        player = new Player(null, new HomeBase("lab"), null);
         SwingUtilities.invokeLater(() -> {
             try {
-                new Homepage();
+                new Homepage(new ProfessorPokemon("Heru", "Professor Monku"), player, monku);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

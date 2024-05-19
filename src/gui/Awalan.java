@@ -4,16 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Collections;
 
+import Entity.Locations.HomeBase;
+import Entity.Monster.Monster;
+import Entity.NPC.NPC;
+import Entity.Player.Player;
 
-public class HomeBase extends JFrame implements ActionListener{
+public class Awalan extends JFrame implements ActionListener {
     private CardLayout dialogText;
     private JPanel dialogTextPanel;
 
-    public HomeBase() {
+    public Awalan(NPC prof, Player player, Monster monku) {
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,7 +50,7 @@ public class HomeBase extends JFrame implements ActionListener{
         panelBG.add(professor);
         dialogText = new CardLayout();
         dialogTextPanel = new JPanel(dialogText);
-        
+
         JPanel dialogBox = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -67,31 +69,51 @@ public class HomeBase extends JFrame implements ActionListener{
         panelBG.add(dialogTextPanel);
         panelBG.add(dialogBox);
 
-
-        // Create dialog cards
-
-
         // Create an invisible button to capture clicks and switch dialogs
         JButton invisibleButton = new JButton();
         invisibleButton.setBounds(dialogBox.getBounds());
         invisibleButton.setOpaque(false);
         invisibleButton.setContentAreaFilled(false);
         invisibleButton.setBorderPainted(false);
-        
+        final JLabel label = new JLabel();
         invisibleButton.addActionListener(e -> {
+            int cardCount = getCardPosition();
+            if (cardCount == 0) {
+                String result = getInput(frame);
+                if (result != null && !result.isEmpty()) {
+                    player.setName(result);
+                }
+            }
             if (isLastCard()) {
+                player.printDetailPlayer();
                 // Transition to new scene
                 newScene();
             } else {
                 dialogText.next(dialogTextPanel);
             }
         });
-        
-        panelBG.add(invisibleButton);
 
+        panelBG.add(label);
+        panelBG.add(invisibleButton);
         frame.setVisible(true);
     }
-    
+
+    public String getInput(JFrame frame) {
+        String result = (String) JOptionPane.showInputDialog(
+            frame,
+            "Masukkan namamu",
+            "Nama Player",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            null,
+            "SIAPA?");
+        if (result == null || result.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Masukkan namamu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return getInput(frame);
+        }
+        return result;
+    }
+
     private boolean isLastCard() {
         Component[] components = dialogTextPanel.getComponents();
         for (Component comp : components) {
@@ -100,6 +122,16 @@ public class HomeBase extends JFrame implements ActionListener{
             }
         }
         return false;
+    }
+
+    private int getCardPosition() {
+        Component[] components = dialogTextPanel.getComponents();
+        for (int i = 0; i < components.length; i++) {
+            if (components[i].isVisible()) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void newScene() {
@@ -127,6 +159,7 @@ public class HomeBase extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
+        JOptionPane.showMessageDialog(this, "Action performed!", "Peringatan", JOptionPane.INFORMATION_MESSAGE);
         throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
 }
