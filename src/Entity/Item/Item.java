@@ -1,10 +1,12 @@
 package Entity.Item;
 
+import java.io.Serializable;
+
 import Entity.Item.Item.Rarity;
 import Entity.Monster.Monster;
 import Entity.Player.Player;
 
-public abstract class Item {
+public abstract class Item implements Serializable{
     public String name;
     public String functionality;
     public int price;

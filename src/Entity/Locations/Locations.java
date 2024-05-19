@@ -1,6 +1,8 @@
 package Entity.Locations;
 
-public abstract class Locations {
+import java.io.Serializable;
+
+public abstract class Locations implements Serializable {
     String locationName;
 
     public Locations(String locationName) {

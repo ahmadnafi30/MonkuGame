@@ -22,54 +22,27 @@ public class Shop extends Locations {
         seller.checkInventory();
     }
 
-    public void buyItem(Player player) {
-        Scanner in = new Scanner(System.in);
+    public void buyItem(Player player, Item item) {
         try {
-            System.out.println("Seller: What would you like to buy?");
-            seller.checkInventory();
-
-            System.out.print("Enter item number to buy: ");
-            int pilihitem = in.nextInt();
-
-            System.out.print("Enter quantity: ");
-            int quantity = in.nextInt();
-
             seller.sellItem(pilihitem, player, quantity);
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a valid number.");
-            in.next(); // Clear the invalid input
         }
     }
 
     public void sellItem(Player player) {
-        Scanner in = new Scanner(System.in);
+
         try {
-            System.out.println("Seller: What items do you have to sell?");
-            player.checkInventory();
-
-            System.out.print("Enter item number to sell: ");
-            int pilihitem = in.nextInt();
-
-            System.out.print("Enter quantity: ");
-            int quantity = in.nextInt();
-
             seller.buyItem(pilihitem, player, quantity);
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a valid number.");
-            in.next(); // Clear the invalid input
+            in.next();
         }
     }
 
-    public void doEverything(Player player) {
-        Scanner in = new Scanner(System.in);
+    public void doEverything(Player player, int whatdoyouwant) {
         try {
-            System.out.println("Seller: Everything is for sale!");
-            System.out.println("1. Buy Item");
-            System.out.println("2. Sell Item");
-            System.out.print("Enter your choice: ");
-            int pilihan = in.nextInt();
-
-            switch (pilihan) {
+            switch (whatdoyouwant) {
                 case 1:
                     buyItem(player);
                     break;
@@ -82,7 +55,6 @@ public class Shop extends Locations {
             }
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a valid number.");
-            in.next(); // Clear the invalid input
         }
         System.out.println("Seller: Come back soon!");
     }

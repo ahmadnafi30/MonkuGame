@@ -30,6 +30,21 @@ public class Player implements ItemInteract, Battle {
     private Locations locationPlayer;
     private String image;
 
+    // constructor buat load game
+    public Player(String name, int level, int exp, Map<Item,Integer> inventory, int coin, ArrayList<Monster> monsters, Duration timePlayed, Instant startTime, Locations locationPlayer, String image) {
+        this.name = name;
+        this.level = level;
+        this.exp = exp;
+        this.inventory = inventory;
+        this.coin = coin;
+        this.monsters = monsters;
+        this.timePlayed = timePlayed;
+        this.startTime = startTime;
+        this.locationPlayer = locationPlayer;
+        this.image = image;
+    }
+
+    // constructor buat new game
     public Player(String name, Locations locationPlayer, String image) {
         this.name = name;
         this.level = 1;
@@ -318,5 +333,9 @@ public class Player implements ItemInteract, Battle {
 
     public Locations getLocationPlayer() {
         return locationPlayer;
+    }
+
+    public String getImage(){
+        return image;
     }
 }

@@ -1,8 +1,9 @@
 package Entity.Monster;
+import java.io.Serializable;
 import java.util.*;
 import Entity.Battle;
 
-public abstract class Monster implements Battle {
+public abstract class Monster implements Battle, Serializable {
     // Attributes
     private String name;
     private int level;

@@ -9,7 +9,7 @@ import Entity.Monster.FireType;
 import Entity.Monster.Monster;
 import Entity.NPC.*;
 
-public class Main {
+public class main {
     
     public static void main(String[] args) {
         Locations homebase = new HomeBase("junction");
@@ -22,26 +22,28 @@ public class Main {
         // player.printDetailPlayer();
         Monster raka = new AirType("RAKA", 1, 2);
         player.catchMonster(raka);
+        player.getLocationPlayer();
+        ((HomeBase)homebase).interactWithPlayer(player, 3, raka);
         // player.printDetailPlayer();
 
-        Monster nagi = new FireType("Barok", 1, 4);
+        // // Monster nagi = new FireType("Barok", 1, 4);
 
-        Monster sekarang = player.deployMonster(0);
+        // Monster sekarang = player.deployMonster(0);
 
-        player.checkMonsters();
-        System.out.println();
-        nagi.basicAttack(sekarang);
-        player.checkMonsters();
+        // player.checkMonsters();
+        // System.out.println();
+        // // nagi.basicAttack(sekarang);
+        // player.checkMonsters();
 
-        raka.setLevel(20);
-        raka.displayDetailMonster();
+        // raka.setLevel(20);
+        // raka.displayDetailMonster();
         
-        NPC prof = new ProfessorPokemon("Heru", "Professor Monku");
-        ((ProfessorPokemon) prof).healPokemon(player, raka.getName());
-        ((ProfessorPokemon) prof).evolvePokemon(raka, "fire");
-        raka = raka.changeMonsterClass();
-        System.out.println(raka.getMonster());
+        // NPC prof = new ProfessorPokemon("Heru", "Professor Monku");
+        // ((ProfessorPokemon) prof).healPokemon(player, raka.getName());
+        // ((ProfessorPokemon) prof).evolvePokemon(raka, "fire");
+        // raka = raka.changeMonsterClass();
+        // System.out.println(raka.getMonster());
 
-        raka.displayDetailMonster();
+        // raka.displayDetailMonster();
     }
 }
