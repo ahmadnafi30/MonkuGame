@@ -25,7 +25,7 @@ public class Monku {
 
     public static void main(String[] args) throws IOException {
         //TODO: bikin konstruktor kosong buat setiap kelas
-        player = new Player(null, new HomeBase("lab"), null);
+        player = new Player("", new HomeBase("HomeBase"), "");
         SwingUtilities.invokeLater(() -> {
             try {
                 new Homepage();

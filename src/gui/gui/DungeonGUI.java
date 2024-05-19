@@ -34,7 +34,7 @@ public class DungeonGUI extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon originalIcon = new ImageIcon(dungeon.getImages());
+                ImageIcon originalIcon = new ImageIcon("asset/bencin-studios-pixelartbackground (1).gif");
                 Image originalImage = originalIcon.getImage();
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
@@ -146,15 +146,15 @@ public class DungeonGUI extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
+    // public static void main(String[] args) {
 
-        Monster[] monsters = {};
-        Item[] rewards = {};
-        Dungeon dungeon = new Dungeon("Mystic Cave", monsters, rewards, 1, "path/to/images");
-        Player player = new Player("Hero", dungeon, "w"); 
+    //     Monster[] monsters = {};
+    //     Item[] rewards = {};
+    //     Dungeon dungeon = new Dungeon("Mystic Cave", monsters, rewards, 1, "path/to/images");
+    //     Player player = new Player("Hero", dungeon, "w"); 
 
-        SwingUtilities.invokeLater(() -> {
-            new DungeonGUI(dungeon, player).setVisible(true);
-        });
-    }
+    //     SwingUtilities.invokeLater(() -> {
+    //         new DungeonGUI(dungeon, player).setVisible(true);
+    //     });
+    // }
 }

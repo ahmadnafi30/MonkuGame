@@ -53,6 +53,8 @@ public class Awalan extends JFrame implements ActionListener {
 
         dialogText = new CardLayout();
         dialogTextPanel = new JPanel(dialogText);
+        dialogTextPanel.setOpaque(false);
+        panelBG.add(dialogTextPanel);
 
         JPanel dialogBox = new JPanel(null) {
             @Override
@@ -63,20 +65,22 @@ public class Awalan extends JFrame implements ActionListener {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-
         dialogBox.setBounds(3, 450, 980, 265);
-        dialogTextPanel.setBounds(120, 500, dialogBox.getWidth() - 160, 265);
-        dialogTextPanel.setOpaque(false);
-        panelBG.add(dialogTextPanel);
         panelBG.add(dialogBox);
 
-        if (loadornew == 1) {
-            createDialogCard("<html><p style=\"margin-left: 20px\">Halo Kamu!</p>Siapa namamu?</html>");
-        } else if (loadornew == 2) {
-            createDialogCard("<html><p style=\"margin-left: 20px\">Hello " + Monku.player.getName() + "!</p>Welcome back!</html>");
+        if (Monku.player == null) {
+            Monku.player = new Player(); // Ensure the player object is initialized
         }
-        createDialogCard("Ini adalah dialog 2");
-        createDialogCard("Ini adalah dialog 3");
+
+        if (loadornew == 1) {
+            createDialogCard("<html><p style=\"margin-left: 30px\">Halo Kamu!</p>Siapa namamu?</html>", 30, 220, 536, 700, 100);
+            // Setelah menambahkan kartu baru, tambahkan pembaruan posisi
+            dialogTextPanel.revalidate();
+            dialogTextPanel.repaint();
+
+        } else if (loadornew == 2) {
+            createDialogCard("<html><p style=\"margin-left: 30px\">Hello " + Monku.player.getName() + " !</p>Welcome back!</html>", 30, 220, 536, 700, 100);
+        }
 
         // Create an invisible button to capture clicks and switch dialogs
         JButton invisibleButton = new JButton();
@@ -86,10 +90,13 @@ public class Awalan extends JFrame implements ActionListener {
         invisibleButton.setBorderPainted(false);
         invisibleButton.addActionListener(e -> {
             int cardCount = getCardPosition();
+            System.out.println(cardCount);
             if (cardCount == 0 && loadornew == 1) {
                 String result = getInput(frame);
                 if (result != null && !result.isEmpty()) {
                     Monku.player.setName(result);
+                    createDialogCard("<html><p style=\"margin-left: 130px\">Halo " + Monku.player.getName() + ",</p> <p style=\"margin-left: 30px\">senang berkenalan denganmu!</p><p>Kamu mau pilih monku yang mana?</p></html>", 20, 220, 540, 700, 100);
+                    createDialogCard("Ini adalah dialog 3", 10, 80, 400, 700, 100);
                 }
             }
             if (isLastCard()) {
@@ -147,26 +154,38 @@ public class Awalan extends JFrame implements ActionListener {
             try {
                 new MapGUI();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         });
     }
 
-    private void createDialogCard(String text) {
+    private void createDialogCard(String text, int size, int x, int y, int width, int height) {
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         JLabel label = new JLabel(text, SwingConstants.CENTER);
-        label.setFont(new Font("Purisa Bold", Font.BOLD, 30));
-        label.setForeground(Color.BLACK); // Set text color
+        label.setFont(new Font("Public Pixel", Font.BOLD, size));
+        label.setForeground(Color.BLACK);
         label.setVisible(true);
-        panel.add(label);
+        label.setBounds(x, y, width, height);
+        System.out.println("label =" + label.getBounds());
+        panel.setBounds(x, y, width, height);
+        System.out.println("panel =" + panel.getBounds());
+        dialogTextPanel.setBounds(x, y, width, height); // Set the bounds of the panel, including location and size
+        System.out.println(dialogTextPanel.getBounds());
         dialogTextPanel.add(panel);
+        panel.add(label);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JOptionPane.showMessageDialog(this, "Action performed!", "Peringatan", JOptionPane.INFORMATION_MESSAGE);
         throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+    }
+
+    public static void main(String[] args) {
+
+        SwingUtilities.invokeLater(() -> {
+            new Awalan(1);
+        });
     }
 }

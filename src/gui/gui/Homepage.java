@@ -59,7 +59,7 @@ public class Homepage {
         Image scaledButtonPressedImage = buttonPressedIcon.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
         JButton newGameButton = new JButton("NEW GAME", new ImageIcon(scaledButtonImage));
         newGameButton.setBounds(xStart, yPosition, buttonWidth, buttonHeight);
-        newGameButton.setFont(new Font("Purisa Bold", Font.BOLD, 18));
+        newGameButton.setFont(new Font("Public Pixel", Font.BOLD, 13));
         newGameButton.setHorizontalTextPosition(SwingConstants.CENTER);
         newGameButton.setVerticalTextPosition(SwingConstants.CENTER);
         newGameButton.setBorder(BorderFactory.createEmptyBorder());
@@ -69,7 +69,7 @@ public class Homepage {
 
         JButton loadGameButton = new JButton("LOAD GAME", new ImageIcon(scaledButtonImage));
         loadGameButton.setBounds(xStart + buttonWidth + spacing, yPosition, buttonWidth, buttonHeight);
-        loadGameButton.setFont(new Font("Purisa Bold", Font.BOLD, 18));
+        loadGameButton.setFont(new Font("Public Pixel", Font.BOLD, 13));
         loadGameButton.setHorizontalTextPosition(SwingConstants.CENTER);
         loadGameButton.setVerticalTextPosition(SwingConstants.CENTER);
         loadGameButton.setIconTextGap(-buttonWidth / 2); // Adjust icon-text gap
@@ -259,4 +259,6 @@ public class Homepage {
         timer.setRepeats(false);
         timer.start();
     }
+
+    
 }

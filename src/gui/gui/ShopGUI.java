@@ -1,10 +1,19 @@
 package gui;
 
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 
 import javax.swing.*;
 
-public class ShopGUI {
+import app.Monku;
+
+public class ShopGUI extends JFrame implements ActionListener {
+    private CardLayout dialogText;
+    private JPanel dialogTextPanel;
+
     public ShopGUI() {
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
@@ -13,6 +22,136 @@ public class ShopGUI {
         frame.setLocationRelativeTo(null);
         ImageIcon icon = new ImageIcon("asset/Screenshot 2024-05-15 192702.png");
         frame.setIconImages(Collections.singletonList(icon.getImage()));
+
+        JPanel panelBG = new JPanel(null) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon originalIcon = new ImageIcon("asset/ShopBG.gif");
+                Image originalImage = originalIcon.getImage();
+                g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        frame.setContentPane(panelBG);
+
+        dialogText = new CardLayout();
+        dialogTextPanel = new JPanel(dialogText);
+
+        JPanel dialogBox = new JPanel(null) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon originalIcon = new ImageIcon("asset/dialog box with pokeball.png");
+                Image originalImage = originalIcon.getImage();
+                g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        dialogBox.setBounds(3, 10, 980, 250);
+        dialogBox.setOpaque(false);  // Ensure the dialog box panel itself is transparent
+        dialogTextPanel.setBounds(70, 60, dialogBox.getWidth() - 160, 265);
+        dialogTextPanel.setOpaque(false);
+        createDialogCard("<html><p style=\"margin-left: 99px\">Halo " + Monku.player.getName() + "!</p>Apa yang ingin kamu lakukan?</html>");
+        createDialogCard("Ini adalah dialog 2");
+        createDialogCard("Ini adalah dialog 3");
+        
+        // Create an invisible button to capture clicks and switch dialogs
+        JButton invisibleButton = new JButton();
+        invisibleButton.setBounds(dialogBox.getBounds());
+        invisibleButton.setOpaque(false);
+        invisibleButton.setContentAreaFilled(false);
+        invisibleButton.setBorderPainted(false);
+        invisibleButton.addActionListener(e -> {
+            int cardCount = getCardPosition();
+            if (cardCount == 0) {
+                String result = getInput(frame);
+                if (result != null && !result.isEmpty()) {
+                    Monku.player.setName(result);
+                }
+            }
+            if (isLastCard()) {
+                Monku.player.printDetailPlayer();
+                // Transition to new scene
+                newScene(frame);
+            } else {
+                dialogText.next(dialogTextPanel);
+            }
+        });
+        
+        panelBG.add(invisibleButton);
+        panelBG.add(dialogTextPanel);
+        panelBG.add(dialogBox);
+        panelBG.setComponentZOrder(invisibleButton, 0);
         frame.setVisible(true);
+        // Request focus for the frame to ensure it receives key events
+        frame.requestFocusInWindow();
+    }
+    
+    public String getInput(JFrame frame) {
+        String result = (String) JOptionPane.showInputDialog(
+            frame,
+            "Masukkan namamu",
+            "Nama Player",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            null,
+            "SIAPA?");
+        if (result == null || result.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Masukkan namamu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return getInput(frame);
+        }
+        return result;
+    }
+
+    private boolean isLastCard() {
+        Component[] components = dialogTextPanel.getComponents();
+        for (Component comp : components) {
+            if (comp.isVisible()) {
+                return dialogTextPanel.getComponent(components.length - 1) == comp;
+            }
+        }
+        return false;
+    }
+
+    private int getCardPosition() {
+        Component[] components = dialogTextPanel.getComponents();
+        for (int i = 0; i < components.length; i++) {
+            if (components[i].isVisible()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void newScene(JFrame frame) {
+        frame.dispose();
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new MapGUI();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void createDialogCard(String text) {
+        JPanel panel = new JPanel();
+        panel.setOpaque(false);
+        JLabel label = new JLabel(text, SwingConstants.CENTER);
+        label.setFont(new Font("Purisa Bold", Font.BOLD, 30));
+        label.setForeground(Color.BLACK); // Set text color
+        label.setVisible(true);
+        panel.add(label);
+        dialogTextPanel.add(panel);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(this, "Action performed!", "Peringatan", JOptionPane.INFORMATION_MESSAGE);
+        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(ShopGUI::new);
     }
 }
