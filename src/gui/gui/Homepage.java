@@ -25,7 +25,7 @@ import java.util.Collections;
 
 public class Homepage {
 
-    public Homepage(NPC prof, Player player, Monster monku) throws IOException {
+    public Homepage() throws IOException {
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -86,8 +86,8 @@ public class Homepage {
         panel.add(aboutUsButton);
 
         addAboutUsActionListener(aboutUsButton, frame);
-        addPlayGameActionListener(newGameButton, frame, prof, player, monku);
-        addPlayGameActionListenerByLoadGames(loadGameButton, frame, prof, player, monku);
+        addPlayGameActionListener(newGameButton, frame);
+        addPlayGameActionListenerByLoadGames(loadGameButton, frame);
         addButtonHoverEffects(newGameButton);
         addButtonHoverEffects(loadGameButton);
         addButtonHoverEffects(aboutUsButton);
@@ -113,17 +113,17 @@ public class Homepage {
         });
     }
 
-    private void addPlayGameActionListener(JButton newGameButton, JFrame frame, NPC prof, Player player, Monster monku) {
+    private void addPlayGameActionListener(JButton newGameButton, JFrame frame) {
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                SwingUtilities.invokeLater(() -> new Awalan(prof, player, monku, 1));
+                SwingUtilities.invokeLater(() -> new Awalan(1));
             }
         });
     }
 
-    private void addPlayGameActionListenerByLoadGames(JButton loadGameButton, JFrame frame, NPC prof, Player player, Monster monku) {
+    private void addPlayGameActionListenerByLoadGames(JButton loadGameButton, JFrame frame) {
         loadGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -142,7 +142,7 @@ public class Homepage {
                     in.close();
     
                     frame.dispose();
-                    SwingUtilities.invokeLater(() -> new Awalan(prof, playerload, monku, 2));
+                    SwingUtilities.invokeLater(() -> new Awalan( 2));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(frame, "Error loading game data", "Error", JOptionPane.ERROR_MESSAGE);

@@ -28,7 +28,7 @@ public class Monku {
         player = new Player(null, new HomeBase("lab"), null);
         SwingUtilities.invokeLater(() -> {
             try {
-                new Homepage(new ProfessorPokemon("Heru", "Professor Monku"), player, monku);
+                new Homepage();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

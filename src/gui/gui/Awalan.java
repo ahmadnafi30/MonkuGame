@@ -10,12 +10,13 @@ import Entity.Locations.HomeBase;
 import Entity.Monster.Monster;
 import Entity.NPC.NPC;
 import Entity.Player.Player;
+import app.Monku;
 
 public class Awalan extends JFrame implements ActionListener {
     private CardLayout dialogText;
     private JPanel dialogTextPanel;
 
-    public Awalan(NPC prof, Player player, Monster monku, int loadornew) {
+    public Awalan(int loadornew) {
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,7 +72,7 @@ public class Awalan extends JFrame implements ActionListener {
         if (loadornew == 1) {
             createDialogCard("<html><p style=\"margin-left: 20px\">Halo Kamu!</p>Siapa namamu?</html>");
         } else if (loadornew == 2) {
-            createDialogCard("<html><p style=\"margin-left: 20px\">Hello " + player.getName() + "!</p>Welcome back!</html>");
+            createDialogCard("<html><p style=\"margin-left: 20px\">Hello " + Monku.player.getName() + "!</p>Welcome back!</html>");
         }
         createDialogCard("Ini adalah dialog 2");
         createDialogCard("Ini adalah dialog 3");
@@ -87,11 +88,11 @@ public class Awalan extends JFrame implements ActionListener {
             if (cardCount == 0 && loadornew == 1) {
                 String result = getInput(frame);
                 if (result != null && !result.isEmpty()) {
-                    player.setName(result);
+                    Monku.player.setName(result);
                 }
             }
             if (isLastCard()) {
-                player.printDetailPlayer();
+                Monku.player.printDetailPlayer();
                 // Transition to new scene
                 newScene();
             } else {
