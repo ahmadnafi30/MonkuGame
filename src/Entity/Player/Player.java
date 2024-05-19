@@ -295,6 +295,9 @@ public class Player implements ItemInteract, Battle {
     }
 
     // Getters
+    public void setName(String name) {
+        this.name = name;
+    }
     public String getName() {
         return name;
     }

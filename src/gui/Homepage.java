@@ -2,6 +2,12 @@ package gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import Entity.Monster.Monster;
+import Entity.NPC.NPC;
+import Entity.NPC.ProfessorPokemon;
+import Entity.Player.Player;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +20,7 @@ import java.util.Collections;
 
 public class Homepage {
 
-    public Homepage() throws IOException {
+    public Homepage(NPC prof, Player player, Monster monku) throws IOException {
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,7 +81,7 @@ public class Homepage {
         panel.add(aboutUsButton);
 
         addAboutUsActionListener(aboutUsButton, frame);
-        addPlayGameActionListener(newGameButton, frame);
+        addPlayGameActionListener(newGameButton, frame, prof, player, monku);
         addButtonHoverEffects(newGameButton);
         addButtonHoverEffects(loadGameButton);
         addButtonHoverEffects(aboutUsButton);
@@ -101,12 +107,12 @@ public class Homepage {
         });
     }
 
-    private void addPlayGameActionListener(JButton newGameButton, JFrame frame) {
+    private void addPlayGameActionListener(JButton newGameButton, JFrame frame, NPC prof, Player player, Monster monku) {
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                SwingUtilities.invokeLater(() -> new HomeBase());;
+                SwingUtilities.invokeLater(() -> new Awalan(prof, player, monku));
             }
         });
     }
