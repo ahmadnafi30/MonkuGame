@@ -12,8 +12,9 @@ public class Dungeon extends Locations {
     private ArrayList<Monster> monsters;
     private ArrayList<Item> rewards;
     private int level;
+    private String images;
 
-    public Dungeon(String locationName, Monster[] monsters, Item[] rewards, int level) {
+    public Dungeon(String locationName, Monster[] monsters, Item[] rewards, int level, String images) {
         super(locationName);
         this.monsters = new ArrayList<>();
         for (Monster monster : monsters) {
@@ -24,6 +25,40 @@ public class Dungeon extends Locations {
             this.rewards.add(reward);
         }
         this.level = level;
+        this.images = images;
+    }
+
+    // Getters and setters
+    public ArrayList<Monster> getMonsters() {
+        return this.monsters;
+    }
+
+    public void setMonsters(ArrayList<Monster> monsters) {
+        this.monsters = monsters;
+    }
+
+    public ArrayList<Item> getRewards() {
+        return this.rewards;
+    }
+
+    public void setRewards(ArrayList<Item> rewards) {
+        this.rewards = rewards;
+    }
+
+    public int getLevel() {
+        return this.level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getImages() {
+        return this.images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
     }
 
     @Override
@@ -75,7 +110,7 @@ public class Dungeon extends Locations {
         }
 
         System.out.println("Battle begins between " + playerMonster.getName() + " and " + enemy.getName() + "!");
-        
+
         while (playerMonster.getHealthPoint() > 0 && enemy.getHealthPoint() > 0) {
             System.out.println("Your turn");
             System.out.println("""
@@ -93,9 +128,6 @@ public class Dungeon extends Locations {
                     player.specialAttack(enemy);
                     break;
                 case 3:
-                    // Assuming ElementalAttack is an enum or a class with predefined attacks
-                    // ElementalAttack elementalAttack = getElementalAttackFromUser(in);
-                    // player.elementalAttack(enemy, elementalAttack);
                     break;
                 default:
                     System.out.println("Invalid choice.");
@@ -118,8 +150,6 @@ public class Dungeon extends Locations {
                     enemy.specialAttack(playerMonster);
                     break;
                 case 2:
-                    // Assuming ElementalAttack is an enum or a class with predefined attacks
-                    // enemy.elementalAttack(playerMonster, getRandomElementalAttack());
                     break;
                 default:
                     System.out.println("Invalid attack choice for monster.");
@@ -134,9 +164,7 @@ public class Dungeon extends Locations {
         in.close();
     }
 
-    
-
-    private Item getRandomReward() {
+    public Item getRandomReward() {
         Random random = new Random();
         return rewards.get(random.nextInt(rewards.size()));
     }

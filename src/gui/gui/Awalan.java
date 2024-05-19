@@ -25,7 +25,7 @@ public class Awalan extends JFrame implements ActionListener {
         ImageIcon icon = new ImageIcon("asset/Screenshot 2024-05-15 192702.png");
         frame.setIconImages(Collections.singletonList(icon.getImage()));
         frame.setVisible(true);
-
+        
         JPanel panelBG = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
