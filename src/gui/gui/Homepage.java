@@ -53,8 +53,10 @@ public class Homepage {
         int xStart = (frame.getWidth() - totalButtonWidth) / 2;
         int yPosition = frame.getHeight() - buttonHeight - 200;
 
-        BufferedImage buttonIcon = ImageIO.read(new File("asset/toppng.com-text-box-pixel-art-cupcake-601x211.png"));
+        BufferedImage buttonIcon = ImageIO.read(new File("asset/text-box.png"));
         Image scaledButtonImage = buttonIcon.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+        BufferedImage buttonPressedIcon = ImageIO.read(new File("asset/toppng.com-text-box-pixel-art-cupcake-601x211.png"));
+        Image scaledButtonPressedImage = buttonPressedIcon.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
         JButton newGameButton = new JButton("NEW GAME", new ImageIcon(scaledButtonImage));
         newGameButton.setBounds(xStart, yPosition, buttonWidth, buttonHeight);
         newGameButton.setFont(new Font("Purisa Bold", Font.BOLD, 18));
@@ -86,11 +88,15 @@ public class Homepage {
         panel.add(aboutUsButton);
 
         addAboutUsActionListener(aboutUsButton, frame);
-        addPlayGameActionListener(newGameButton, frame);
-        addPlayGameActionListenerByLoadGames(loadGameButton, frame);
+        addPlayGameActionListener(newGameButton, scaledButtonPressedImage,frame);
+        addPlayGameActionListenerByLoadGames(loadGameButton, scaledButtonPressedImage, frame);
         addButtonHoverEffects(newGameButton);
         addButtonHoverEffects(loadGameButton);
         addButtonHoverEffects(aboutUsButton);
+        addButtonPressedEffect(newGameButton);
+        addButtonPressedEffect(loadGameButton);
+        addButtonPressedEffect(aboutUsButton);
+
 
         frame.setContentPane(panel);
         frame.setVisible(true);
@@ -113,17 +119,16 @@ public class Homepage {
         });
     }
 
-    private void addPlayGameActionListener(JButton newGameButton, JFrame frame) {
+    private void addPlayGameActionListener(JButton newGameButton, Image buttonPressed, JFrame frame) {
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                SwingUtilities.invokeLater(() -> new Awalan(1));
+                handleButtonPress(newGameButton, buttonPressed, frame, () -> new Awalan(1));
             }
         });
     }
 
-    private void addPlayGameActionListenerByLoadGames(JButton loadGameButton, JFrame frame) {
+    private void addPlayGameActionListenerByLoadGames(JButton loadGameButton, Image buttonPressed, JFrame frame) {
         loadGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -140,9 +145,7 @@ public class Homepage {
                     DataStorage dStorage = (DataStorage) in.readObject();
                     Player playerload = new Player(dStorage.name, dStorage.level, dStorage.exp, dStorage.inventory, dStorage.coin, dStorage.monsters, dStorage.timePlayed, dStorage.startTime, new HomeBase("lab"), dStorage.image);
                     in.close();
-    
-                    frame.dispose();
-                    SwingUtilities.invokeLater(() -> new Awalan( 2));
+                    handleButtonPress(loadGameButton, buttonPressed, frame, () -> new Awalan(2));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(frame, "Error loading game data", "Error", JOptionPane.ERROR_MESSAGE);
@@ -154,7 +157,6 @@ public class Homepage {
         });
     }
     
-
     private void addButtonHoverEffects(JButton button) {
         button.addMouseListener(new MouseAdapter() {
             private Timer hoverTimer;
@@ -172,9 +174,9 @@ public class Homepage {
                     @Override
                     public void actionPerformed(ActionEvent event) {
                         if (r > 0 && g > 0 && b > 0) {
-                            r -= 10;
-                            g -= 10;
-                            b -= 10;
+                            r -= 5;
+                            g -= 5;
+                            b -= 5;
                             button.setForeground(new Color(r, g, b));
                         } else {
                             button.setForeground(Color.WHITE);
@@ -199,9 +201,9 @@ public class Homepage {
                     @Override
                     public void actionPerformed(ActionEvent event) {
                         if (r < 255 && g < 255 && b < 255) {
-                            r += 10;
-                            g += 10;
-                            b += 10;
+                            r += 5;
+                            g += 5;
+                            b += 5;
                             button.setForeground(new Color(r, g, b));
                         } else {
                             button.setForeground(Color.BLACK);
@@ -213,5 +215,48 @@ public class Homepage {
                 hoverTimer.start();
             }
         });
+    }
+    private void addButtonPressedEffect(JButton button) {
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Simpan warna asli tombol
+                Color originalBackground = button.getBackground();
+                Color originalForeground = button.getForeground();
+    
+                // Ubah tampilan tombol untuk memberikan efek ketika ditekan
+                button.setBackground(Color.GRAY);
+                button.setForeground(Color.WHITE);
+    
+                // Buat timer untuk mengembalikan tampilan tombol ke kondisi semula setelah beberapa waktu
+                Timer timer = new Timer(200, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        // Kembalikan tampilan tombol ke kondisi semula
+                        button.setBackground(originalBackground);
+                        button.setForeground(originalForeground);
+                    }
+                });
+    
+                // Mulai timer
+                timer.setRepeats(false); // Set timer agar berhenti setelah satu kali pengulangan
+                timer.start();
+            }
+        });
+    }
+    private void handleButtonPress(JButton button, Image pressedIcon, JFrame frame, Runnable action) {
+        Icon originalIcon = button.getIcon();
+        button.setIcon(new ImageIcon(pressedIcon)); // Change to pressed icon
+
+        Timer timer = new Timer(500, new ActionListener() { // Delay to show the pressed effect
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                button.setIcon(originalIcon); // Revert to the original icon
+                frame.dispose();
+                action.run();
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 }

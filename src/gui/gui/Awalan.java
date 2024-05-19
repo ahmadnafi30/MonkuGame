@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Collections;
 
 import Entity.Locations.HomeBase;
@@ -25,7 +26,7 @@ public class Awalan extends JFrame implements ActionListener {
         ImageIcon icon = new ImageIcon("asset/Screenshot 2024-05-15 192702.png");
         frame.setIconImages(Collections.singletonList(icon.getImage()));
         frame.setVisible(true);
-        
+
         JPanel panelBG = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -94,7 +95,7 @@ public class Awalan extends JFrame implements ActionListener {
             if (isLastCard()) {
                 Monku.player.printDetailPlayer();
                 // Transition to new scene
-                newScene();
+                newScene(frame);
             } else {
                 dialogText.next(dialogTextPanel);
             }
@@ -140,15 +141,16 @@ public class Awalan extends JFrame implements ActionListener {
         return -1;
     }
 
-    private void newScene() {
-        // Logic to transition to the new scene
-        JOptionPane.showMessageDialog(this, "Switching to new scene!");
-        // Example: Switch to a new JFrame or change content
-        // JFrame newFrame = new JFrame("New Scene");
-        // newFrame.setSize(1000, 750);
-        // newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // newFrame.setLocationRelativeTo(null);
-        // newFrame.setVisible(true);
+    private void newScene(JFrame frame) {
+        frame.dispose();
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new MapGUI();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
     }
 
     private void createDialogCard(String text) {
