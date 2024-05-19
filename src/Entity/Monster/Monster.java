@@ -325,6 +325,24 @@ public abstract class Monster implements Battle {
         return true;
     }
 
+    public Monster changeMonsterClass(){
+        switch (this.getELementTypeStr()){
+        case "FIRE":
+            return new FireType(this);
+        case "WATER":
+            return new WaterType(this);
+        case "EARTH":
+            return new EarthType(this);
+        case "AIR":
+            System.out.println("OI");
+            return new AirType(this);
+        case "ICE":
+            return new IceType(this);
+        default:
+            return null;
+        }
+    }
+
     private void evolveAttributes(double minMultiplier, double maxMultiplier) {
         Random rand = new Random();
         double multiplier = minMultiplier + (maxMultiplier - minMultiplier) * rand.nextDouble();
@@ -399,8 +417,14 @@ public abstract class Monster implements Battle {
         ICE
     }
 
-    // Getter and setter methods
+    public void changeElementalAttack(ElementalAttack before, ElementalAttack after){
+        elementalAttacks.forEach(e -> {
+            if(e.equals(before)) e = after;
+            
+        });
+    }
 
+    // Getter and setter methods
     public int getMaxHealthPoint(){
         return maxHealthPoint;
     }

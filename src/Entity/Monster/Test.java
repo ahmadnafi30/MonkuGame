@@ -17,7 +17,9 @@ public class Test {
             System.out.println(i + "  "+properties[i]);
         }
         monster.evolution("air");
+        monster = monster.changeMonsterClass();
+        System.out.println(monster.getMonster());
         monster.displayDetailMonster();
         
-    }           
+    }
 }

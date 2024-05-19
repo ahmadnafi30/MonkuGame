@@ -1,16 +1,16 @@
 package Entity;
 
 import java.io.*;
-public class progressManagement{
+public class ProgressManagement{
 
     private String savePath;
     private boolean appendToFile;
 
-    public progressManagement(String path){
+    public ProgressManagement(String path){
         savePath = path;
     }
     
-    public progressManagement(String path, boolean appendValue){
+    public ProgressManagement(String path, boolean appendValue){
         savePath = path;
         appendToFile = appendValue;
     }

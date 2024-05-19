@@ -15,6 +15,7 @@ public class HomeBase extends JFrame implements ActionListener{
 
     public HomeBase() {
         JFrame frame = new JFrame("Monku Games");
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 750);
         frame.setLocationRelativeTo(null);
@@ -76,11 +77,40 @@ public class HomeBase extends JFrame implements ActionListener{
         invisibleButton.setOpaque(false);
         invisibleButton.setContentAreaFilled(false);
         invisibleButton.setBorderPainted(false);
-        invisibleButton.addActionListener(e -> dialogText.next(dialogTextPanel));
+        
+        invisibleButton.addActionListener(e -> {
+            if (isLastCard()) {
+                // Transition to new scene
+                newScene();
+            } else {
+                dialogText.next(dialogTextPanel);
+            }
+        });
         
         panelBG.add(invisibleButton);
 
         frame.setVisible(true);
+    }
+    
+    private boolean isLastCard() {
+        Component[] components = dialogTextPanel.getComponents();
+        for (Component comp : components) {
+            if (comp.isVisible()) {
+                return dialogTextPanel.getComponent(components.length - 1) == comp;
+            }
+        }
+        return false;
+    }
+
+    private void newScene() {
+        // Logic to transition to the new scene
+        JOptionPane.showMessageDialog(this, "Switching to new scene!");
+        // Example: Switch to a new JFrame or change content
+        // JFrame newFrame = new JFrame("New Scene");
+        // newFrame.setSize(1000, 750);
+        // newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // newFrame.setLocationRelativeTo(null);
+        // newFrame.setVisible(true);
     }
 
     private void createDialogCard(String text) {

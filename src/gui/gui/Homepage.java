@@ -16,6 +16,7 @@ public class Homepage {
 
     public Homepage() throws IOException {
         JFrame frame = new JFrame("Monku Games");
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 750);
         frame.setLocationRelativeTo(null);

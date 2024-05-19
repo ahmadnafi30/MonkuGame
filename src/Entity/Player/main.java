@@ -9,11 +9,11 @@ import Entity.Monster.FireType;
 import Entity.Monster.Monster;
 import Entity.NPC.*;
 
-public class main {
+public class Main {
     
     public static void main(String[] args) {
-        Locations hombase = new HomeBase("junction");
-        Player player = new Player("Raka", hombase);
+        Locations homebase = new HomeBase("junction");
+        Player player = new Player("Raka", homebase, "");
         // player.printDetailPlayer();
         Item buff = new BuffPotion("raka", "common");
         // player.buyItem(buff, 3);
@@ -38,10 +38,10 @@ public class main {
         
         NPC prof = new ProfessorPokemon("Heru", "Professor Monku");
         ((ProfessorPokemon) prof).healPokemon(player, raka.getName());
+        ((ProfessorPokemon) prof).evolvePokemon(raka, "fire");
+        raka = raka.changeMonsterClass();
+        System.out.println(raka.getMonster());
+
         raka.displayDetailMonster();
-        ((ProfessorPokemon) prof).evolvePokemon(raka, raka.getElementType()[0].toString());
-        raka.displayDetailMonster();
-        raka.
-        System.out.println(raka.monsterProperty());
     }
 }
