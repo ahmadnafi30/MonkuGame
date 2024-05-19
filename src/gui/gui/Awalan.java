@@ -15,7 +15,7 @@ public class Awalan extends JFrame implements ActionListener {
     private CardLayout dialogText;
     private JPanel dialogTextPanel;
 
-    public Awalan(NPC prof, Player player, Monster monku) {
+    public Awalan(NPC prof, Player player, Monster monku, int loadornew) {
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,6 +48,7 @@ public class Awalan extends JFrame implements ActionListener {
         };
         professor.setBounds(70, 510, 298 / 2, 295 / 2);
         panelBG.add(professor);
+
         dialogText = new CardLayout();
         dialogTextPanel = new JPanel(dialogText);
 
@@ -60,14 +61,20 @@ public class Awalan extends JFrame implements ActionListener {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
+
         dialogBox.setBounds(3, 450, 980, 265);
         dialogTextPanel.setBounds(120, 500, dialogBox.getWidth() - 160, 265);
         dialogTextPanel.setOpaque(false);
-        createDialogCard("<html><p style=\"margin-left: 20px\">Halo Kamu!</p>Siapa namamu?</html>");
-        createDialogCard("Ini adalah dialog 2");
-        createDialogCard("Ini adalah dialog 3");
         panelBG.add(dialogTextPanel);
         panelBG.add(dialogBox);
+
+        if (loadornew == 1) {
+            createDialogCard("<html><p style=\"margin-left: 20px\">Halo Kamu!</p>Siapa namamu?</html>");
+        } else if (loadornew == 2) {
+            createDialogCard("<html><p style=\"margin-left: 20px\">Hello " + player.getName() + "!</p>Welcome back!</html>");
+        }
+        createDialogCard("Ini adalah dialog 2");
+        createDialogCard("Ini adalah dialog 3");
 
         // Create an invisible button to capture clicks and switch dialogs
         JButton invisibleButton = new JButton();
@@ -75,10 +82,9 @@ public class Awalan extends JFrame implements ActionListener {
         invisibleButton.setOpaque(false);
         invisibleButton.setContentAreaFilled(false);
         invisibleButton.setBorderPainted(false);
-        final JLabel label = new JLabel();
         invisibleButton.addActionListener(e -> {
             int cardCount = getCardPosition();
-            if (cardCount == 0) {
+            if (cardCount == 0 && loadornew == 1) {
                 String result = getInput(frame);
                 if (result != null && !result.isEmpty()) {
                     player.setName(result);
@@ -93,7 +99,6 @@ public class Awalan extends JFrame implements ActionListener {
             }
         });
 
-        panelBG.add(label);
         panelBG.add(invisibleButton);
         frame.setVisible(true);
     }
@@ -158,7 +163,6 @@ public class Awalan extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
         JOptionPane.showMessageDialog(this, "Action performed!", "Peringatan", JOptionPane.INFORMATION_MESSAGE);
         throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }

@@ -3,6 +3,8 @@ package gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import Entity.DataStorage;
+import Entity.Locations.HomeBase;
 import Entity.Monster.Monster;
 import Entity.NPC.NPC;
 import Entity.NPC.ProfessorPokemon;
@@ -14,8 +16,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Collections;
 
 public class Homepage {
@@ -82,6 +87,7 @@ public class Homepage {
 
         addAboutUsActionListener(aboutUsButton, frame);
         addPlayGameActionListener(newGameButton, frame, prof, player, monku);
+        addPlayGameActionListenerByLoadGames(loadGameButton, frame, prof, player, monku);
         addButtonHoverEffects(newGameButton);
         addButtonHoverEffects(loadGameButton);
         addButtonHoverEffects(aboutUsButton);
@@ -112,10 +118,42 @@ public class Homepage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                SwingUtilities.invokeLater(() -> new Awalan(prof, player, monku));
+                SwingUtilities.invokeLater(() -> new Awalan(prof, player, monku, 1));
             }
         });
     }
+
+    private void addPlayGameActionListenerByLoadGames(JButton loadGameButton, JFrame frame, NPC prof, Player player, Monster monku) {
+        loadGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    File savedFile = new File("save_files/saveGames.txt");
+                    if (!savedFile.exists()) {
+                        JOptionPane.showMessageDialog(frame, "No saved game found!", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    FileInputStream filein = new FileInputStream(savedFile);
+                    BufferedInputStream bis = new BufferedInputStream(filein);
+                    ObjectInputStream in = new ObjectInputStream(bis);
+    
+                    DataStorage dStorage = (DataStorage) in.readObject();
+                    Player playerload = new Player(dStorage.name, dStorage.level, dStorage.exp, dStorage.inventory, dStorage.coin, dStorage.monsters, dStorage.timePlayed, dStorage.startTime, new HomeBase("lab"), dStorage.image);
+                    in.close();
+    
+                    frame.dispose();
+                    SwingUtilities.invokeLater(() -> new Awalan(prof, playerload, monku, 2));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "Error loading game data", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "Class not found", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+    
 
     private void addButtonHoverEffects(JButton button) {
         button.addMouseListener(new MouseAdapter() {

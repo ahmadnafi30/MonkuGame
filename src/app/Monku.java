@@ -4,7 +4,7 @@ import java.io.*;
 
 import javax.swing.SwingUtilities;
 
-import Entity.ProgressManagement;
+// import Entity.ProgressManagement;
 import Entity.Player.*;
 import Entity.Item.*;
 import Entity.Locations.*;
@@ -21,7 +21,7 @@ public class Monku {
     public static NPC shopKeeper;
     public static Locations loc;
     public static Item item;
-    public static ProgressManagement progress;
+    // public static ProgressManagement progress;
 
     public static void main(String[] args) throws IOException {
         //TODO: bikin konstruktor kosong buat setiap kelas

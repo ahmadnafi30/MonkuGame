@@ -1,6 +1,9 @@
 package Entity.Locations;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import Entity.Item.Item;
@@ -22,32 +25,39 @@ public class Shop extends Locations {
         seller.checkInventory();
     }
 
-    public void buyItem(Player player, Item item) {
-        try {
-            seller.sellItem(pilihitem, player, quantity);
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter a valid number.");
+    public void sellItem(int itemIndex, Player player, int quantity) {
+    Map<Item, Integer> playerInventory = player.getInventory();
+    List<Item> items = new ArrayList<>(playerInventory.keySet());
+    if (itemIndex >= 1 && itemIndex <= items.size()) {
+        Item itemToSell = items.get(itemIndex - 1);
+        player.sellItem(itemToSell, quantity, this.seller);
+    } else {
+        System.out.println("Invalid item index.");
+    }
+}
+
+
+    public void buyItem(int itemIndex, Player player, int quantity) {
+        ItemSeller seller = this.seller; 
+        Map<Item, Integer> sellerInventory = seller.getInventory();
+        List<Item> items = new ArrayList<>(sellerInventory.keySet());
+        if (itemIndex >= 1 && itemIndex <= items.size()) {
+        Item itemToBuy = items.get(itemIndex - 1);
+        player.buyItem(itemToBuy, quantity, seller);
+        }else {
+        System.out.println("Invalid item index.");
         }
     }
 
-    public void sellItem(Player player) {
 
-        try {
-            seller.buyItem(pilihitem, player, quantity);
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter a valid number.");
-            in.next();
-        }
-    }
-
-    public void doEverything(Player player, int whatdoyouwant) {
+    public void doEverything(Player player, int whatdoyouwant, int itemIndex, int quantity) {
         try {
             switch (whatdoyouwant) {
                 case 1:
-                    buyItem(player);
+                    buyItem(itemIndex, player, quantity);
                     break;
                 case 2:
-                    sellItem(player);
+                    sellItem(itemIndex, player, quantity);
                     break;
                 default:
                     System.out.println("Invalid choice. Please select 1 or 2.");
@@ -58,6 +68,7 @@ public class Shop extends Locations {
         }
         System.out.println("Seller: Come back soon!");
     }
+    
 
     public void detailLocation() {
         System.out.println("Welcome to " + locationName + "!!!");

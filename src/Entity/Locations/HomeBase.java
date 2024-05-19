@@ -85,7 +85,7 @@ public class HomeBase extends Locations {
     private void saveGame(Player player) {
         System.out.println("Professor: Saving your game...");
         try {
-            FileOutputStream fileOut = new FileOutputStream("saveGames.txt");
+            FileOutputStream fileOut = new FileOutputStream("save_files/saveGames.txt");
             BufferedOutputStream bos = new BufferedOutputStream(fileOut);
             ObjectOutputStream out = new ObjectOutputStream(bos);
     
@@ -99,7 +99,7 @@ public class HomeBase extends Locations {
             storage.monsters = player.getMonsters();
             storage.timePlayed = player.getTimePlayed();
             storage.startTime = player.getStartTime();
-            storage.locationPlayer = player.getLocationPlayer();
+            // storage.locationPlayer = player.getLocationPlayer();
             storage.image = player.getImage();
             out.writeObject(storage);
             out.close();

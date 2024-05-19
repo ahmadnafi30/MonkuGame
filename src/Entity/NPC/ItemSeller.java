@@ -98,5 +98,10 @@ public class ItemSeller extends NPC implements ItemInteract {
     public void setCoin(int coin) {
         this.coin += coin;
     }
+
+    public Map<Item, Integer> getInventory() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInventory'");
+    }
     
 }
