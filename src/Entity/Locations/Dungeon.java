@@ -13,8 +13,10 @@ public class Dungeon extends Locations {
     private ArrayList<Item> rewards;
     private int level;
     private String images;
+    private String guardsImages;
+    private String guardsName;
 
-    public Dungeon(String locationName, Monster[] monsters, Item[] rewards, int level, String images) {
+    public Dungeon(String locationName, Monster[] monsters, Item[] rewards, int level, String images, String guardsImages, String guardsName) {
         super(locationName);
         this.monsters = new ArrayList<>();
         for (Monster monster : monsters) {
@@ -26,6 +28,18 @@ public class Dungeon extends Locations {
         }
         this.level = level;
         this.images = images;
+        this.guardsImages = guardsImages;
+        this.guardsName = guardsName;
+    }
+
+
+
+    public int monsterLenght(){
+        int count = -1;
+        for (Monster monster : monsters) {
+            count++;
+        }
+        return count;
     }
 
     // Getters and setters
@@ -55,6 +69,14 @@ public class Dungeon extends Locations {
 
     public String getImages() {
         return this.images;
+    }
+
+    public String getGuardImage() {
+        return this.guardsImages;
+    }
+
+    public String getGuardName() {
+        return this.guardsName;
     }
 
     public void setImages(String images) {
@@ -167,5 +189,15 @@ public class Dungeon extends Locations {
     public Item getRandomReward() {
         Random random = new Random();
         return rewards.get(random.nextInt(rewards.size()));
+    }
+
+    public String getName() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+    }
+
+    public String getDifficultyLevel() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getDifficultyLevel'");
     }
 }
