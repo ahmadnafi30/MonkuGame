@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 public class DungeonGUI extends JFrame {
     private Dungeon dungeon;
@@ -44,6 +45,8 @@ public class DungeonGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 750);
         setLocationRelativeTo(null);
+        ImageIcon icon = new ImageIcon("asset/Screenshot 2024-05-15 192702.png");
+        setIconImages(Collections.singletonList(icon.getImage()));
 
         panelBG = new JPanel(null) {
             @Override
@@ -170,8 +173,6 @@ public class DungeonGUI extends JFrame {
         return resized;
     }
 
-    
-
     private void createDialogCard(String text) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
@@ -260,6 +261,7 @@ public class DungeonGUI extends JFrame {
         battle = new JButton("BATTLE", new ImageIcon(scaledButtonImage));
         battle.addActionListener(e -> {
             System.out.println("Battle button pressed");
+            createBattleScene();
         });
         battle.setBounds((buttonBackgroundPanel.getWidth() - 150) / 2, 40, 150, 50);
         battle.setFont(new Font("Public Pixel", Font.BOLD, 15));
@@ -300,23 +302,46 @@ public class DungeonGUI extends JFrame {
     
         BufferedImage chatBox = null;
         try {
-            chatBox = ImageIO.read(new File("asset/png-transparent-white-dialog-box-dialog-box-icon-painted-simple-dialog-box-watercolor-painting-miscellaneous-angle.png"));
+            chatBox = ImageIO.read(new File("asset/Untitled design (7).png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (chatBox != null) {
-            BufferedImage resizedChatBoxImage = resize(chatBox, 200, 200);
+            BufferedImage resizedChatBoxImage = resize(chatBox, 300, 200);
             chatLabel = new JLabel(new ImageIcon(resizedChatBoxImage));
-            chatLabel.setBounds(100, 300, resizedChatBoxImage.getWidth(), resizedChatBoxImage.getHeight());
-            panelBG.add(chatLabel);
-    
+            chatLabel.setBounds(160, 300, resizedChatBoxImage.getWidth(), resizedChatBoxImage.getHeight());
+            
             chatTextLabel = new JLabel("Mau ngapain ya?");
             chatTextLabel.setFont(new Font("Public Pixel", Font.BOLD, 15));
-            chatTextLabel.setForeground(Color.WHITE);
-            chatTextLabel.setBounds(130, 340, 150, 50);
+            chatTextLabel.setForeground(Color.BLACK);
+            chatTextLabel.setBounds(200, 340, 250, 50);
             panelBG.add(chatTextLabel);
+            panelBG.add(chatLabel);
         }
     
+        panelBG.revalidate();
+        panelBG.repaint();
+    }
+
+    private void createBattleScene() {
+        panelBG.removeAll();
+        panelBG.repaint();
+        panelBG.revalidate();
+
+        panelBG = new JPanel(null) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    BufferedImage battleBackground = ImageIO.read(new File("asset/Screenshot 2024-05-20 202918.png"));
+                    g.drawImage(battleBackground, 0, 0, getWidth(), getHeight(), this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        
+        setContentPane(panelBG);
         panelBG.revalidate();
         panelBG.repaint();
     }
@@ -346,8 +371,6 @@ public class DungeonGUI extends JFrame {
         panelBG.revalidate();
         panelBG.repaint();
     }
-    
-
 
     public static void main(String[] args) {
         Monster monster = new AirType("kehed", 4, 4);
