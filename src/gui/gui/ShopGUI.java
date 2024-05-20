@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -18,6 +17,8 @@ public class ShopGUI extends JFrame implements ActionListener {
     private CardLayout dialogText;
     private JPanel dialogTextPanel;
     private JPanel dialogBox;
+    private JButton invisibleButton;
+
     public ShopGUI() {
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
@@ -59,7 +60,7 @@ public class ShopGUI extends JFrame implements ActionListener {
         createDialogCard("Ini adalah dialog 3");
         
         // Create an invisible button to capture clicks and switch dialogs
-        JButton invisibleButton = new JButton();
+        invisibleButton = new JButton();
         invisibleButton.setBounds(dialogBox.getBounds());
         invisibleButton.setOpaque(false);
         invisibleButton.setContentAreaFilled(false);
@@ -69,7 +70,7 @@ public class ShopGUI extends JFrame implements ActionListener {
             if (cardCount == 0) {
                 String result = getInputKegiatan(frame);
                 if (result.equalsIgnoreCase("beli")) {
-                    potionButtons(panelBG);
+                    potionButtons(panelBG, frame);
                     Monku.player.buyItem(null, cardCount, e);
                     Monku.shopKeeper.setCoin(cardCount);
                 } else if (result.equalsIgnoreCase("jual")) {
@@ -95,39 +96,44 @@ public class ShopGUI extends JFrame implements ActionListener {
         frame.requestFocusInWindow();
     }
 
-    // private void setInvisibleDialogText() {
+    private void potionButtons(JPanel panelBG, JFrame frame) {
+        JButton healButton = addButtons(panelBG, null, "asset/HealPotion.png", 200, 200, 200, 200, 110, 20, "Heal Potion");
+        JButton defButton = addButtons(panelBG, null, "asset/DefensePotion.png", 200, 200, 200, 200, 150 + 110 + 10, 20, "Defense Potion");
+        JButton buffPotion = addButtons(panelBG, null, "asset/BuffPotion.png", 200, 200, 200, 200, (150 * 2) + 110 + 10, 20, "Buff Potion");
+        JButton poisonButton = addButtons(panelBG, null, "asset/PoisonPotion.png", 200, 200, 200, 200, (150 * 3) + 110 + 10, 20, "Poison Potion");
+        JButton teleButton = addButtons(panelBG, null, "asset/healthPotion.png", 200, 200, 200, 200, (150 * 4) + 110 + 10, 20, "Health Potion");
         
-    // }
-    private void potionButtons(JPanel panelBG){
-        JButton healButton = addButtons(panelBG, null, "asset/healthPotion.png", 150, 150, 150, 150, 110, 20, "Heal Potion");
-        JButton defButton = addButtons(panelBG, null, "asset/healthPotion.png", 150, 150, 150, 150, 150+110+10, 20, "Heal Potion");
-        JButton buffPotion = addButtons(panelBG, null, "asset/healthPotion.png", 150, 150, 150, 150, (150*2)+110+10, 20, "Heal Potion");
-        JButton poisonButton = addButtons(panelBG, null, "asset/healthPotion.png", 150, 150, 150, 150, (150*3)+110+10, 20, "Heal Potion");
-        JButton teleButton = addButtons(panelBG, null, "asset/healthPotion.png", 150, 150, 150, 150, (150*4)+110+10, 20, "Heal Potion"); 
         dialogBox.setVisible(false);
         dialogTextPanel.setVisible(false);
+        invisibleButton.setVisible(false); // Hide the invisible button when showing potion buttons
+        
         panelBG.add(healButton);
         panelBG.add(defButton);
         panelBG.add(buffPotion);
         panelBG.add(poisonButton);
         panelBG.add(teleButton);
+        
+        healButton.addActionListener(e -> {
+            JOptionPane.showInputDialog(
+                frame,
+                "Masukkan jumlah potion yang ingin kamu beli",
+                "Input jumlah", JOptionPane.QUESTION_MESSAGE
+            );
+        });
     }
 
-    private void removeDialogBox() {
-        
-    }
     private JButton addButtons(JPanel panelBG, BufferedImage img, String path, int buttonWidth, int buttonHeight, int imageWidth, int imageHeight, int x, int y, String name) {
-        try{
+        try {
             img = ImageIO.read(new File(path));
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
             return null;
         }
-        
+
         BufferedImage iconImage;
         iconImage = resize(img, imageWidth, imageHeight);
         Image scaledButtonImage = iconImage.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
-    
+
         JButton button = new JButton(new ImageIcon(scaledButtonImage));
         button.setBounds(x, y, buttonWidth, buttonHeight);
         button.setBorder(BorderFactory.createEmptyBorder());
@@ -136,17 +142,17 @@ public class ShopGUI extends JFrame implements ActionListener {
         return button;
     }
 
-    private BufferedImage resize(BufferedImage img, int newW, int newH) { 
+    private BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
-    
+
         Graphics2D g2d = dimg.createGraphics();
         g2d.drawImage(tmp, 0, 0, null);
         g2d.dispose();
-    
+
         return dimg;
-    }  
-    
+    }
+
     public String getInputKegiatan(JFrame frame) {
         String[] options = {"Beli", "Jual"};
         int choice = JOptionPane.showOptionDialog(

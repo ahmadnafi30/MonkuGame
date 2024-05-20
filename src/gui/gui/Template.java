@@ -25,7 +25,7 @@ public class Template {
         BufferedImage iconImage;
         iconImage = resize(img, imageWidth, imageHeight);
         Image scaledButtonImage = iconImage.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
-    
+        
         JButton button = new JButton(new ImageIcon(scaledButtonImage));
         button.setBounds(x, y, buttonWidth, buttonHeight);
         button.setBorder(BorderFactory.createEmptyBorder());
@@ -34,6 +34,16 @@ public class Template {
         return button;
     }
 
+    public static JButton createButtonWithGIF(JPanel panelBG, String path, int buttonWidth, int buttonHeight, int x, int y) {
+        ImageIcon icon = new ImageIcon(path);
+        JButton button = new JButton(icon);
+        button.setBounds(x, y, buttonWidth, buttonHeight);
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setContentAreaFilled(false);
+        button.setFocusable(false);
+        return button;
+    }
+    
     public static BufferedImage resize(BufferedImage img, int newW, int newH) { 
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
