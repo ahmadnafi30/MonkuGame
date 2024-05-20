@@ -260,5 +260,14 @@ public class Homepage {
         timer.start();
     }
 
-    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new Homepage();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
+    }   
 }
