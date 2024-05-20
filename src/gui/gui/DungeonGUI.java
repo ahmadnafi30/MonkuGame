@@ -39,7 +39,7 @@ public class DungeonGUI extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 750);
         frame.setLocationRelativeTo(null);
-       
+
 
         JPanel panelBG = new JPanel(null) {
             @Override
@@ -86,6 +86,7 @@ public class DungeonGUI extends JFrame {
         int dialogBoxX = (frame.getWidth() - dialogBoxWidth) / 2;
         int dialogBoxY = (frame.getHeight() - dialogBoxHeight) / 2;
 
+        dialogBox.setOpaque(false);
         dialogBox.setBounds(dialogBoxX, dialogBoxY, dialogBoxWidth, dialogBoxHeight);
         dialogTextPanel.setBounds(dialogBoxX + 120, dialogBoxY + 20, dialogBoxWidth - 160, 200);
         dialogTextPanel.setOpaque(false);
@@ -145,6 +146,8 @@ public class DungeonGUI extends JFrame {
 
     private void showDungeonDetails(Dungeon dungeon) {
         dialogText.first(dialogTextPanel);
+        dialogBox.setOpaque(false);
+        dialogBox.setVisible(true);
         dialogText.show(dialogTextPanel, "Dungeon Details Dialog 1");
     }
 
@@ -184,25 +187,31 @@ public class DungeonGUI extends JFrame {
                     setOpacity(guard, opacity / 100.0f);
                 } else {
                     ((Timer) e.getSource()).stop();
+                    
+                    dialogBox.setVisible(false);
+                    panelBG.remove(dialogBox);
+                    panelBG.remove(guard);
+        
+                    JButton battleButton = new JButton("Battle");
+                    battleButton.setBounds(200, 400, 100, 50);
+                    battleButton.setVisible(true); // Ensure button is visible
+                    battleButton.setComponentZOrder(battleButton, 9);
+                    panelBG.add(battleButton);
+                    
+        
+                    JButton exitButton = new JButton("Exit");
+                    exitButton.setBounds(400, 400, 100, 50);
+                    exitButton.setVisible(true); // Ensure button is visible
+                    panelBG.add(exitButton);
+        
+                    panelBG.revalidate();
+                    panelBG.repaint();
                 }
-                
-                panelBG.remove(dialogBox);
-                panelBG.remove(guard);
-    
-                JButton battleButton = new JButton("Battle");
-                battleButton.setBounds(200, 400, 100, 50);
-                panelBG.add(battleButton);
-    
-                JButton exitButton = new JButton("Exit");
-                exitButton.setBounds(400, 400, 100, 50);
-                panelBG.add(exitButton);
-    
-                panelBG.revalidate();
-                panelBG.repaint();
             }
         });
         timer.start();
     }
+    
     
     
     private void setOpacity(JComponent component, float opacity) {

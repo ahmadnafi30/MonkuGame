@@ -73,13 +73,13 @@ public class Awalan extends JFrame implements ActionListener {
         }
 
         if (loadornew == 1) {
-            createDialogCard("<html><p style=\"margin-left: 30px\">Halo Kamu!</p>Siapa namamu?</html>", 30, 220, 536, 700, 100);
+            createDialogCard("<html><p style=\"margin-left: 30px\">Halo Kamu!<br>Siapa namamu?</p></html>", 40, 220, 536, 600, 100);
             // Setelah menambahkan kartu baru, tambahkan pembaruan posisi
             dialogTextPanel.revalidate();
             dialogTextPanel.repaint();
 
         } else if (loadornew == 2) {
-            createDialogCard("<html><p style=\"margin-left: 30px\">Hello " + Monku.player.getName() + " !</p>Welcome back!</html>", 30, 220, 536, 700, 100);
+            createDialogCard("<html><p style=\"margin-left: 30px\">Hello " + Monku.player.getName() + " !<br>Welcome back!</p></html>", 30, 220, 536, 700, 100);
         }
 
         // Create an invisible button to capture clicks and switch dialogs
@@ -95,8 +95,8 @@ public class Awalan extends JFrame implements ActionListener {
                 String result = getInput(frame);
                 if (result != null && !result.isEmpty()) {
                     Monku.player.setName(result);
-                    createDialogCard("<html><p style=\"margin-left: 130px\">Halo " + Monku.player.getName() + ",</p> <p style=\"margin-left: 30px\">senang berkenalan denganmu!</p><p>Kamu mau pilih monku yang mana?</p></html>", 20, 220, 540, 700, 100);
-                    createDialogCard("Ini adalah dialog 3", 10, 80, 400, 700, 100);
+                    createDialogCard("<html><p style=\"margin-left: 130px\">Halo " + Monku.player.getName() + ",<br>senang berkenalan denganmu<br>Kamu mau pilih monku yang mana?</p></html>", 20, 220, 536, 700, 100);
+                    createDialogCard("Selamat berpetualang " + Monku.player.getName() +"!", 30, 220, 536, 700, 100);
                 }
             }
             if (isLastCard()) {
@@ -160,7 +160,7 @@ public class Awalan extends JFrame implements ActionListener {
     }
 
     private void createDialogCard(String text, int size, int x, int y, int width, int height) {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
         JLabel label = new JLabel(text, SwingConstants.CENTER);
         label.setFont(new Font("Public Pixel", Font.BOLD, size));
@@ -170,7 +170,7 @@ public class Awalan extends JFrame implements ActionListener {
         System.out.println("label =" + label.getBounds());
         panel.setBounds(x, y, width, height);
         System.out.println("panel =" + panel.getBounds());
-        dialogTextPanel.setBounds(x, y, width, height); // Set the bounds of the panel, including location and size
+        dialogTextPanel.setBounds(x, y, width, height); 
         System.out.println(dialogTextPanel.getBounds());
         dialogTextPanel.add(panel);
         panel.add(label);
