@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 //buat nyimpen method yang mungkin dipake berulang-ulang
 public class Template {
-    public static JButton addButtons(JPanel panelBG, BufferedImage img, String path, int buttonWidth, int buttonHeight, int imageWidth, int imageHeight, int x, int y, String name) {
+    public static JButton addButtons(JPanel panelBG, BufferedImage img, String path, int buttonWidth, int buttonHeight, int imageWidth, int imageHeight, int x, int y) {
         try{
             img = ImageIO.read(new File(path));
         } catch(IOException e) {

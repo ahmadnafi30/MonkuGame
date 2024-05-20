@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Random;
 
 public class DungeonGUI extends JFrame {
     private Dungeon dungeon;
@@ -323,6 +324,8 @@ public class DungeonGUI extends JFrame {
         panelBG.repaint();
     }
 
+
+
     private void createBattleScene() {
         panelBG.removeAll();
         panelBG.repaint();
@@ -333,19 +336,157 @@ public class DungeonGUI extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 try {
-                    BufferedImage battleBackground = ImageIO.read(new File("asset/Screenshot 2024-05-20 202918.png"));
+                    BufferedImage battleBackground = ImageIO.read(new File("asset/Untitled design (8).png"));
                     g.drawImage(battleBackground, 0, 0, getWidth(), getHeight(), this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         };
-        
+
+        BufferedImage bcAttackImage;
+        BufferedImage speAttackImage;
+        BufferedImage eleAttackImage;
+        BufferedImage fleeImage;
+        BufferedImage boxHpImage;
+
+        try {
+            bcAttackImage = ImageIO.read(new File("asset/SPECIAL ATTACK/2.png"));
+            speAttackImage = ImageIO.read(new File("asset/SPECIAL ATTACK/1.png"));
+            eleAttackImage = ImageIO.read(new File("asset/SPECIAL ATTACK/3.png"));
+            fleeImage = ImageIO.read(new File("asset/SPECIAL ATTACK/4.png"));
+            boxHpImage = ImageIO.read(new File("asset/HPBAR.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        JButton bcAttackButton = Template.addButtons(panelBG, bcAttackImage, "asset/SPECIAL ATTACK/2.png", 250, 92, 92, 250, 500, 532);
+        JButton speAttackButton = Template.addButtons(panelBG, speAttackImage, "asset/SPECIAL ATTACK/1.png", 250, 92, 92, 250, 740, 532);
+        JButton eleAttackButton = Template.addButtons(panelBG, eleAttackImage, "asset/SPECIAL ATTACK/3.png", 250, 92, 92, 250, 500, 623);
+        JButton fleeButton = Template.addButtons(panelBG, fleeImage, "asset/SPECIAL ATTACK/4.png", 250, 92, 92, 250, 740, 623);
+
+        JPanel hpBoxPanelPlayer = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(boxHpImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        JPanel hpBoxPanelMonster = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(boxHpImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        int hpBoxWidth = 510;
+        int hpBoxHeight = 184;
+        int hpBoxX = 0;
+        int hpBoxY = 532;
+        hpBoxPanelMonster.setBounds(20, 20, 470, 150);
+        hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
+        hpBoxPanelPlayer.setOpaque(false);
+        hpBoxPanelMonster.setOpaque(false);
+
+        panelBG.add(bcAttackButton);
+        panelBG.add(speAttackButton);
+        panelBG.add(eleAttackButton);
+        panelBG.add(fleeButton);
+        panelBG.add(hpBoxPanelPlayer);
+        panelBG.add(hpBoxPanelMonster);
+
+
+        // Add button actions
+        bcAttackButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playerAttack("basic");
+            }
+        });
+
+        speAttackButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playerAttack("special");
+            }
+        });
+
+        eleAttackButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playerAttack("elemental");
+            }
+        });
+
+        fleeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                flee();
+            }
+        });
+
         setContentPane(panelBG);
         panelBG.revalidate();
         panelBG.repaint();
     }
 
+    private void playerAttack(String attackType) {
+        int damage = calculateDamage(attackType);
+        monsterHP -= damage;
+        updateHpLabels();
+
+        if (monsterHP <= 0) {
+            JOptionPane.showMessageDialog(panelBG, "You defeated the monster!");
+            return;
+        }
+
+        monsterAttack();
+    }
+
+    private void monsterAttack() {
+        String[] attackTypes = {"basic", "special", "elemental"};
+        Random random = new Random();
+        String attackType = attackTypes[random.nextInt(3)];
+        int damage = calculateDamage(attackType);
+        playerHP -= damage;
+        updateHpLabels();
+
+        if (playerHP <= 0) {
+            JOptionPane.showMessageDialog(panelBG, "The monster defeated you!");
+        }
+    }
+
+    private int calculateDamage(String attackType) {
+        switch (attackType) {
+            case "basic":
+                return 10;
+            case "special":
+                return 20;
+            case "elemental":
+                return 15;
+            default:
+                return 0;
+        }
+    }
+
+    private void flee() {
+        JOptionPane.showMessageDialog(panelBG, "You fled from the battle!");
+    }
+
+    private void updateHpLabels() {
+        playerHpLabel.setText("Player HP: " + playerHP);
+        monsterHpLabel.setText("Monster HP: " + monsterHP);
+        panelBG.repaint();
+    }
+
+    private void setContentPane(JPanel panelBG) {
+        // Set content pane logic
+    }
+}
+    
     private void showDungeonDetails(Dungeon dungeon) {
         if (buttonBackgroundPanel != null) {
             panelBG.remove(buttonBackgroundPanel);
