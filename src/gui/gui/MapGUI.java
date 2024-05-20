@@ -72,7 +72,7 @@ public class MapGUI {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleButtonPress(homeButton, scaledHomeIconPressed, frame, () -> new HomeBaseGUI(0));
+                handleButtonPress(homeButton, scaledHomeIconPressed, frame, () -> new HomeBaseGUI(2));
             }
         });
 

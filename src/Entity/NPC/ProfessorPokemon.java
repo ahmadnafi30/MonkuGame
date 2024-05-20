@@ -33,8 +33,8 @@ public class ProfessorPokemon extends NPC {
             System.out.println("Professor " + name + ": Your monster " + monster.getName() + " has evolved!");
             System.out.println("Apakah kamu ingin mengubah skill element-nya? (y/n)");
             String answer = "y";
-            String after = "";
             String before = "";
+            String after = "";
             if(answer.equals("y")){
                 System.out.println("Mau mengubah element attack yang mana?");
                 switch (monster.getELementTypeStr()) {

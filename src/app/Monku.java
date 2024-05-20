@@ -17,7 +17,7 @@ public class Monku {
 
     public static Player player = new Player("", new HomeBase("HomeBase"), "");;
     public static Monster monku;
-    public static NPC professor;
+    public static ProfessorPokemon professor = new ProfessorPokemon("Einstein", "Professor Monku");
     public static ItemSeller shopKeeper = new ItemSeller("Bowo", "ShopKeeper", new HomeBase("HomeBase"));
     public static Locations loc;
     public static Item item;

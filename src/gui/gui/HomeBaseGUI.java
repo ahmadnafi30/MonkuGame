@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import Entity.Locations.HomeBase;
@@ -69,13 +70,9 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         panelBG.add(dialogTextPanel);
         panelBG.add(dialogBox);
 
-        if (loadornew == 1) {
-            createDialogCard("<html><p style=\"margin-left: 20px\">Halo Kamu!</p>Siapa namamu?</html>");
-        } else if (loadornew == 2) {
-            createDialogCard("<html><p style=\"margin-left: 20px\">Hello " + Monku.player.getName() + "!</p>Welcome back!</html>");
+        if (loadornew == 2) {
+            createDialogCard("<html><p style=\"margin-left: 20px\">Hello " + Monku.player.getName() + "!</p>Apa yang ingin kamu lakukan?</html>");
         }
-        createDialogCard("Ini adalah dialog 2");
-        createDialogCard("Ini adalah dialog 3");
 
         // Create an invisible button to capture clicks and switch dialogs
         JButton invisibleButton = new JButton();
@@ -85,7 +82,9 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         invisibleButton.setBorderPainted(false);
         invisibleButton.addActionListener(e -> {
             int cardCount = getCardPosition();
-            if (cardCount == 0 && loadornew == 1) {
+            if (cardCount == 0) {
+                showOptions(invisibleButton, panelBG, frame);
+                invisibleButton.setEnabled(false);
             }
             if (isLastCard()) {
                 Monku.player.printDetailPlayer();
@@ -99,8 +98,120 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         panelBG.add(invisibleButton);
         frame.setVisible(true);
     }
+    private void showOptions(JButton invis, JPanel panelBG, JFrame frame) {
+        String[] options = {"Save Game", "Heal Monku", "Evolve Monku", "Cancel"};
+        int choice = JOptionPane.showOptionDialog(
+                this,
+                "Apa yang ingin kamu lakukan?",
+                "Pilih opsi",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
 
+        switch (choice) {
+            case 0:
+                createDialogCard("Saving game...");
+                // Monku.saveGame();
+                break;
+            case 1:
+                createDialogCard("Pilih monster yang ingin kamu heal");
+                monkuChoicesHeal(panelBG, frame, invis);
+                break;
+            case 2:
+                createDialogCard("Pilih monster yang ingin kamu evolve");
+                monkuChoicesEvolve(panelBG, frame, invis);
+                break;
+            default:
+                // Cancel or closed dialog
+                break;
+        }
+    }
 
+    public void monkuChoicesHeal(JPanel panelBG, JFrame frame, JButton invis) {
+        int middle = 450;
+        int i = 0;
+        ArrayList<JButton> monsters = new ArrayList<>();
+    
+        for (int j = 0; j < Monku.player.getMonsters().size(); j++) {
+            String name = Monku.player.getMonsters().get(j).getName();
+            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, "asset/" + name + ".gif", 140, 140, middle + i, 250);
+            monsters.add(monsterButton.getButton());
+            int pos = middle + i;
+            i += 50;
+            JButton monster = monsters.get(j);
+    
+            monsters.get(j).addActionListener(e -> {
+                Monku.professor.healPokemon(Monku.player, name);
+                JLabel heal = new JLabel();
+                heal.setIcon(new ImageIcon("asset/healEffect.gif"));
+                heal.setOpaque(false);
+                panelBG.add(heal);
+                heal.setBounds(pos, 250, 140, 140);
+                panelBG.setComponentZOrder(heal, 0); // Set heal to be the top component
+                heal.setVisible(true);
+    
+                // Timer to remove heal effect after a delay
+                Timer timer = new Timer(2000, event -> {
+                    panelBG.remove(heal);
+                    panelBG.revalidate();
+                    panelBG.repaint();
+                    createDialogCard("Darah "+name + " telah penuh!");
+                    dialogText.next(dialogTextPanel);
+                    invis.setEnabled(true);
+                    monster.setVisible(false);
+                });
+                timer.setRepeats(false);
+                timer.start();
+            });
+    
+            panelBG.add(monsters.get(j));
+        }
+    }
+
+    public void monkuChoicesEvolve(JPanel panelBG, JFrame frame, JButton invis) {
+        int middle = 450;
+        int i = 0;
+        ArrayList<JButton> monsters = new ArrayList<>();
+    
+        for (int j = 0; j < Monku.player.getMonsters().size(); j++) {
+            String name = Monku.player.getMonsters().get(j).getName();
+            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, "asset/" + name + ".gif", 140, 140, middle + i, 250);
+            monsters.add(monsterButton.getButton());
+            int pos = middle + i;
+            i += 50;
+            JButton monster = monsters.get(j);
+            Monster monsterPlyr = Monku.player.getMonsters().get(j);
+    
+            monsters.get(j).addActionListener(e -> {
+                Monku.professor.evolvePokemon(monsterPlyr, "AIR");
+                JLabel heal = new JLabel();
+                heal.setIcon(new ImageIcon("asset/healEffect.gif"));
+                heal.setOpaque(false);
+                panelBG.add(heal);
+                heal.setBounds(pos, 250, 140, 140);
+                panelBG.setComponentZOrder(heal, 0); // Set heal to be the top component
+                heal.setVisible(true);
+    
+                // Timer to remove heal effect after a delay
+                Timer timer = new Timer(2000, event -> {
+                    panelBG.remove(heal);
+                    panelBG.revalidate();
+                    panelBG.repaint();
+                    createDialogCard("Darah "+name + " telah penuh!");
+                    dialogText.next(dialogTextPanel);
+                    invis.setEnabled(true);
+                    monster.setVisible(false);
+                });
+                timer.setRepeats(false);
+                timer.start();
+            });
+    
+            panelBG.add(monsters.get(j));
+        }
+    }
 
     private boolean isLastCard() {
         Component[] components = dialogTextPanel.getComponents();
@@ -149,4 +260,5 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(this, "Action performed!", "Peringatan", JOptionPane.INFORMATION_MESSAGE);
         throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
+
 }

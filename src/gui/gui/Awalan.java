@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Collections;
 
 import Entity.Locations.HomeBase;
-import Entity.Monster.Monster;
 import Entity.Monster.*;
 import Entity.NPC.NPC;
 import Entity.Player.Player;
@@ -98,7 +97,8 @@ public class Awalan extends JFrame implements ActionListener {
                     Monku.player.setName(result);
                     createDialogCard("<html><p style=\"margin-left: 130px\">Halo " + Monku.player.getName() + ",<br>senang berkenalan denganmu<br>Kamu mau pilih monku yang mana?</p></html>", 20, 220, 536, 700, 100);
                     createDialogCard("<html><br>Pilihan yang bagus! </br>Selamat berpetualang " + Monku.player.getName() +"!</html>", 30, 220, 536, 700, 100);
-                    monkuChoices(panelBG, frame);
+                    monkuChoices(panelBG, frame, invisibleButton);
+                    invisibleButton.setEnabled(false);
                 }
             }
             if (isLastCard()) {
@@ -114,11 +114,25 @@ public class Awalan extends JFrame implements ActionListener {
         frame.setVisible(true);
     }
 
-    public void monkuChoices(JPanel panelBG, JFrame frame){
-        JButton vanillite = Template.createButtonWithGIF(panelBG, "asset/vanillite.gif", 140, 140, 77+44, 250);
-        JButton charmander = Template.createButtonWithGIF(panelBG, "asset/charmander.gif", 140, 140, 300+12, 250);
-        JButton rhyhorn = Template.createButtonWithGIF(panelBG, "asset/rhyhorn.gif", 140, 140, 460+44, 250);
-        JButton squirtle = Template.createButtonWithGIF(panelBG, "asset/squirtle.gif", 140, 140, 620+80, 250);
+    public void monkuChoices(JPanel panelBG, JFrame frame, JButton invisibleButton){
+        ButtonWithIcon vanillitePair = Template.createButtonWithGIF(panelBG, "asset/vanillite.gif", 140, 140, 77 + 44, 250);
+        ButtonWithIcon charmanderPair = Template.createButtonWithGIF(panelBG, "asset/charmander.gif", 140, 140, 300 + 12, 250);
+        ButtonWithIcon rhyhornPair = Template.createButtonWithGIF(panelBG, "asset/rhyhorn.gif", 140, 140, 460 + 44, 250);
+        ButtonWithIcon squirtlePair = Template.createButtonWithGIF(panelBG, "asset/squirtle.gif", 140, 140, 620 + 80, 250);
+
+        JButton vanillite = vanillitePair.getButton();
+        // ImageIcon vanilliteIcon = vanillitePair.getIcon();
+        JButton charmander = charmanderPair.getButton();
+        // ImageIcon charmanderIcon = charmanderPair.getIcon();
+        JButton rhyhorn = rhyhornPair.getButton();
+        // ImageIcon rhyhornIcon = rhyhornPair.getIcon();
+        JButton squirtle = squirtlePair.getButton();
+        // ImageIcon squirtleIcon = squirtlePair.getIcon();
+
+        // Template.addHoverEffect(vanillite, vanilliteIcon);
+        // Template.addHoverEffect(charmander, charmanderIcon);
+        // Template.addHoverEffect(rhyhorn, rhyhornIcon);
+        // Template.addHoverEffect(squirtle, squirtleIcon);
         vanillite.addActionListener(e -> {
             Monku.player.catchMonster(new IceType("vanillite", 1, 3));
             dialogText.next(dialogTextPanel);
@@ -126,6 +140,7 @@ public class Awalan extends JFrame implements ActionListener {
             charmander.setVisible(false);
             rhyhorn.setVisible(false);
             squirtle.setVisible(false);
+            invisibleButton.setEnabled(true);
         });
         charmander.addActionListener(e -> {
             Monku.player.catchMonster(new FireType("charmander", 1, 3));
@@ -134,6 +149,7 @@ public class Awalan extends JFrame implements ActionListener {
             charmander.setVisible(false);
             rhyhorn.setVisible(false);
             squirtle.setVisible(false);
+            invisibleButton.setEnabled(true);
         });
         rhyhorn.addActionListener(e -> {
             Monku.player.catchMonster(new EarthType("rhyhorn", 1, 3));
@@ -142,6 +158,7 @@ public class Awalan extends JFrame implements ActionListener {
             charmander.setVisible(false);
             rhyhorn.setVisible(false);
             squirtle.setVisible(false);
+            invisibleButton.setEnabled(true);
         });
         squirtle.addActionListener(e -> {
             Monku.player.catchMonster(new WaterType("squirtle", 1, 3));
@@ -150,6 +167,7 @@ public class Awalan extends JFrame implements ActionListener {
             charmander.setVisible(false);
             rhyhorn.setVisible(false);
             squirtle.setVisible(false);
+            invisibleButton.setEnabled(true);
         });
         panelBG.add(squirtle);
         panelBG.add(charmander);
