@@ -15,10 +15,10 @@ import gui.*;
 
 public class Monku {
 
-    public static Player player;
+    public static Player player = new Player("", new HomeBase("HomeBase"), "");;
     public static Monster monku;
     public static NPC professor;
-    public static NPC shopKeeper;
+    public static ItemSeller shopKeeper = new ItemSeller("Bowo", "ShopKeeper", new HomeBase("HomeBase"));
     public static Locations loc;
     public static Item item;
     // public static ProgressManagement progress;

@@ -2,18 +2,22 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import Entity.NPC.ItemSeller;
+import Entity.NPC.*;
 import app.Monku;
 
 public class ShopGUI extends JFrame implements ActionListener {
     private CardLayout dialogText;
     private JPanel dialogTextPanel;
-
+    private JPanel dialogBox;
     public ShopGUI() {
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
@@ -37,7 +41,7 @@ public class ShopGUI extends JFrame implements ActionListener {
         dialogText = new CardLayout();
         dialogTextPanel = new JPanel(dialogText);
 
-        JPanel dialogBox = new JPanel(null) {
+        dialogBox = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -51,7 +55,7 @@ public class ShopGUI extends JFrame implements ActionListener {
         dialogTextPanel.setBounds(70, 60, dialogBox.getWidth() - 160, 265);
         dialogTextPanel.setOpaque(false);
         createDialogCard("<html><p style=\"margin-left: 99px\">Halo " + Monku.player.getName() + "!</p>Apa yang ingin kamu lakukan?</html>");
-        createDialogCard("Ini adalah dialog 2");
+        createDialogCard("Pleasure doing business with you!");
         createDialogCard("Ini adalah dialog 3");
         
         // Create an invisible button to capture clicks and switch dialogs
@@ -63,9 +67,14 @@ public class ShopGUI extends JFrame implements ActionListener {
         invisibleButton.addActionListener(e -> {
             int cardCount = getCardPosition();
             if (cardCount == 0) {
-                String result = getInput(frame);
-                if (result != null && !result.isEmpty()) {
-                    Monku.player.setName(result);
+                String result = getInputKegiatan(frame);
+                if (result.equalsIgnoreCase("beli")) {
+                    potionButtons(panelBG);
+                    Monku.player.buyItem(null, cardCount, e);
+                    Monku.shopKeeper.setCoin(cardCount);
+                } else if (result.equalsIgnoreCase("jual")) {
+                    Monku.player.sellItem(null, cardCount, e);
+                    Monku.shopKeeper.setCoin(-cardCount);
                 }
             }
             if (isLastCard()) {
@@ -85,21 +94,75 @@ public class ShopGUI extends JFrame implements ActionListener {
         // Request focus for the frame to ensure it receives key events
         frame.requestFocusInWindow();
     }
+
+    // private void setInvisibleDialogText() {
+        
+    // }
+    private void potionButtons(JPanel panelBG){
+        JButton healButton = addButtons(panelBG, null, "asset/healthPotion.png", 150, 150, 150, 150, 110, 20, "Heal Potion");
+        JButton defButton = addButtons(panelBG, null, "asset/healthPotion.png", 150, 150, 150, 150, 150+110+10, 20, "Heal Potion");
+        JButton buffPotion = addButtons(panelBG, null, "asset/healthPotion.png", 150, 150, 150, 150, (150*2)+110+10, 20, "Heal Potion");
+        JButton poisonButton = addButtons(panelBG, null, "asset/healthPotion.png", 150, 150, 150, 150, (150*3)+110+10, 20, "Heal Potion");
+        JButton teleButton = addButtons(panelBG, null, "asset/healthPotion.png", 150, 150, 150, 150, (150*4)+110+10, 20, "Heal Potion"); 
+        dialogBox.setVisible(false);
+        dialogTextPanel.setVisible(false);
+        panelBG.add(healButton);
+        panelBG.add(defButton);
+        panelBG.add(buffPotion);
+        panelBG.add(poisonButton);
+        panelBG.add(teleButton);
+    }
+
+    private void removeDialogBox() {
+        
+    }
+    private JButton addButtons(JPanel panelBG, BufferedImage img, String path, int buttonWidth, int buttonHeight, int imageWidth, int imageHeight, int x, int y, String name) {
+        try{
+            img = ImageIO.read(new File(path));
+        } catch(IOException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+        
+        BufferedImage iconImage;
+        iconImage = resize(img, imageWidth, imageHeight);
+        Image scaledButtonImage = iconImage.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
     
-    public String getInput(JFrame frame) {
-        String result = (String) JOptionPane.showInputDialog(
+        JButton button = new JButton(new ImageIcon(scaledButtonImage));
+        button.setBounds(x, y, buttonWidth, buttonHeight);
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setContentAreaFilled(false);
+        button.setFocusable(false);
+        return button;
+    }
+
+    private BufferedImage resize(BufferedImage img, int newW, int newH) { 
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+    
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+    
+        return dimg;
+    }  
+    
+    public String getInputKegiatan(JFrame frame) {
+        String[] options = {"Beli", "Jual"};
+        int choice = JOptionPane.showOptionDialog(
             frame,
-            "Masukkan namamu",
-            "Nama Player",
+            "Apakah kamu mau beli atau jual item?",
+            "Pilih opsi",
+            JOptionPane.DEFAULT_OPTION,
             JOptionPane.QUESTION_MESSAGE,
             null,
-            null,
-            "SIAPA?");
-        if (result == null || result.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Masukkan namamu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return getInput(frame);
+            options,
+            options[0]
+        );
+        if (choice == JOptionPane.CLOSED_OPTION) {
+            return null; // No selection made
         }
-        return result;
+        return options[choice];
     }
 
     private boolean isLastCard() {

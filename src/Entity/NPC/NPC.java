@@ -7,6 +7,7 @@ public abstract class NPC {
     
     protected String name;
     protected String job;
+    public Object setCoin;
 
     public String getName() {
         return this.name;

@@ -180,5 +180,14 @@ public class MapGUI {
         g.dispose();
         return newImage;
     }
-    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new MapGUI();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
+    }
 }
