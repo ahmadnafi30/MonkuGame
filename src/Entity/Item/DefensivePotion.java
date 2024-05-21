@@ -35,15 +35,15 @@ public class DefensivePotion extends Item{
     }
 
     @Override
-    public void printDetailItemm() {
-        System.out.println("""
+    public String printDetailItemm() {
+        return("""
                 Name: """ + super.name + """
-                Rarity: """ + super.rarity + """
-                Functionality: """ + super.functionality + """
-                Price: """ + super.price + """
-                Attack Power: """ + defencePowerAmount + """
-                Duration: """ + duration + """
-                Price: """ + price + """
+                \nRarity: """ + super.rarity + """
+                \nFunctionality: """ + super.functionality + """
+                \nPrice: """ + super.price + """
+                \nAttack Power: """ + defencePowerAmount + """
+                \nDuration: """ + duration + """
+                \nPrice: """ + price + """
                 """);
     }
 

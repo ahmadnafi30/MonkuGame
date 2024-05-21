@@ -72,11 +72,8 @@ public class ShopGUI extends JFrame implements ActionListener {
                 String result = getInputKegiatan(frame);
                 if (result.equalsIgnoreCase("beli")) {
                     potionButtons(panelBG, frame);
-                    Monku.player.buyItem(null, cardCount, e);
-                    Monku.shopKeeper.setCoin(cardCount);
                 } else if (result.equalsIgnoreCase("jual")) {
-                    Monku.player.sellItem(null, cardCount, e);
-                    Monku.shopKeeper.setCoin(-cardCount);
+                    
                 }
             }
             if (isLastCard()) {
@@ -99,7 +96,7 @@ public class ShopGUI extends JFrame implements ActionListener {
     private void potionButtons(JPanel panelBG, JFrame frame) {
         JButton healButton = addButtons(panelBG, null, "asset/HealPotion.png", 200, 200, 200, 200, 110, 20, "Heal Potion");
         JButton defButton = addButtons(panelBG, null, "asset/DefensePotion.png", 200, 200, 200, 200, 150 + 110 + 10, 20, "Defense Potion");
-        JButton buffPotion = addButtons(panelBG, null, "asset/BuffPotion.png", 200, 200, 200, 200, (150 * 2) + 110 + 10, 20, "Buff Potion");
+        JButton buffButton = addButtons(panelBG, null, "asset/BuffPotion.png", 200, 200, 200, 200, (150 * 2) + 110 + 10, 20, "Buff Potion");
         JButton poisonButton = addButtons(panelBG, null, "asset/PoisonPotion.png", 200, 200, 200, 200, (150 * 3) + 110 + 10, 20, "Poison Potion");
         JButton teleButton = addButtons(panelBG, null, "asset/healthPotion.png", 200, 200, 200, 200, (150 * 4) + 110 + 10, 20, "Health Potion");
         
@@ -109,30 +106,61 @@ public class ShopGUI extends JFrame implements ActionListener {
         coin = Template.addCoinLabel(panelBG);
         panelBG.add(healButton);
         panelBG.add(defButton);
-        panelBG.add(buffPotion);
+        panelBG.add(buffButton);
         panelBG.add(poisonButton);
         panelBG.add(teleButton);
         
         healButton.addActionListener(e -> {
-            String input = JOptionPane.showInputDialog(
-                frame,
-                "Masukkan jumlah potion yang ingin kamu beli",
-                "Input jumlah", JOptionPane.QUESTION_MESSAGE
-            );
-    
-            try {
-                // Attempt to parse input as an integer
-                int quantity = Integer.parseInt(input);
-                if (quantity > 0) {
-                    Monku.player.buyItem(Monku.shopKeeper.getItem("Jamu Kuat", "COMMON"), quantity, e);
-                }
-                coin.setText("" + Monku.player.getCoin());
-                // Process the quantity here
-            } catch (NumberFormatException ex) {
-                // Input is not a valid integer
-                JOptionPane.showMessageDialog(frame, "Mohon masukkan angka yang valid.", "Input Invalid", JOptionPane.ERROR_MESSAGE);
-            }
+            options(panelBG, frame, "Jamu Kencur");
         });
+        buffButton.addActionListener(e -> {
+            options(panelBG, frame, "Jamu Kuat");
+        });
+        poisonButton.addActionListener(e -> {
+            options(panelBG, frame, "Ludah Buzzer");
+        });
+        teleButton.addActionListener(e -> {
+            options(panelBG, frame, "BECAK");
+        });
+    }
+
+    private void options(JPanel panelBG, JFrame frame, String potionName) {
+        String[] rarityOptions = { "COMMON", "RARE", "EPIC" };
+        int rarityChoice = JOptionPane.showOptionDialog(
+            frame,
+            "Pilih Rarity", 
+            "Pilih Rarity", 
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.QUESTION_MESSAGE, 
+            null, 
+            rarityOptions, 
+            rarityOptions[0]
+        );
+        String input = JOptionPane.showInputDialog(
+            frame,
+            "Masukkan jumlah potion yang ingin kamu beli",
+            "Input jumlah", JOptionPane.QUESTION_MESSAGE
+        );
+
+    // Get the selected rarity as a String
+        String selectedRarity = (rarityChoice >= 0) ? rarityOptions[rarityChoice] : null;
+
+        try {
+            // Attempt to parse input as an integer
+            int quantity = Integer.parseInt(input);
+            if (quantity > 0) {
+                Monku.player.buyItem(Monku.shopKeeper.getItem(potionName, selectedRarity), quantity, Monku.shopKeeper);
+                System.out.println(Monku.player.getCoin());
+            }
+            panelBG.remove(coin);
+            panelBG.repaint();
+            coin = Template.addCoinLabel(panelBG);
+            panelBG.add(coin);
+            // Process the quantity here
+        } catch (NumberFormatException ex) {
+            // Input is not a valid integer
+            JOptionPane.showMessageDialog(frame, "Mohon masukkan angka yang valid.", "Input Invalid", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private JButton addButtons(JPanel panelBG, BufferedImage img, String path, int buttonWidth, int buttonHeight, int imageWidth, int imageHeight, int x, int y, String name) {
