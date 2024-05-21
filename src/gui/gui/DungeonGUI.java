@@ -556,11 +556,10 @@ private void addBattleButtons() {
     panelBG.repaint();
 }
 
-private Monster randomDungeon(){
-    Random random = new Random();
-    return Monster.get(random.nextInt(dungeon.monsterLenght()));
-
-}
+// private Monster randomDungeon(){
+//     Random random = new Random();
+//     return Monster.get(random.nextInt(dungeon.monsterLenght()));
+// }
 
 
 
