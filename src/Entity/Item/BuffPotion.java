@@ -34,8 +34,8 @@ public class BuffPotion extends Item {
     }
 
     @Override
-    public void printDetailItemm() {
-        System.out.println("""
+    public String printDetailItemm() {
+        return("""
                 Name: """ + super.name + """
                 \nRarity: """ + super.rarity + """
                 \nFunctionality: """ + super.functionality + """

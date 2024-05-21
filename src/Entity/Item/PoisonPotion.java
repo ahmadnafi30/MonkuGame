@@ -34,8 +34,8 @@ public class PoisonPotion extends Item{
     }
 
     @Override
-    public void printDetailItemm() {
-        System.out.println("""
+    public String printDetailItemm() {
+        return("""
                 Name: """ + super.name + """
                 Rarity: """ + super.rarity + """
                 Functionality: """ + super.functionality + """

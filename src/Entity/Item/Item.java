@@ -75,7 +75,7 @@ public abstract class Item implements Serializable{
         }
     }
 
-    public abstract void printDetailItemm();
+    public abstract String printDetailItemm();
     public abstract void useItem(Monster monster, int turn, Player player);
     public abstract void itemRanOut(Monster monster, Player player);
 
