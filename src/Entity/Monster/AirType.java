@@ -6,8 +6,8 @@ import Entity.Item.Item;
 
 public class AirType extends Monster {
 
-    public AirType(String name, int monsterPhase, int maxMonsterPhase) {
-        super(name, monsterPhase, "AIR", maxMonsterPhase);
+    public AirType(String name, int monsterPhase, int maxMonsterPhase, String image) {
+        super(name, monsterPhase, "AIR", maxMonsterPhase, image);
     }
 
     public AirType(Monster monster){

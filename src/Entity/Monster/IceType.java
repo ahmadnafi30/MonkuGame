@@ -6,8 +6,8 @@ import Entity.Item.Item;
 
 public class IceType extends Monster{
     
-    public IceType(String name, int monsterPhase, int maxMonsterPhase) {
-        super(name, monsterPhase, "ICE", maxMonsterPhase);
+    public IceType(String name, int monsterPhase, int maxMonsterPhase, String image) {
+        super(name, monsterPhase, "ICE", maxMonsterPhase, image);
     }
 
     public IceType(Monster iceType){

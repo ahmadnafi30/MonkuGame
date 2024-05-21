@@ -8,7 +8,7 @@ import Entity.Monster.*;
 
 public class Test {
     public static void main(String[] args) {
-        Monster monster = new FireType("Raka", 1, 4);
+        Monster monster = new FireType("Raka", 1, 4, "asset/squirtle.gif");
         ((FireType)monster).ember();
         monster.setLevel(20);
         monster.displayDetailMonster();

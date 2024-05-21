@@ -5,8 +5,8 @@ import Entity.Item.Item;
 
 public class WaterType extends Monster {
 
-    public WaterType(String name, int monsterPhase, int maxMonsterPhase) {
-        super(name, monsterPhase, "WATER", maxMonsterPhase);
+    public WaterType(String name, int monsterPhase, int maxMonsterPhase, String image) {
+        super(name, monsterPhase, "WATER", maxMonsterPhase, image);
     }
 
     public WaterType(Monster waterType) {

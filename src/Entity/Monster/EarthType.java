@@ -6,8 +6,8 @@ import Entity.Item.Item;
 
 public class EarthType extends Monster {
 
-    public EarthType(String name, int monsterPhase, int maxMonsterPhase) {
-        super(name, monsterPhase, "EARTH", maxMonsterPhase);
+    public EarthType(String name, int monsterPhase, int maxMonsterPhase, String image) {
+        super(name, monsterPhase, "EARTH", maxMonsterPhase, image);
     }
 
     public EarthType(Monster earthType){

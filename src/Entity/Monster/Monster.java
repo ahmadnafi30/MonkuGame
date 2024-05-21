@@ -27,6 +27,7 @@ public abstract class Monster implements Battle, Serializable {
     private int currentMaxSpcAttackPower;
     private int currentMaxElemAttackPower;
     private int currentMaxDefensePower;
+    private String image;
 
     public Monster(Monster monster){
         name = monster.name;
@@ -53,7 +54,7 @@ public abstract class Monster implements Battle, Serializable {
         currentMaxDefensePower = monster.currentMaxDefensePower;
     }
 
-    public Monster(String name, int monsterPhase, String elementType, int maxMonsterPhase) {
+    public Monster(String name, int monsterPhase, String elementType, int maxMonsterPhase, String image) {
         this.elementalAttacks = new ArrayList<>();
         this.name = name;
         this.level = 1;
@@ -75,10 +76,15 @@ public abstract class Monster implements Battle, Serializable {
         this.currentMaxElemAttackPower = maxElemAttackPower / 2;
         this.defensePower = maxDefensePower / 2;
         this.currentMaxDefensePower = maxDefensePower / 2;
+        this.image = image;
     }
 
     public Monster getMonster(){
         return this;
+    }
+
+    public String getImage(){
+        return this.image;
     }
     // cek jika attacker memimiliki elemen yang efektif dengan musuh
     public boolean checkWeakness(ElementType elementType) {
@@ -383,7 +389,6 @@ public abstract class Monster implements Battle, Serializable {
         this.defensePower = Math.min(this.defensePower, maxDefensePower);
     }
 
-    // Method to heal HP
     public void healingHp(int amountHeal) {
         if (healthPoint == maxHealthPoint) {
             System.out.println("You already have full health!");
@@ -392,7 +397,6 @@ public abstract class Monster implements Battle, Serializable {
         this.healthPoint = Math.min(this.healthPoint + amountHeal, currentMaxHealthPoint);
     }
 
-    // Method to display details of the Pokemon
     public void displayDetailMonster() {
         System.out.println("Name: " + name + " (" + elementType[0] +")");
         System.out.println("Level: " + level);
@@ -409,6 +413,26 @@ public abstract class Monster implements Battle, Serializable {
         });
     }
 
+    public String displayDetailMonsterReturn() {
+        StringBuilder details = new StringBuilder();
+        details.append("Name: ").append(name).append(" (").append(elementType[0]).append(")\n");
+        details.append("Level: ").append(level).append("\n");
+        details.append("Experience Point: ").append(experiencePoint).append("\n");
+        details.append("Health Point: ").append(healthPoint).append("\n");
+        details.append("Attack Power: ").append(attackPower).append("\n");
+        details.append("Special Attack Power: ").append(spcAttackPower).append("\n");
+        details.append("Defense Power: ").append(defensePower).append("\n");
+    
+        elementalAttacks.forEach(attribute -> {
+            details.append("\n");
+            details.append(attribute.nama).append("\n");
+            details.append("Power: ").append(attribute.power).append("\n");
+            details.append("Element: ").append(attribute.element).append("\n");
+        });
+    
+        return details.toString();
+    }
+    
     // Nested enum for Pokemon element types
     public enum ElementType {
         FIRE,

@@ -6,8 +6,8 @@ import Entity.Item.Item;
 
 public class FireType extends Monster {
 
-    public FireType(String name, int monsterPhase, int maxMonsterPhase) {
-        super(name, monsterPhase, "FIRE", maxMonsterPhase);
+    public FireType(String name, int monsterPhase, int maxMonsterPhase, String image) {
+        super(name, monsterPhase, "FIRE", maxMonsterPhase, image);
     }
     public FireType(Monster fireType){
         super(fireType);

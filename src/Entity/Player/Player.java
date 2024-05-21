@@ -172,6 +172,15 @@ public class Player implements ItemInteract, Battle {
         }
     }
 
+    public String printMonster(int i){
+        String detail = monsters.get(i).displayDetailMonsterReturn();
+        return detail;
+    }
+
+    public String getImage(int i){
+        return monsters.get(i).getImage();
+    }
+
     public void catchMonster(Monster monster) {
         this.monsters.add(monster);
         System.out.println("Monster " + monster.getName() + " berhasil dijinakkan");

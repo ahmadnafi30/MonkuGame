@@ -1,3 +1,7 @@
+/**
+ * The `ElementalAttack` class in the `Entity.Monster` package defines properties for a monster's
+ * elemental attack including name, power, and element type.
+ */
 package Entity.Monster;
 
 import Entity.Monster.Monster.ElementType;

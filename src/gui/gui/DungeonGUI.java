@@ -10,12 +10,15 @@ import Entity.Item.Item;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class DungeonGUI extends JFrame {
@@ -31,10 +34,11 @@ public class DungeonGUI extends JFrame {
     private JPanel buttonBackgroundPanel;
     private JButton battle;
     private JButton exit;
-
+    private JButton selectedPokemonButton = null;
     private JLabel playerLabel;
     private JLabel chatLabel;
     private JLabel chatTextLabel;
+    private int indeksMonku;
 
     public DungeonGUI(Dungeon dungeon, Player player) {
         this.dungeon = dungeon;
@@ -340,65 +344,213 @@ public class DungeonGUI extends JFrame {
             }
         };
     
-        BufferedImage bcAttackImage;
-        BufferedImage speAttackImage;
-        BufferedImage eleAttackImage;
-        BufferedImage fleeImage;
+
         BufferedImage boxHpImage;
-    
+        BufferedImage GoButton;
         try {
-            bcAttackImage = ImageIO.read(new File("asset/SPECIAL ATTACK/2.png"));
-            speAttackImage = ImageIO.read(new File("asset/SPECIAL ATTACK/1.png"));
-            eleAttackImage = ImageIO.read(new File("asset/SPECIAL ATTACK/3.png"));
-            fleeImage = ImageIO.read(new File("asset/SPECIAL ATTACK/4.png"));
-            boxHpImage = ImageIO.read(new File("asset/HPBAR.png"));
+            boxHpImage = ImageIO.read(new File("asset/HPBAR/5.png"));
+            GoButton = ImageIO.read(new File("asset/HPBAR/HPBAR (3).png"));
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
     
-        JButton bcAttackButton = Template.addButtons(panelBG, bcAttackImage, "asset/SPECIAL ATTACK/2.png", 250, 92, 92, 250, 500, 532);
-        JButton speAttackButton = Template.addButtons(panelBG, speAttackImage, "asset/SPECIAL ATTACK/1.png", 250, 92, 92, 250, 740, 532);
-        JButton eleAttackButton = Template.addButtons(panelBG, eleAttackImage, "asset/SPECIAL ATTACK/3.png", 250, 92, 92, 250, 500, 623);
-        JButton fleeButton = Template.addButtons(panelBG, fleeImage, "asset/SPECIAL ATTACK/4.png", 250, 92, 92, 250, 740, 623);
-    
-        JPanel hpBoxPanelPlayer = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(boxHpImage, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
 
-        JPanel hpBoxPanelMonster = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(boxHpImage, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-    
+    JButton goButton = Template.addButtons(panelBG, GoButton, "asset/HPBAR/HPBAR (3).png", 500, 184, 500, 500, 500, 532);
 
-        int hpBoxWidth = 510;  
-        int hpBoxHeight = 184;  
-        int hpBoxX = 0;       
-        int hpBoxY = 532;  
-        hpBoxPanelMonster.setBounds(20,20,470,150);
-        hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
-        hpBoxPanelPlayer.setOpaque(false); 
-        hpBoxPanelMonster.setOpaque(false); 
-    
-        panelBG.add(bcAttackButton);
-        panelBG.add(speAttackButton);
-        panelBG.add(eleAttackButton);
-        panelBG.add(fleeButton);
-        panelBG.add(hpBoxPanelPlayer);
-        panelBG.add(hpBoxPanelMonster);
-    
-        setContentPane(panelBG);
-        panelBG.revalidate();
-        panelBG.repaint();
+    JPanel hpBoxPanelPlayer = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(boxHpImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
+
+    JPanel hpBoxPanelMonster = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(boxHpImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
+
+    int hpBoxWidth = 510;  
+    int hpBoxHeight = 184;  
+    int hpBoxX = 0;       
+    int hpBoxY = 532;  
+    hpBoxPanelMonster.setBounds(20, 20, 470, 150);
+    hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
+    hpBoxPanelPlayer.setOpaque(false); 
+    hpBoxPanelMonster.setOpaque(false); 
+
+    panelBG.add(hpBoxPanelMonster);
+    panelBG.add(hpBoxPanelPlayer);
+    panelBG.add(goButton);
+
+    JPanel listPanel = new JPanel();
+    listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+    listPanel.setOpaque(false);
+
+    ArrayList<Monster> pokemonNames = player.getMonsters();
+    ArrayList<JButton> pokemonButtons = new ArrayList<>();
+    for (int i = 0; i < pokemonNames.size(); i++) {
+        try {
+            BufferedImage pokemonImage = ImageIO.read(new File(player.getImage(i)));
+            JButton button = createPokemonButton(pokemonImage, player.printMonster(i), i);
+            listPanel.add(button);
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    JScrollPane scrollPane = new JScrollPane(listPanel);
+    scrollPane.setBounds(10, 10, hpBoxPanelPlayer.getWidth() - 20, hpBoxPanelPlayer.getHeight() - 20); 
+    scrollPane.setOpaque(false);
+    scrollPane.getViewport().setOpaque(false); 
+    scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+    JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+    verticalScrollBar.setUI(new BasicScrollBarUI() {
+        @Override
+        protected void configureScrollBarColors() {
+            this.thumbColor = Color.BLACK; 
+            this.trackColor = new Color(0, 0, 0, 0); 
+        }
+    });
+
+    scrollPane.getVerticalScrollBar().setUnitIncrement(16);  
+    scrollPane.getVerticalScrollBar().setBlockIncrement(50); 
+
+    hpBoxPanelPlayer.setLayout(null);  
+    hpBoxPanelPlayer.add(scrollPane);
+
+    goButton.addActionListener(e -> {
+        System.out.println("basic attack button pressed");
+        if (selectedPokemonButton != null) {
+            goButton.setVisible(false);
+            panelBG.remove(scrollPane);
+            panelBG.remove(verticalScrollBar);
+            panelBG.remove(hpBoxPanelPlayer);
+            addBattleButtons();
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a Pokémon first.", "Reminder", JOptionPane.WARNING_MESSAGE);
+        }
+        
+    });
+
+    setContentPane(panelBG);
+    panelBG.revalidate();
+    panelBG.repaint();
+}
+
+private void addBattleButtons() {
+    BufferedImage bcAttackImage;
+    BufferedImage speAttackImage;
+    BufferedImage eleAttackImage;
+    BufferedImage fleeImage;
+    BufferedImage boxHpImage;
+
+    try {
+        bcAttackImage = ImageIO.read(new File("asset/HPBAR/2.png"));
+        speAttackImage = ImageIO.read(new File("asset/HPBAR/1.png"));
+        eleAttackImage = ImageIO.read(new File("asset/HPBAR/3.png"));
+        fleeImage = ImageIO.read(new File("asset/HPBAR/4.png"));
+        boxHpImage = ImageIO.read(new File("asset/HPBAR/5.png"));
+    } catch (IOException e) {
+        e.printStackTrace();
+        return;
+    }
+
+    JButton bcAttackButton = Template.addButtons(panelBG, bcAttackImage, "asset/HPBAR/2.png", 250, 92, 92, 250, 500, 532);
+    JButton speAttackButton = Template.addButtons(panelBG, speAttackImage, "asset/HPBAR/1.png", 250, 92, 92, 250, 740, 532);
+    JButton eleAttackButton = Template.addButtons(panelBG, eleAttackImage, "asset/HPBAR/3.png", 250, 92, 92, 250, 500, 623);
+    JButton fleeButton = Template.addButtons(panelBG, fleeImage, "asset/HPBAR/4.png", 250, 92, 92, 250, 740, 623);
+
+    JPanel hpBoxPanelPlayer = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(boxHpImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
+
+    
+    int hpBoxWidth = 510;  
+    int hpBoxHeight = 184;  
+    int hpBoxX = 0;       
+    int hpBoxY = 532;  
+;
+    hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
+    hpBoxPanelPlayer.setOpaque(false); 
+
+    panelBG.add(hpBoxPanelPlayer);
+    panelBG.add(bcAttackButton);
+    panelBG.add(speAttackButton);
+    panelBG.add(eleAttackButton);
+    panelBG.add(fleeButton);
+
+    bcAttackButton.addActionListener(e -> System.out.println("Basic attack button pressed"));
+    speAttackButton.addActionListener(e -> System.out.println("Special attack button pressed"));
+    eleAttackButton.addActionListener(e -> System.out.println("Elemental attack button pressed"));
+    fleeButton.addActionListener(e -> System.out.println("Flee button pressed"));
+
+    panelBG.revalidate();
+    panelBG.repaint();
+}
+
+
+private JButton createPokemonButton(BufferedImage image, String details, int i) {
+    JButton pokemonButton = new JButton();
+    pokemonButton.setLayout(new BorderLayout());
+
+    JLabel imageLabel = new JLabel(new ImageIcon(image));
+    JLabel detailsLabel = new JLabel("<html>" + details.replace("\n", "<br>") + "</html>");
+
+    pokemonButton.add(imageLabel, BorderLayout.WEST);
+    pokemonButton.add(detailsLabel, BorderLayout.CENTER);
+    pokemonButton.setOpaque(false);
+    pokemonButton.setBorder(BorderFactory.createEmptyBorder());
+    pokemonButton.setContentAreaFilled(false);
+    pokemonButton.setFocusable(false);
+
+    pokemonButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            if (selectedPokemonButton != pokemonButton) {
+                pokemonButton.setBackground(Color.LIGHT_GRAY);
+                pokemonButton.setOpaque(true);
+            }
+        }
+
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            if (selectedPokemonButton != pokemonButton) {
+                pokemonButton.setBackground(null);
+                pokemonButton.setOpaque(false);
+            }
+        }
+    });
+
+    pokemonButton.addActionListener(e -> {
+        System.out.println("Pokemon button clicked: " + details);
+        indeksMonku = i;
+
+        // Reset the background of the previously selected button
+        if (selectedPokemonButton != null) {
+            selectedPokemonButton.setBackground(null);
+            selectedPokemonButton.setOpaque(false);
+        }
+
+        // Set the current button as the selected one
+        selectedPokemonButton = pokemonButton;
+        pokemonButton.setBackground(Color.WHITE);
+        pokemonButton.setOpaque(true);
+    });
+
+    return pokemonButton;
+}
+
     
     private void showDungeonDetails(Dungeon dungeon) {
         if (buttonBackgroundPanel != null) {
@@ -427,12 +579,19 @@ public class DungeonGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        Monster monster = new AirType("kehed", 4, 4);
+        Monster monster = new AirType("kehed", 4, 4, "asset/squirtle.gif");
+        Monster monster2 = new AirType("kehed", 4, 4, "asset/squirtle.gif");
+        Monster monster3 = new AirType("kehed", 4, 4, "asset/squirtle.gif");
+        Monster monster4 = new AirType("kehed", 4, 4, "asset/squirtle.gif");
         Item item = new BuffPotion("Jamu Kuat", "COMMON");
         Monster[] monsters = {monster};
         Item[] rewards = {item};
         Dungeon dungeon = new Dungeon("Mystic Cave", monsters, rewards, 1, "asset/den4zwg-45a7fe9e-d38a-417c-815c-3e56972adf62.jpg", "asset/wizard1.gif", "Sapi");
         Player player = new Player("Hero", dungeon, "asset/wizard.gif");
+        player.catchMonster(monster);
+        player.catchMonster(monster2);
+        player.catchMonster(monster3);
+        player.catchMonster(monster4);
 
         SwingUtilities.invokeLater(() -> new DungeonGUI(dungeon, player));
     }
