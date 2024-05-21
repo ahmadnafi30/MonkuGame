@@ -642,4 +642,9 @@ public abstract class Monster implements Battle, Serializable {
 
         return properties.toString();
     }
+
+    public static Monster get(int nextInt) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'get'");
+    }
 }

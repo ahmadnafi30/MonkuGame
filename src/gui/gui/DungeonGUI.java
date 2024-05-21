@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class DungeonGUI extends JFrame {
     private Dungeon dungeon;
@@ -38,7 +39,8 @@ public class DungeonGUI extends JFrame {
     private JLabel playerLabel;
     private JLabel chatLabel;
     private JLabel chatTextLabel;
-    private int indeksMonku;
+    private int indeksMonku = -1;
+    JPanel listPanel;
 
     public DungeonGUI(Dungeon dungeon, Player player) {
         this.dungeon = dungeon;
@@ -396,7 +398,7 @@ public class DungeonGUI extends JFrame {
     for (int i = 0; i < pokemonNames.size(); i++) {
         try {
             BufferedImage pokemonImage = ImageIO.read(new File(player.getImage(i)));
-            JButton button = createPokemonButton(pokemonImage, player.printMonster(i), i);
+            JButton button = createPokemonButton(player.getImage(i), player.printMonster(i), i);
             listPanel.add(button);
             
         } catch (IOException e) {
@@ -414,7 +416,7 @@ public class DungeonGUI extends JFrame {
     verticalScrollBar.setUI(new BasicScrollBarUI() {
         @Override
         protected void configureScrollBarColors() {
-            this.thumbColor = Color.BLACK; 
+            this.thumbColor = Color.GRAY; 
             this.trackColor = new Color(0, 0, 0, 0); 
         }
     });
@@ -448,14 +450,14 @@ private void addBattleButtons() {
     BufferedImage bcAttackImage;
     BufferedImage speAttackImage;
     BufferedImage eleAttackImage;
-    BufferedImage fleeImage;
+    BufferedImage usePotion;
     BufferedImage boxHpImage;
 
     try {
         bcAttackImage = ImageIO.read(new File("asset/HPBAR/2.png"));
         speAttackImage = ImageIO.read(new File("asset/HPBAR/1.png"));
         eleAttackImage = ImageIO.read(new File("asset/HPBAR/3.png"));
-        fleeImage = ImageIO.read(new File("asset/HPBAR/4.png"));
+        usePotion = ImageIO.read(new File("asset/HPBAR/HPBAR (5).png"));
         boxHpImage = ImageIO.read(new File("asset/HPBAR/5.png"));
     } catch (IOException e) {
         e.printStackTrace();
@@ -465,7 +467,7 @@ private void addBattleButtons() {
     JButton bcAttackButton = Template.addButtons(panelBG, bcAttackImage, "asset/HPBAR/2.png", 250, 92, 92, 250, 500, 532);
     JButton speAttackButton = Template.addButtons(panelBG, speAttackImage, "asset/HPBAR/1.png", 250, 92, 92, 250, 740, 532);
     JButton eleAttackButton = Template.addButtons(panelBG, eleAttackImage, "asset/HPBAR/3.png", 250, 92, 92, 250, 500, 623);
-    JButton fleeButton = Template.addButtons(panelBG, fleeImage, "asset/HPBAR/4.png", 250, 92, 92, 250, 740, 623);
+    JButton fleeButton = Template.addButtons(panelBG, usePotion, "asset/HPBAR/HPBAR (5).png", 250, 92, 92, 250, 740, 623);
 
     JPanel hpBoxPanelPlayer = new JPanel() {
         @Override
@@ -475,20 +477,75 @@ private void addBattleButtons() {
         }
     };
 
-    
     int hpBoxWidth = 510;  
     int hpBoxHeight = 184;  
     int hpBoxX = 0;       
     int hpBoxY = 532;  
-;
+
     hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
     hpBoxPanelPlayer.setOpaque(false); 
+
+    // JLabel monsterPlayerLabel = new JLabel(new ImageIcon(player.getImage(indeksMonku)));
+    // int monsterGifWidth = 600;
+    // int monsterGifHeight = 600;
+    // int monsterGifX = 0;
+    // int monsterGifY = 200;
+    // monsterPlayerLabel.setBounds(monsterGifX, monsterGifY, monsterGifWidth, monsterGifHeight);
+
+    Monster monsterPlayer = player.deployMonster(indeksMonku);
+    JPanel monsterPlayerPlanel = new JPanel(null) {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            ImageIcon originalIcon = new ImageIcon(player.getImage(indeksMonku));
+            Image originalImage = originalIcon.getImage();
+            g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
+    monsterPlayerPlanel.setBounds(90, 330, 300, 300);
+    monsterPlayerPlanel.setOpaque(false);
+   
+    
+    
+    Monster monsterDungeon = dungeon.getRandomMonster();
+    JPanel monsterDungPanel = new JPanel(null) {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            ImageIcon originalIcon = new ImageIcon(monsterDungeon.getImage());
+            Image originalImage = originalIcon.getImage();
+            g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
+    monsterDungPanel.setBounds(575, 85, 300, 300);
+    monsterDungPanel.setOpaque(false);
+
+    // int monsterDungeonGifWidth = 300;
+    // int monsterDungeonGifHeight = 300;
+    // int monsterDungeonGifX = 450;
+    // int monsterDungeonGifY = 0;
+
+    // ImageIcon originalIcon = new ImageIcon(monsterDungeon.getImage());
+    // Image scaledImage = Template.getScaledImage(originalIcon.getImage(), monsterDungeonGifWidth, monsterDungeonGifHeight);
+    // ImageIcon scaledIcon = new ImageIcon(scaledImage);
+    // if (originalIcon.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+    //     System.out.println("Error: Image did not load correctly from path: " + monsterDungeon.getImage());
+    //     return;
+    // } else {
+    //     System.out.println("Image loaded successfully from path: " + monsterDungeon.getImage());
+    // }
+    // JLabel monsterDungeonLabel = new JLabel(scaledIcon);
+    // monsterDungeonLabel.setVisible(true);
+    // monsterDungeonLabel.setBounds(monsterDungeonGifX, monsterDungeonGifY, monsterDungeonGifWidth, monsterDungeonGifHeight);
 
     panelBG.add(hpBoxPanelPlayer);
     panelBG.add(bcAttackButton);
     panelBG.add(speAttackButton);
     panelBG.add(eleAttackButton);
     panelBG.add(fleeButton);
+    panelBG.add(monsterDungPanel);
+    panelBG.add(monsterPlayerPlanel);
+    // panelBG.add(monsterPlayerLabel);
 
     bcAttackButton.addActionListener(e -> System.out.println("Basic attack button pressed"));
     speAttackButton.addActionListener(e -> System.out.println("Special attack button pressed"));
@@ -499,9 +556,17 @@ private void addBattleButtons() {
     panelBG.repaint();
 }
 
+private Monster randomDungeon(){
+    Random random = new Random();
+    return Monster.get(random.nextInt(dungeon.monsterLenght()));
 
-private JButton createPokemonButton(BufferedImage image, String details, int i) {
+}
+
+
+
+private JButton createPokemonButton(String image, String details, int i) {
     JButton pokemonButton = new JButton();
+    
     pokemonButton.setLayout(new BorderLayout());
 
     JLabel imageLabel = new JLabel(new ImageIcon(image));
@@ -540,9 +605,7 @@ private JButton createPokemonButton(BufferedImage image, String details, int i) 
         if (selectedPokemonButton != null) {
             selectedPokemonButton.setBackground(null);
             selectedPokemonButton.setOpaque(false);
-        }
-
-        // Set the current button as the selected one
+        }    // Set the current button as the selected one
         selectedPokemonButton = pokemonButton;
         pokemonButton.setBackground(Color.WHITE);
         pokemonButton.setOpaque(true);
@@ -579,7 +642,7 @@ private JButton createPokemonButton(BufferedImage image, String details, int i) 
     }
 
     public static void main(String[] args) {
-        Monster monster = new AirType("kehed", 4, 4, "asset/squirtle.gif");
+        Monster monster = new AirType("kehed", 4, 4, "asset/rhyhorn.gif");
         Monster monster2 = new AirType("kehed", 4, 4, "asset/squirtle.gif");
         Monster monster3 = new AirType("kehed", 4, 4, "asset/squirtle.gif");
         Monster monster4 = new AirType("kehed", 4, 4, "asset/squirtle.gif");

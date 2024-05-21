@@ -191,6 +191,11 @@ public class Dungeon extends Locations {
         return rewards.get(random.nextInt(rewards.size()));
     }
 
+    public Monster getRandomMonster() {
+        Random random = new Random();
+        return monsters.get(random.nextInt(monsters.size()));
+    }
+
     public String getName() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getName'");
