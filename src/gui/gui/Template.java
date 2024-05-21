@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -13,9 +15,40 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+
+import app.Monku;
 
 public class Template {
+
+    public static JLabel addCoinLabel(JPanel panelBG) {
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File("asset/coin.png"));
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        if (img != null) {
+            img = resize(img, 140 / 2, 140 / 2);
+            JLabel coinLabel = new JLabel(""+ Monku.player.getCoin(), new ImageIcon(img), SwingConstants.LEFT);
+            coinLabel.setHorizontalTextPosition(JLabel.RIGHT); // Position the text to the right of the image
+            coinLabel.setVerticalTextPosition(JLabel.CENTER); // Center the text vertically relative to the image
+            coinLabel.setIconTextGap(-5);
+            coinLabel.setBackground(Color.YELLOW);
+            coinLabel.setForeground(Color.YELLOW);
+            coinLabel.setFont(new Font("Public Pixel", Font.BOLD, 20));
+            coinLabel.setBounds(0, 5, 150, 75); // Adjust the size to fit both image and text
+            panelBG.add(coinLabel);
+            return coinLabel;
+        } else {
+            return null;
+        }
+    }
+    
     public static void addHoverEffect(JButton button, ImageIcon originalIcon) {
         // Add transparency effect
         float originalAlpha = 1.0f; // Original opacity

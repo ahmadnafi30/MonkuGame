@@ -44,7 +44,7 @@ public class MapGUI {
             System.err.println("Error loading icons: " + e.getMessage());
             return; // Exit the constructor if the icons can't be loaded
         }
-
+        
         homeIcon = resize(homeIcon, 90, 90);
         homeIconPressed = resize(homeIconPressed, 90, 90);
 
@@ -63,7 +63,8 @@ public class MapGUI {
                 g.drawImage(originalImage, -160, 0, getWidth() + 300, getHeight(), this);
             }
         };
-
+        
+        Template.addCoinLabel(panelBG);
         Image scaledHomeIcon = homeIcon.getScaledInstance(90, 90, Image.SCALE_SMOOTH);
         Image scaledHomeIconPressed = homeIconPressed.getScaledInstance(90, 90, Image.SCALE_SMOOTH);
 
@@ -98,7 +99,6 @@ public class MapGUI {
             }
             }
         );
-        
         homeButton.setBounds(279, 502, 90, 90);
         homeButton.setBorder(BorderFactory.createEmptyBorder());
         homeButton.setContentAreaFilled(false);

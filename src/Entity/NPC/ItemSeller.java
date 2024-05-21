@@ -103,5 +103,13 @@ public class ItemSeller extends NPC implements ItemInteract {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getInventory'");
     }
+    public Item getItem(String itemName, String rarity) {
+        for (Item item : inventory.keySet()) {
+            if (item.getName().equals(itemName) && item.getRarity().equals(rarity) && inventory.get(item) > 0) {
+                return item;
+            }
+        }
+        return null; // Item tidak ditemukan atau tidak tersedia
+    }
     
 }

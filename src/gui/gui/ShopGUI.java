@@ -18,6 +18,7 @@ public class ShopGUI extends JFrame implements ActionListener {
     private JPanel dialogTextPanel;
     private JPanel dialogBox;
     private JButton invisibleButton;
+    private JLabel coin;
 
     public ShopGUI() {
         JFrame frame = new JFrame("Monku Games");
@@ -86,7 +87,6 @@ public class ShopGUI extends JFrame implements ActionListener {
                 dialogText.next(dialogTextPanel);
             }
         });
-        
         panelBG.add(invisibleButton);
         panelBG.add(dialogTextPanel);
         panelBG.add(dialogBox);
@@ -106,7 +106,7 @@ public class ShopGUI extends JFrame implements ActionListener {
         dialogBox.setVisible(false);
         dialogTextPanel.setVisible(false);
         invisibleButton.setVisible(false); // Hide the invisible button when showing potion buttons
-        
+        coin = Template.addCoinLabel(panelBG);
         panelBG.add(healButton);
         panelBG.add(defButton);
         panelBG.add(buffPotion);
@@ -114,11 +114,24 @@ public class ShopGUI extends JFrame implements ActionListener {
         panelBG.add(teleButton);
         
         healButton.addActionListener(e -> {
-            JOptionPane.showInputDialog(
+            String input = JOptionPane.showInputDialog(
                 frame,
                 "Masukkan jumlah potion yang ingin kamu beli",
                 "Input jumlah", JOptionPane.QUESTION_MESSAGE
             );
+    
+            try {
+                // Attempt to parse input as an integer
+                int quantity = Integer.parseInt(input);
+                if (quantity > 0) {
+                    Monku.player.buyItem(Monku.shopKeeper.getItem("Jamu Kuat", "COMMON"), quantity, e);
+                }
+                coin.setText("" + Monku.player.getCoin());
+                // Process the quantity here
+            } catch (NumberFormatException ex) {
+                // Input is not a valid integer
+                JOptionPane.showMessageDialog(frame, "Mohon masukkan angka yang valid.", "Input Invalid", JOptionPane.ERROR_MESSAGE);
+            }
         });
     }
 

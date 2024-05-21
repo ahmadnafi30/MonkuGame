@@ -11,7 +11,48 @@ public abstract class Item implements Serializable{
     public String functionality;
     public int price;
     public Rarity rarity;
-    public int duration; //durasi per putaran
+    public int duration;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFunctionality() {
+        return this.functionality;
+    }
+
+    public void setFunctionality(String functionality) {
+        this.functionality = functionality;
+    }
+
+    public int getPrice() {
+        return this.price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public String getRarity() {
+        return this.rarity.toString();
+    }
+
+    public void setRarity(Rarity rarity) {
+        this.rarity = rarity;
+    }
+
+    public int getDuration() {
+        return this.duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+    //durasi per putaran
 
     public Item(String name, String functionality, int price, String rarity, int duration) {
         this.name = name;
