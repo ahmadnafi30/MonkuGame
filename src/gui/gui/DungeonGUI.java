@@ -479,8 +479,25 @@ public class DungeonGUI extends JFrame {
 
 private void setMonsterDungeon(){
     monsterBattle = dungeon.getRandomMonster();
+    // switch(monsterBattle.getELementTypeStr()){
+    //     case "Fire":
+            
+    //         break;
+    //     case "Water":
+    //         monsterDungeonPanel.setBackground(Color.BLUE);
+    //         break;
+    //     case "Earth":
+    //         monsterDungeonPanel.setBackground(Color.GREEN);
+    //         break;
+    //     default:
+    //         break;
+    //     }
 }
 
+public void popUp(Monster monster){
+    // Kalo meninggal muncul popUp
+    if(isDead(monster)){}
+}
 private void addBattleButtons() {
 
     Monster monsterPlayer = player.deployMonster(indeksMonku);
@@ -553,17 +570,39 @@ private void addBattleButtons() {
     bcAttackButton.addActionListener(e -> {
         System.out.println("Basic attack button pressed");
         monsterBattle.getAttacked("basic", monsterPlayer, null);
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        //updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
+        popUp(monsterBattle);
+
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        //updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        popUp(monsterPlayer);
+        System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
+        bcAttackButton.setEnabled(false);
+        Timer timer = new Timer(200, new ActionListener() { // Delay 200 milidetik (0.2 detik)
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                bcAttackButton.setEnabled(true); // Mengaktifkan kembali tombol setelah 0.2 detik
+            }
+        });
+        timer.setRepeats(false); // Hanya menjalankan sekali saja        
     });
 
     speAttackButton.addActionListener(e -> {
         System.out.println("Special attack button pressed");
         monsterBattle.getAttacked("special", monsterPlayer, null);
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        //updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
+
+        popUp(monsterBattle);
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        //updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        popUp(monsterPlayer);
+        System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
     });
 
     eleAttackButton.addActionListener(e -> {
@@ -573,8 +612,11 @@ private void addBattleButtons() {
         }
         System.out.println("Elemental attack button pressed");
         monsterBattle.getAttacked("elemntal", monsterPlayer, null);
+        if(isDead(monsterBattle)){
+
+        }
         updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
-        monsterPlayer.getAttacked(, monsterPlayer, null);
+        monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
         updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
     });
 
@@ -633,6 +675,10 @@ private void addBattleButtons() {
 
     panelBG.revalidate();
     panelBG.repaint();
+}
+
+public boolean isDead(Monster monster) {
+    return monster.getHealthPoint() <= 0;
 }
 
 private JPanel createHpPanel(String name, int currentHp, int maxHp, int color, Monster monster) {
@@ -777,10 +823,10 @@ private JButton createPokemonButton(String image, String details, int i) {
     }
 
     public static void main(String[] args) {
-        Monster monster = new AirType("kehed", 4, 4, "asset/rhyhorn.gif");
-        Monster monster2 = new AirType("kehed", 4, 4, "asset/squirtle.gif");
-        Monster monster3 = new AirType("kehed", 4, 4, "asset/squirtle.gif");
-        Monster monster4 = new AirType("kehed", 4, 4, "asset/squirtle.gif");
+        Monster monster = new AirType("kehed", 1, 4, "asset/rhyhorn.gif");
+        Monster monster2 = new AirType("dehek", 1, 4, "asset/squirtle.gif");
+        Monster monster3 = new AirType("heked", 1, 4, "asset/squirtle.gif");
+        Monster monster4 = new AirType("edehek", 1, 4, "asset/squirtle.gif");
         Item item = new BuffPotion("Jamu Kuat", "COMMON");
         Monster[] monsters = {monster};
         Item[] rewards = {item};

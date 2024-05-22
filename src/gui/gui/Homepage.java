@@ -98,7 +98,6 @@ public class Homepage {
         addButtonPressedEffect(loadGameButton);
         addButtonPressedEffect(aboutUsButton);
 
-
         frame.setContentPane(panel);
         frame.setVisible(true);
     }
