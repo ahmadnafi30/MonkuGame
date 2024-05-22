@@ -197,8 +197,7 @@ public class Dungeon extends Locations {
     }
 
     public String getName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+        return this.locationName;
     }
 
     public String getDifficultyLevel() {

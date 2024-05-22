@@ -363,10 +363,7 @@ public class DungeonGUI extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
             return;
-        }
-
-        
-    
+        }    
 
     JButton goButton = Template.addButtons(panelBG, GoButton, "asset/HPBAR/HPBAR (3).png", 500, 184, 500, 500, 500, 532);
 
@@ -378,22 +375,22 @@ public class DungeonGUI extends JFrame {
         }
     };
 
-    JPanel hpBoxPanelMonster = new JPanel() {
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(boxHpImage2, 0, 0, getWidth(), getHeight(), this);
-        }
-    };
+    // JPanel hpBoxPanelMonster = new JPanel() {
+    //     @Override
+    //     protected void paintComponent(Graphics g) {
+    //         super.paintComponent(g);
+    //         g.drawImage(boxHpImage2, 0, 0, getWidth(), getHeight(), this);
+    //     }
+    // };
 
     int hpBoxWidth = 510;  
     int hpBoxHeight = 184;  
     int hpBoxX = 0;       
     int hpBoxY = 532;  
-    hpBoxPanelMonster.setBounds(20, 20, 470, 220);
+    // hpBoxPanelMonster.setBounds(20, 20, 470, 220);
     hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
     hpBoxPanelPlayer.setOpaque(false); 
-    hpBoxPanelMonster.setOpaque(false); 
+    // hpBoxPanelMonster.setOpaque(false); 
 
 
     panelBG.add(goButton);
@@ -430,11 +427,12 @@ public class DungeonGUI extends JFrame {
     monsterDungeonPanel.setBounds(575, 85, 300, 300);
     monsterDungeonPanel.setOpaque(false);
 
-    JPanel monsterHpPanel = createHpPanel(monsterBattle.getName(), monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
-    monsterHpPanel.setBounds(100, 125, 300, 20);
+    JPanel monsterHpPanel = createHpPanel(monsterBattle.getName(), monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, monsterBattle);
+    monsterHpPanel.getComponent(1).setForeground(Color.WHITE);
+    monsterHpPanel.setBounds(515, 100, 400, 30);
     panelBG.add(monsterHpPanel);
     panelBG.add(monsterDungeonPanel);
-    panelBG.add(hpBoxPanelMonster);
+    // panelBG.add(hpBoxPanelMonster);
     panelBG.add(hpBoxPanelPlayer);
 
     JScrollPane scrollPane = new JScrollPane(listPanel);
@@ -483,6 +481,8 @@ private void setMonsterDungeon(){
 }
 
 private void addBattleButtons() {
+
+    Monster monsterPlayer = player.deployMonster(indeksMonku);
     BufferedImage bcAttackImage;
     BufferedImage speAttackImage;
     BufferedImage eleAttackImage;
@@ -523,7 +523,6 @@ private void addBattleButtons() {
     hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
     hpBoxPanelPlayer.setOpaque(false); 
 
-    Monster monsterPlayer = player.deployMonster(indeksMonku);
 
     JPanel monsterPlayerPanel = new JPanel(null) {
         @Override
@@ -538,10 +537,8 @@ private void addBattleButtons() {
     monsterPlayerPanel.setOpaque(false);
 
     
-    JPanel playerHpPanel = createHpPanel(monsterPlayer.getName(), monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
-    
-
-    playerHpPanel.setBounds(50, 600,300, 20);
+    JPanel playerHpPanel = createHpPanel(monsterPlayer.getName(), monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(), 1, monsterPlayer);
+    playerHpPanel.setBounds(50, 600,400, 30);
 
 
     panelBG.add(playerHpPanel);
@@ -550,9 +547,7 @@ private void addBattleButtons() {
     panelBG.add(speAttackButton);
     panelBG.add(eleAttackButton);
     panelBG.add(usePotionButton);
-    
     panelBG.add(monsterPlayerPanel);
-
 
     bcAttackButton.addActionListener(e -> {
         System.out.println("Basic attack button pressed");
@@ -574,8 +569,6 @@ private void addBattleButtons() {
 
     usePotionButton.addActionListener(e -> {
         System.out.println("Use potion button pressed");
-
-        // Menampilkan daftar item di inventori
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
@@ -631,22 +624,27 @@ private void addBattleButtons() {
     panelBG.repaint();
 }
 
-private JPanel createHpPanel(String name, int currentHp, int maxHp) {
+private JPanel createHpPanel(String name, int currentHp, int maxHp, int color, Monster monster) {
     JPanel hpPanel = new JPanel();
     hpPanel.setLayout(new BorderLayout());
     hpPanel.setOpaque(false);
+    int level = monster.getLevel();
+    JLabel levelMonster = new JLabel(String.valueOf(level));
 
-    JLabel nameLabel = new JLabel(name);
+    JLabel nameLabel = new JLabel(name +  ", Level: " + String.valueOf(level));
     nameLabel.setFont(new Font("Public Pixel", Font.BOLD, 15));
-    nameLabel.setForeground(Color.BLACK);
-    
+    nameLabel.setForeground(Color.black);
+    if (color == 0) {
+        nameLabel.setForeground(Color.WHITE);
+    }
+
     JProgressBar hpBar = new JProgressBar(0, maxHp);
     hpBar.setValue(currentHp);
     hpBar.setForeground(Color.GREEN);
     hpBar.setBackground(Color.RED);
-
-    hpPanel.add(nameLabel, BorderLayout.WEST);
+    
     hpPanel.add(hpBar, BorderLayout.CENTER);
+    hpPanel.add(nameLabel, BorderLayout.NORTH);
 
     return hpPanel;
 }
