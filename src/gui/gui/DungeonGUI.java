@@ -46,7 +46,8 @@ public class DungeonGUI extends JFrame {
     private JLabel chatTextLabel;
     private int indeksMonku = -1;
     JPanel listPanel;
-
+    private Monster monsterBattle;
+    JPanel monsterHpPanel;
     public DungeonGUI(Dungeon dungeon, Player player) {
         this.dungeon = dungeon;
         this.player = player;
@@ -363,6 +364,8 @@ public class DungeonGUI extends JFrame {
             e.printStackTrace();
             return;
         }
+
+        
     
 
     JButton goButton = Template.addButtons(panelBG, GoButton, "asset/HPBAR/HPBAR (3).png", 500, 184, 500, 500, 500, 532);
@@ -392,8 +395,7 @@ public class DungeonGUI extends JFrame {
     hpBoxPanelPlayer.setOpaque(false); 
     hpBoxPanelMonster.setOpaque(false); 
 
-    panelBG.add(hpBoxPanelMonster);
-    panelBG.add(hpBoxPanelPlayer);
+
     panelBG.add(goButton);
 
     JPanel listPanel = new JPanel();
@@ -412,6 +414,28 @@ public class DungeonGUI extends JFrame {
             e.printStackTrace();
         }
     }
+
+    setMonsterDungeon();
+
+    JPanel monsterDungeonPanel = new JPanel(null) {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            ImageIcon originalIcon = new ImageIcon(monsterBattle.getImage());
+            Image originalImage = originalIcon.getImage();
+            g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
+
+    monsterDungeonPanel.setBounds(575, 85, 300, 300);
+    monsterDungeonPanel.setOpaque(false);
+
+    JPanel monsterHpPanel = createHpPanel(monsterBattle.getName(), monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+    monsterHpPanel.setBounds(100, 125, 300, 20);
+    panelBG.add(monsterHpPanel);
+    panelBG.add(monsterDungeonPanel);
+    panelBG.add(hpBoxPanelMonster);
+    panelBG.add(hpBoxPanelPlayer);
 
     JScrollPane scrollPane = new JScrollPane(listPanel);
     scrollPane.setBounds(10, 10, hpBoxPanelPlayer.getWidth() - 20, hpBoxPanelPlayer.getHeight() - 20); 
@@ -434,6 +458,7 @@ public class DungeonGUI extends JFrame {
     hpBoxPanelPlayer.setLayout(null);  
     hpBoxPanelPlayer.add(scrollPane);
 
+
     goButton.addActionListener(e -> {
         System.out.println("basic attack button pressed");
         if (selectedPokemonButton != null) {
@@ -451,6 +476,10 @@ public class DungeonGUI extends JFrame {
     setContentPane(panelBG);
     panelBG.revalidate();
     panelBG.repaint();
+}
+
+private void setMonsterDungeon(){
+    monsterBattle = dungeon.getRandomMonster();
 }
 
 private void addBattleButtons() {
@@ -495,7 +524,6 @@ private void addBattleButtons() {
     hpBoxPanelPlayer.setOpaque(false); 
 
     Monster monsterPlayer = player.deployMonster(indeksMonku);
-    Monster monsterDungeon = dungeon.getRandomMonster();
 
     JPanel monsterPlayerPanel = new JPanel(null) {
         @Override
@@ -506,53 +534,42 @@ private void addBattleButtons() {
             g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
         }
     };
-    monsterPlayerPanel.setBounds(90, 330, 300, 300);
+    monsterPlayerPanel.setBounds(75, 330, 300, 300);
     monsterPlayerPanel.setOpaque(false);
 
-    JPanel monsterDungeonPanel = new JPanel(null) {
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            ImageIcon originalIcon = new ImageIcon(monsterDungeon.getImage());
-            Image originalImage = originalIcon.getImage();
-            g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
-        }
-    };
-    monsterDungeonPanel.setBounds(575, 85, 300, 300);
-    monsterDungeonPanel.setOpaque(false);
-    JPanel playerHpPanel = createHpPanel(monsterPlayer.getName(), monsterPlayer.getCurrentHp(), monsterPlayer.getMaxHp());
-    JPanel monsterHpPanel = createHpPanel(monsterDungeon.getName(), monsterDungeon.getCurrentHp(), monsterDungeon.getMaxHp());
+    
+    JPanel playerHpPanel = createHpPanel(monsterPlayer.getName(), monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+    
 
-    playerHpPanel.setBounds(50, 600, 300, 50);
-    monsterHpPanel.setBounds(650, 50, 300, 50);
+    playerHpPanel.setBounds(50, 600,300, 20);
 
+
+    panelBG.add(playerHpPanel);
     panelBG.add(hpBoxPanelPlayer);
     panelBG.add(bcAttackButton);
     panelBG.add(speAttackButton);
     panelBG.add(eleAttackButton);
     panelBG.add(usePotionButton);
-    panelBG.add(monsterDungeonPanel);
+    
     panelBG.add(monsterPlayerPanel);
-    panelBG.add(playerHpPanel);
-    panelBG.add(monsterHpPanel);
+
 
     bcAttackButton.addActionListener(e -> {
         System.out.println("Basic attack button pressed");
-        updateHpPanel(playerHpPanel, monsterPlayer.getCurrentHp(), monsterPlayer.getMaxHp());
-        updateHpPanel(monsterHpPanel, monsterDungeon.getCurrentHp(), monsterDungeon.getMaxHp());
+        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
     });
 
     speAttackButton.addActionListener(e -> {
         System.out.println("Special attack button pressed");
-
-        updateHpPanel(playerHpPanel, monsterPlayer.getCurrentHp(), monsterPlayer.getMaxHp());
-        updateHpPanel(monsterHpPanel, monsterDungeon.getCurrentHp(), monsterDungeon.getMaxHp());
+        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
     });
 
     eleAttackButton.addActionListener(e -> {
         System.out.println("Elemental attack button pressed");
-        updateHpPanel(playerHpPanel, monsterPlayer.getCurrentHp(), monsterPlayer.getMaxHp());
-        updateHpPanel(monsterHpPanel, monsterDungeon.getCurrentHp(), monsterDungeon.getMaxHp());
+        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
     });
 
     usePotionButton.addActionListener(e -> {
@@ -622,7 +639,7 @@ private JPanel createHpPanel(String name, int currentHp, int maxHp) {
     JLabel nameLabel = new JLabel(name);
     nameLabel.setFont(new Font("Public Pixel", Font.BOLD, 15));
     nameLabel.setForeground(Color.BLACK);
-
+    
     JProgressBar hpBar = new JProgressBar(0, maxHp);
     hpBar.setValue(currentHp);
     hpBar.setForeground(Color.GREEN);
@@ -759,10 +776,10 @@ private JButton createPokemonButton(String image, String details, int i) {
         Monster[] monsters = {monster};
         Item[] rewards = {item};
         Dungeon dungeon = new Dungeon("Mystic Cave", monsters, rewards, 1, "asset/den4zwg-45a7fe9e-d38a-417c-815c-3e56972adf62.jpg", "asset/wizard1.gif", "Sapi");
-        ItemSeller seller = new ItemSeller(null, null, dungeon);
+        // ItemSeller seller = new ItemSeller(null, null, dungeon);
         // seller.sellItem(seller.getInventory(), ABORT, seller);
         Player player = new Player("Hero", dungeon, "asset/wizard.gif");
-        player.buyItem(item, 3, seller);
+        // player.buyItem(item, 3, seller);
         player.catchMonster(monster);
         player.catchMonster(monster2);
         player.catchMonster(monster3);

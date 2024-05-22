@@ -28,6 +28,7 @@ public abstract class Monster implements Battle, Serializable {
     private int currentMaxElemAttackPower;
     private int currentMaxDefensePower;
     private String image;
+    private int maxHpCurrentLevel;
 
     public Monster(Monster monster){
         name = monster.name;
@@ -52,6 +53,7 @@ public abstract class Monster implements Battle, Serializable {
         currentMaxSpcAttackPower = monster.currentMaxSpcAttackPower;
         currentMaxElemAttackPower = monster.currentMaxElemAttackPower;
         currentMaxDefensePower = monster.currentMaxDefensePower;
+        maxHpCurrentLevel = monster.maxHpCurrentLevel;
     }
 
     public Monster(String name, int monsterPhase, String elementType, int maxMonsterPhase, String image) {
@@ -77,6 +79,7 @@ public abstract class Monster implements Battle, Serializable {
         this.defensePower = maxDefensePower / 2;
         this.currentMaxDefensePower = maxDefensePower / 2;
         this.image = image;
+        setcurrentMaxHpLevel();
     }
 
     public Monster getMonster(){
@@ -86,7 +89,12 @@ public abstract class Monster implements Battle, Serializable {
     public String getImage(){
         return this.image;
     }
-    // cek jika attacker memimiliki elemen yang efektif dengan musuh
+
+    private void setcurrentMaxHpLevel(){
+        maxHpCurrentLevel = healthPoint;
+    }
+
+
     public boolean checkWeakness(ElementType elementType) {
         switch (elementType) {
             case WATER:
@@ -387,6 +395,11 @@ public abstract class Monster implements Battle, Serializable {
         this.spcAttackPower = Math.min(this.spcAttackPower, maxSpcAttackPower);
         this.elemAttackPower = Math.min(this.elemAttackPower, maxElemAttackPower);
         this.defensePower = Math.min(this.defensePower, maxDefensePower);
+        setcurrentMaxHpLevel();
+    }
+
+    public int returnMacHpLevel(){
+        return this.maxHpCurrentLevel;
     }
 
     public void healingHp(int amountHeal) {
