@@ -41,6 +41,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
+        Template.showNameLoc(homeBase, panelBG);
 
         frame.setContentPane(panelBG);
 
@@ -97,6 +98,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 Monku.player.printDetailPlayer();
                 // Transition to new scene
                 cardCount = 1;
+                
             } else {
                 dialogText.next(dialogTextPanel);
             }
@@ -190,7 +192,6 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 timer.setRepeats(false);
                 timer.start();
             });
-    
             panelBG.add(monsters.get(j));
         }
     }

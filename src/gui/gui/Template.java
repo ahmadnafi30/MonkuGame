@@ -3,14 +3,15 @@ package gui;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -18,12 +19,40 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
+import Entity.Locations.Locations;
 import app.Monku;
 
+
 public class Template {
+
+    public static void showNameLoc(Locations loc, JPanel panelBG) {
+        TransparentLabel nameLoc = new TransparentLabel(loc.getName());
+        nameLoc.setFont(new Font("Arial", Font.BOLD, 100));
+        nameLoc.setBounds(0, 0, 500, 345);
+        nameLoc.setForeground(Color.WHITE);
+        panelBG.add(nameLoc);
+
+        // Timer for fading effect
+        Timer timer = new Timer(50, new ActionListener() {
+            private float alpha = 1.0f;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                alpha -= 0.05f;
+                if (alpha <= 0) {
+                    alpha = 0;
+                    ((Timer) e.getSource()).stop();
+                }
+                nameLoc.setAlpha(alpha);
+            }
+        });
+
+        timer.setInitialDelay(0);
+        timer.start();
+    }
 
     public static Image getScaledImage(Image srcImg, int w, int h){
         BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
@@ -130,6 +159,28 @@ public class Template {
         g2d.dispose();
     
         return dimg;
+    }
+
+     // Custom JLabel class to support transparency
+     static class TransparentLabel extends JLabel {
+        private float alpha = 1.0f;
+
+        public TransparentLabel(String text) {
+            super(text);
+        }
+
+        public void setAlpha(float alpha) {
+            this.alpha = alpha;
+            repaint();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+            super.paintComponent(g2d);
+            g2d.dispose();
+        }
     }
 
 }

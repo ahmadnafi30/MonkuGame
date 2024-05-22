@@ -18,4 +18,7 @@ public abstract class Locations implements Serializable {
     }
 
     public abstract void printDetailLocation();
+    public String getName(){
+        return locationName;
+    }
 }

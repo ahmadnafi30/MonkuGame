@@ -48,6 +48,7 @@ public class DungeonGUI extends JFrame {
     JPanel listPanel;
     private Monster monsterBattle;
     JPanel monsterHpPanel;
+    String[] skills = {"basic", "special", "elemental"};
     public DungeonGUI(Dungeon dungeon, Player player) {
         this.dungeon = dungeon;
         this.player = player;
@@ -551,20 +552,30 @@ private void addBattleButtons() {
 
     bcAttackButton.addActionListener(e -> {
         System.out.println("Basic attack button pressed");
-        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        monsterBattle.getAttacked("basic", monsterPlayer, null);
         updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
+        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
     });
 
     speAttackButton.addActionListener(e -> {
         System.out.println("Special attack button pressed");
-        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        monsterBattle.getAttacked("special", monsterPlayer, null);
         updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
+        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
     });
 
     eleAttackButton.addActionListener(e -> {
+        String elementalAttack;
+        if(skills[new Random().nextInt(2)].equals("elemental")){
+            
+        }
         System.out.println("Elemental attack button pressed");
-        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        monsterBattle.getAttacked("elemntal", monsterPlayer, null);
         updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        monsterPlayer.getAttacked(, monsterPlayer, null);
+        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
     });
 
     usePotionButton.addActionListener(e -> {
