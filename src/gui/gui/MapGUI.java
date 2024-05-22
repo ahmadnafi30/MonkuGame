@@ -73,7 +73,7 @@ public class MapGUI {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleButtonPress(homeButton, scaledHomeIconPressed, frame, () -> new HomeBaseGUI(2));
+                handleButtonPress(homeButton, scaledHomeIconPressed, frame, () -> new HomeBaseGUI());
             }
         });
 
@@ -95,7 +95,7 @@ public class MapGUI {
         dungeonButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleButtonPress(dungeonButton, scaledDungeonIconPressed, frame, () -> new DungeonGUI((Dungeon)Monku.loc, Monku.player));
+                handleButtonPress(dungeonButton, scaledDungeonIconPressed, frame, () -> new DungeonGUI((Dungeon)Monku.dungeon, Monku.player));
             }
             }
         );

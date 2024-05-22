@@ -16,9 +16,11 @@ import app.Monku;
 public class Awalan extends JFrame implements ActionListener {
     private CardLayout dialogText;
     private JPanel dialogTextPanel;
+    private HomeBase homeBase = new HomeBase("Lab");
 
     public Awalan(int loadornew) {
         JFrame frame = new JFrame("Monku Games");
+        Monku.player.setLocation(Monku.homeBase);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 750);

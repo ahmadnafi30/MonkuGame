@@ -1,9 +1,11 @@
 package gui;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -16,9 +18,12 @@ import app.Monku;
 public class HomeBaseGUI extends JFrame implements ActionListener {
     private CardLayout dialogText;
     private JPanel dialogTextPanel;
+    private HomeBase homeBase = new HomeBase("Lab");
+    private ArrayList<Component> dialogues = new ArrayList<>();
 
-    public HomeBaseGUI(int loadornew) {
+    public HomeBaseGUI() {
         JFrame frame = new JFrame("Monku Games");
+        Monku.player.setLocation(Monku.homeBase);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 750);
@@ -70,9 +75,9 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         panelBG.add(dialogTextPanel);
         panelBG.add(dialogBox);
 
-        if (loadornew == 2) {
-            createDialogCard("<html><p style=\"margin-left: 20px\">Hello " + Monku.player.getName() + "!</p>Apa yang ingin kamu lakukan?</html>");
-        }
+        createDialogCard("Selamat datang kembali " + Monku.player.getName() + "!");        
+        createDialogCard("<html><p style=\"margin-left: 20px\">Hello " + Monku.player.getName() + "!</p>Apa yang ingin kamu lakukan?</html>");
+        
 
         // Create an invisible button to capture clicks and switch dialogs
         JButton invisibleButton = new JButton();
@@ -82,14 +87,16 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         invisibleButton.setBorderPainted(false);
         invisibleButton.addActionListener(e -> {
             int cardCount = getCardPosition();
-            if (cardCount == 0) {
+            dialogText.next(dialogTextPanel);
+            System.out.println(cardCount);
+            if (cardCount == 0 || cardCount == 1) {
                 showOptions(invisibleButton, panelBG, frame);
                 invisibleButton.setEnabled(false);
             }
             if (isLastCard()) {
                 Monku.player.printDetailPlayer();
                 // Transition to new scene
-                newScene();
+                cardCount = 1;
             } else {
                 dialogText.next(dialogTextPanel);
             }
@@ -114,7 +121,14 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         switch (choice) {
             case 0:
                 createDialogCard("Saving game...");
-                // Monku.saveGame();
+
+                Timer timer = new Timer(1000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        saveGame(panelBG, frame, invis);
+                    }
+                });
+                timer.start();
                 break;
             case 1:
                 createDialogCard("Pilih monster yang ingin kamu heal");
@@ -130,6 +144,13 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         }
     }
 
+    public void saveGame(JPanel panelBG, JFrame frame, JButton invis) {
+        homeBase.interactWithPlayer(Monku.player, 3, null);
+        createDialogCard("Game berhasill disimpan!");
+        dialogText.next(dialogTextPanel);
+        dialogText.removeLayoutComponent(getComponent(getCardPosition()));
+    }
+
     public void monkuChoicesHeal(JPanel panelBG, JFrame frame, JButton invis) {
         int middle = 450;
         int i = 0;
@@ -142,9 +163,11 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             int pos = middle + i;
             i += 50;
             JButton monster = monsters.get(j);
+            monster.setVisible(true);
+            int indeksMonku = j;
     
             monsters.get(j).addActionListener(e -> {
-                Monku.professor.healPokemon(Monku.player, name);
+                homeBase.interactWithPlayer(Monku.player, 1, Monku.player.getMonsters().get(indeksMonku));
                 JLabel heal = new JLabel();
                 heal.setIcon(new ImageIcon("asset/healEffect.gif"));
                 heal.setOpaque(false);
@@ -160,6 +183,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                     panelBG.repaint();
                     createDialogCard("Darah "+name + " telah penuh!");
                     dialogText.next(dialogTextPanel);
+                    dialogText.removeLayoutComponent(getComponent(getCardPosition()));
                     invis.setEnabled(true);
                     monster.setVisible(false);
                 });
@@ -202,6 +226,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                     panelBG.repaint();
                     createDialogCard("Darah "+name + " telah penuh!");
                     dialogText.next(dialogTextPanel);
+                    dialogText.removeLayoutComponent(getComponent(getCardPosition() - 1));
                     invis.setEnabled(true);
                     monster.setVisible(false);
                 });
@@ -223,6 +248,19 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         return false;
     }
 
+    private void removeDialog(Component dialog) {
+        dialogTextPanel.remove(getComponent(dialog));
+        dialogues.remove(dialog);
+    }
+    public Component getComponent(Component dialog) {
+        for(Component comp : dialogues){
+            if(comp == dialog){
+                return comp;
+            }
+        }
+        return null;
+    }
+
     private int getCardPosition() {
         Component[] components = dialogTextPanel.getComponents();
         for (int i = 0; i < components.length; i++) {
@@ -235,7 +273,13 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
 
     private void newScene() {
         // Logic to transition to the new scene
-        JOptionPane.showMessageDialog(this, "Switching to new scene!");
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new MapGUI();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         // Example: Switch to a new JFrame or change content
         // JFrame newFrame = new JFrame("New Scene");
         // newFrame.setSize(1000, 750);
@@ -248,11 +292,12 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         JLabel label = new JLabel(text, SwingConstants.CENTER);
-        label.setFont(new Font("Purisa Bold", Font.BOLD, 30));
+        label.setFont(new Font("Public Pixel", Font.BOLD, 30));
         label.setForeground(Color.BLACK); // Set text color
         label.setVisible(true);
         panel.add(label);
         dialogTextPanel.add(panel);
+        dialogues.add(label);
     }
 
     @Override

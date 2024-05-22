@@ -9,6 +9,7 @@ import Entity.Monster.Monster;
 import Entity.NPC.NPC;
 import Entity.NPC.ProfessorPokemon;
 import Entity.Player.Player;
+import app.Monku;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -132,27 +133,8 @@ public class Homepage {
         loadGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    File savedFile = new File("save_files/saveGames.txt");
-                    if (!savedFile.exists()) {
-                        JOptionPane.showMessageDialog(frame, "No saved game found!", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    FileInputStream filein = new FileInputStream(savedFile);
-                    BufferedInputStream bis = new BufferedInputStream(filein);
-                    ObjectInputStream in = new ObjectInputStream(bis);
-    
-                    DataStorage dStorage = (DataStorage) in.readObject();
-                    Player playerload = new Player(dStorage.name, dStorage.level, dStorage.exp, dStorage.inventory, dStorage.coin, dStorage.monsters, dStorage.timePlayed, dStorage.startTime, new HomeBase("lab"), dStorage.image);
-                    in.close();
-                    handleButtonPress(loadGameButton, buttonPressed, frame, () -> new Awalan(2));
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(frame, "Error loading game data", "Error", JOptionPane.ERROR_MESSAGE);
-                } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(frame, "Class not found", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                Monku.loadGame();
+                handleButtonPress(loadGameButton, buttonPressed, frame, () -> new HomeBaseGUI());
             }
         });
     }

@@ -351,4 +351,8 @@ public class Player implements ItemInteract, Battle {
     public String getImage(){
         return image;
     }
+
+    public void setLocation(Locations loc){
+        this.locationPlayer = loc;
+    }
 }
