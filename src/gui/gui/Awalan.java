@@ -98,7 +98,7 @@ public class Awalan extends JFrame implements ActionListener {
                 if (result != null && !result.isEmpty()) {
                     Monku.player.setName(result);
                     createDialogCard("<html><p style=\"margin-left: 130px\">Halo " + Monku.player.getName() + ",<br>senang berkenalan denganmu<br>Kamu mau pilih monku yang mana?</p></html>", 20, 220, 536, 700, 100);
-                    createDialogCard("<html><br>Pilihan yang bagus! </br>Selamat berpetualang " + Monku.player.getName() +"!</html>", 30, 220, 536, 700, 100);
+                    createDialogCard("<html><br>Pilihan yang bagus!</br>Selamat berpetualang " + Monku.player.getName() +"!</html>", 20, 220, 536, 700, 100);
                     monkuChoices(panelBG, frame, invisibleButton);
                     invisibleButton.setEnabled(false);
                 }
@@ -135,6 +135,10 @@ public class Awalan extends JFrame implements ActionListener {
         // Template.addHoverEffect(charmander, charmanderIcon);
         // Template.addHoverEffect(rhyhorn, rhyhornIcon);
         // Template.addHoverEffect(squirtle, squirtleIcon);
+        squirtle.setVisible(true);
+        vanillite.setVisible(true);
+        charmander.setVisible(true);
+        rhyhorn.setVisible(true);
         vanillite.addActionListener(e -> {
             Monku.player.catchMonster(new IceType("vanillite", 1, 3, "asset/vanillite.gif"));
             dialogText.next(dialogTextPanel);
