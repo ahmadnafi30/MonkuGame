@@ -272,7 +272,6 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
     }
 
     private void newScene() {
-        // Logic to transition to the new scene
         SwingUtilities.invokeLater(() -> {
             try {
                 new MapGUI();
@@ -280,12 +279,6 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 e.printStackTrace();
             }
         });
-        // Example: Switch to a new JFrame or change content
-        // JFrame newFrame = new JFrame("New Scene");
-        // newFrame.setSize(1000, 750);
-        // newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // newFrame.setLocationRelativeTo(null);
-        // newFrame.setVisible(true);
     }
 
     private void createDialogCard(String text) {
@@ -293,7 +286,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         panel.setOpaque(false);
         JLabel label = new JLabel(text, SwingConstants.CENTER);
         label.setFont(new Font("Public Pixel", Font.BOLD, 30));
-        label.setForeground(Color.BLACK); // Set text color
+        label.setForeground(Color.BLACK); 
         label.setVisible(true);
         panel.add(label);
         dialogTextPanel.add(panel);

@@ -39,7 +39,7 @@ public class Homepage {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon originalIcon = new ImageIcon("asset/Blue Green Yellow Video.gif");
+                ImageIcon originalIcon = new ImageIcon("asset/Monku Games (2).gif");
                 Image originalImage = originalIcon.getImage();
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
@@ -59,7 +59,7 @@ public class Homepage {
         BufferedImage buttonPressedIcon = ImageIO.read(new File("asset/toppng.com-text-box-pixel-art-cupcake-601x211.png"));
         Image scaledButtonPressedImage = buttonPressedIcon.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
         JButton newGameButton = new JButton("NEW GAME", new ImageIcon(scaledButtonImage));
-        newGameButton.setBounds(xStart, yPosition, buttonWidth, buttonHeight);
+        newGameButton.setBounds(xStart, yPosition - 30, buttonWidth, buttonHeight);
         newGameButton.setFont(new Font("Public Pixel", Font.BOLD, 13));
         newGameButton.setHorizontalTextPosition(SwingConstants.CENTER);
         newGameButton.setVerticalTextPosition(SwingConstants.CENTER);
@@ -69,7 +69,7 @@ public class Homepage {
         panel.add(newGameButton);
 
         JButton loadGameButton = new JButton("LOAD GAME", new ImageIcon(scaledButtonImage));
-        loadGameButton.setBounds(xStart + buttonWidth + spacing, yPosition, buttonWidth, buttonHeight);
+        loadGameButton.setBounds(xStart + buttonWidth + spacing, yPosition - 30, buttonWidth, buttonHeight);
         loadGameButton.setFont(new Font("Public Pixel", Font.BOLD, 13));
         loadGameButton.setHorizontalTextPosition(SwingConstants.CENTER);
         loadGameButton.setVerticalTextPosition(SwingConstants.CENTER);

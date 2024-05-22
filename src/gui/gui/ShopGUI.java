@@ -151,6 +151,10 @@ public class ShopGUI extends JFrame implements ActionListener {
             if (quantity > 0) {
                 Monku.player.buyItem(Monku.shopKeeper.getItem(potionName, selectedRarity), quantity, Monku.shopKeeper);
                 System.out.println(Monku.player.getCoin());
+                Monku.player.getInventory().forEach((k, v) -> {
+                    System.out.println(k.getName() + " = " + v);
+                });
+
             }
             panelBG.remove(coin);
             panelBG.repaint();
