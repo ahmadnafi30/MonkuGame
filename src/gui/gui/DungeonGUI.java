@@ -3,10 +3,15 @@ package gui;
 import Entity.Locations.Dungeon;
 import Entity.Monster.AirType;
 import Entity.Monster.Monster;
+import Entity.NPC.ItemSeller;
 import Entity.Player.Player;
 import app.Monku;
 import Entity.Item.BuffPotion;
+import Entity.Item.DefensivePotion;
+import Entity.Item.HealthPotion;
 import Entity.Item.Item;
+import Entity.Item.PoisonPotion;
+import Entity.Item.Teleportation;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -348,9 +353,11 @@ public class DungeonGUI extends JFrame {
     
 
         BufferedImage boxHpImage;
+        BufferedImage boxHpImage2;
         BufferedImage GoButton;
         try {
             boxHpImage = ImageIO.read(new File("asset/HPBAR/5.png"));
+            boxHpImage2 = ImageIO.read(new File("asset/HPBAR/HPBAR (6).png"));
             GoButton = ImageIO.read(new File("asset/HPBAR/HPBAR (3).png"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -372,7 +379,7 @@ public class DungeonGUI extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.drawImage(boxHpImage, 0, 0, getWidth(), getHeight(), this);
+            g.drawImage(boxHpImage2, 0, 0, getWidth(), getHeight(), this);
         }
     };
 
@@ -380,7 +387,7 @@ public class DungeonGUI extends JFrame {
     int hpBoxHeight = 184;  
     int hpBoxX = 0;       
     int hpBoxY = 532;  
-    hpBoxPanelMonster.setBounds(20, 20, 470, 150);
+    hpBoxPanelMonster.setBounds(20, 20, 470, 220);
     hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
     hpBoxPanelPlayer.setOpaque(false); 
     hpBoxPanelMonster.setOpaque(false); 
@@ -450,15 +457,17 @@ private void addBattleButtons() {
     BufferedImage bcAttackImage;
     BufferedImage speAttackImage;
     BufferedImage eleAttackImage;
-    BufferedImage usePotion;
+    BufferedImage usePotionImage;
     BufferedImage boxHpImage;
+    BufferedImage boxHpImage2;
 
     try {
         bcAttackImage = ImageIO.read(new File("asset/HPBAR/2.png"));
         speAttackImage = ImageIO.read(new File("asset/HPBAR/1.png"));
         eleAttackImage = ImageIO.read(new File("asset/HPBAR/3.png"));
-        usePotion = ImageIO.read(new File("asset/HPBAR/HPBAR (5).png"));
+        usePotionImage = ImageIO.read(new File("asset/HPBAR/HPBAR (5).png"));
         boxHpImage = ImageIO.read(new File("asset/HPBAR/5.png"));
+        boxHpImage2 = ImageIO.read(new File("asset/HPBAR/HPBAR (6).png"));
     } catch (IOException e) {
         e.printStackTrace();
         return;
@@ -467,33 +476,28 @@ private void addBattleButtons() {
     JButton bcAttackButton = Template.addButtons(panelBG, bcAttackImage, "asset/HPBAR/2.png", 250, 92, 92, 250, 500, 532);
     JButton speAttackButton = Template.addButtons(panelBG, speAttackImage, "asset/HPBAR/1.png", 250, 92, 92, 250, 740, 532);
     JButton eleAttackButton = Template.addButtons(panelBG, eleAttackImage, "asset/HPBAR/3.png", 250, 92, 92, 250, 500, 623);
-    JButton fleeButton = Template.addButtons(panelBG, usePotion, "asset/HPBAR/HPBAR (5).png", 250, 92, 92, 250, 740, 623);
+    JButton usePotionButton = Template.addButtons(panelBG, usePotionImage, "asset/HPBAR/HPBAR (5).png", 250, 92, 92, 250, 740, 623);
 
     JPanel hpBoxPanelPlayer = new JPanel() {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.drawImage(boxHpImage, 0, 0, getWidth(), getHeight(), this);
+            g.drawImage(boxHpImage2, 0, 0, getWidth(), getHeight(), this);
         }
     };
 
     int hpBoxWidth = 510;  
-    int hpBoxHeight = 184;  
-    int hpBoxX = 0;       
-    int hpBoxY = 532;  
+    int hpBoxHeight = 285;  
+    int hpBoxX = -5;       
+    int hpBoxY = 484;  
 
     hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
     hpBoxPanelPlayer.setOpaque(false); 
 
-    // JLabel monsterPlayerLabel = new JLabel(new ImageIcon(player.getImage(indeksMonku)));
-    // int monsterGifWidth = 600;
-    // int monsterGifHeight = 600;
-    // int monsterGifX = 0;
-    // int monsterGifY = 200;
-    // monsterPlayerLabel.setBounds(monsterGifX, monsterGifY, monsterGifWidth, monsterGifHeight);
-
     Monster monsterPlayer = player.deployMonster(indeksMonku);
-    JPanel monsterPlayerPlanel = new JPanel(null) {
+    Monster monsterDungeon = dungeon.getRandomMonster();
+
+    JPanel monsterPlayerPanel = new JPanel(null) {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -502,13 +506,10 @@ private void addBattleButtons() {
             g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
         }
     };
-    monsterPlayerPlanel.setBounds(90, 330, 300, 300);
-    monsterPlayerPlanel.setOpaque(false);
-   
-    
-    
-    Monster monsterDungeon = dungeon.getRandomMonster();
-    JPanel monsterDungPanel = new JPanel(null) {
+    monsterPlayerPanel.setBounds(90, 330, 300, 300);
+    monsterPlayerPanel.setOpaque(false);
+
+    JPanel monsterDungeonPanel = new JPanel(null) {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -517,51 +518,160 @@ private void addBattleButtons() {
             g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
         }
     };
-    monsterDungPanel.setBounds(575, 85, 300, 300);
-    monsterDungPanel.setOpaque(false);
+    monsterDungeonPanel.setBounds(575, 85, 300, 300);
+    monsterDungeonPanel.setOpaque(false);
+    JPanel playerHpPanel = createHpPanel(monsterPlayer.getName(), monsterPlayer.getCurrentHp(), monsterPlayer.getMaxHp());
+    JPanel monsterHpPanel = createHpPanel(monsterDungeon.getName(), monsterDungeon.getCurrentHp(), monsterDungeon.getMaxHp());
 
-    // int monsterDungeonGifWidth = 300;
-    // int monsterDungeonGifHeight = 300;
-    // int monsterDungeonGifX = 450;
-    // int monsterDungeonGifY = 0;
-
-    // ImageIcon originalIcon = new ImageIcon(monsterDungeon.getImage());
-    // Image scaledImage = Template.getScaledImage(originalIcon.getImage(), monsterDungeonGifWidth, monsterDungeonGifHeight);
-    // ImageIcon scaledIcon = new ImageIcon(scaledImage);
-    // if (originalIcon.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
-    //     System.out.println("Error: Image did not load correctly from path: " + monsterDungeon.getImage());
-    //     return;
-    // } else {
-    //     System.out.println("Image loaded successfully from path: " + monsterDungeon.getImage());
-    // }
-    // JLabel monsterDungeonLabel = new JLabel(scaledIcon);
-    // monsterDungeonLabel.setVisible(true);
-    // monsterDungeonLabel.setBounds(monsterDungeonGifX, monsterDungeonGifY, monsterDungeonGifWidth, monsterDungeonGifHeight);
+    playerHpPanel.setBounds(50, 600, 300, 50);
+    monsterHpPanel.setBounds(650, 50, 300, 50);
 
     panelBG.add(hpBoxPanelPlayer);
     panelBG.add(bcAttackButton);
     panelBG.add(speAttackButton);
     panelBG.add(eleAttackButton);
-    panelBG.add(fleeButton);
-    panelBG.add(monsterDungPanel);
-    panelBG.add(monsterPlayerPlanel);
-    // panelBG.add(monsterPlayerLabel);
+    panelBG.add(usePotionButton);
+    panelBG.add(monsterDungeonPanel);
+    panelBG.add(monsterPlayerPanel);
+    panelBG.add(playerHpPanel);
+    panelBG.add(monsterHpPanel);
 
-    bcAttackButton.addActionListener(e -> System.out.println("Basic attack button pressed"));
-    speAttackButton.addActionListener(e -> System.out.println("Special attack button pressed"));
-    eleAttackButton.addActionListener(e -> System.out.println("Elemental attack button pressed"));
-    fleeButton.addActionListener(e -> System.out.println("Flee button pressed"));
+    bcAttackButton.addActionListener(e -> {
+        System.out.println("Basic attack button pressed");
+        updateHpPanel(playerHpPanel, monsterPlayer.getCurrentHp(), monsterPlayer.getMaxHp());
+        updateHpPanel(monsterHpPanel, monsterDungeon.getCurrentHp(), monsterDungeon.getMaxHp());
+    });
+
+    speAttackButton.addActionListener(e -> {
+        System.out.println("Special attack button pressed");
+
+        updateHpPanel(playerHpPanel, monsterPlayer.getCurrentHp(), monsterPlayer.getMaxHp());
+        updateHpPanel(monsterHpPanel, monsterDungeon.getCurrentHp(), monsterDungeon.getMaxHp());
+    });
+
+    eleAttackButton.addActionListener(e -> {
+        System.out.println("Elemental attack button pressed");
+        updateHpPanel(playerHpPanel, monsterPlayer.getCurrentHp(), monsterPlayer.getMaxHp());
+        updateHpPanel(monsterHpPanel, monsterDungeon.getCurrentHp(), monsterDungeon.getMaxHp());
+    });
+
+    usePotionButton.addActionListener(e -> {
+        System.out.println("Use potion button pressed");
+
+        // Menampilkan daftar item di inventori
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setOpaque(false);
+
+        ArrayList<Item> inventoryItems = new ArrayList<>(player.getInventory().keySet());
+        for (int i = 0; i < inventoryItems.size(); i++) {
+            try {
+                String detailItem = "";
+                Item item = inventoryItems.get(i);
+                if (item instanceof BuffPotion) {
+                    detailItem = ((BuffPotion) item).printDetailItemm();
+                } else if (item instanceof DefensivePotion) {
+                    detailItem = ((DefensivePotion) item).printDetailItemm();
+                } else if (item instanceof HealthPotion) {
+                    detailItem = ((HealthPotion) item).printDetailItemm();
+                } else if (item instanceof PoisonPotion) {
+                    detailItem = ((PoisonPotion) item).printDetailItemm();
+                } else if (item instanceof Teleportation) {
+                    detailItem = ((Teleportation) item).printDetailItemm();
+                }
+                JButton button = createItemButton(item.getName(), detailItem, i);
+                listPanel.add(button);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+        scrollPane.setBounds(10, 10, hpBoxPanelPlayer.getWidth() - 20, hpBoxPanelPlayer.getHeight() - 20); // Atur batas sesuai kebutuhan
+
+        scrollPane.setViewportView(listPanel);
+
+        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+        verticalScrollBar.setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.GRAY;
+                this.trackColor = new Color(0, 0, 0, 0);
+            }
+        });
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.getVerticalScrollBar().setBlockIncrement(50);
+
+        // Tambahkan JScrollPane ke panel
+        panelBG.add(scrollPane);
+
+        // Perbaharui tampilan panel
+        panelBG.revalidate();
+        panelBG.repaint();
+    });
 
     panelBG.revalidate();
     panelBG.repaint();
 }
 
-// private Monster randomDungeon(){
-//     Random random = new Random();
-//     return Monster.get(random.nextInt(dungeon.monsterLenght()));
-// }
+private JPanel createHpPanel(String name, int currentHp, int maxHp) {
+    JPanel hpPanel = new JPanel();
+    hpPanel.setLayout(new BorderLayout());
+    hpPanel.setOpaque(false);
+
+    JLabel nameLabel = new JLabel(name);
+    nameLabel.setFont(new Font("Public Pixel", Font.BOLD, 15));
+    nameLabel.setForeground(Color.BLACK);
+
+    JProgressBar hpBar = new JProgressBar(0, maxHp);
+    hpBar.setValue(currentHp);
+    hpBar.setForeground(Color.GREEN);
+    hpBar.setBackground(Color.RED);
+
+    hpPanel.add(nameLabel, BorderLayout.WEST);
+    hpPanel.add(hpBar, BorderLayout.CENTER);
+
+    return hpPanel;
+}
+
+private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp) {
+    JProgressBar hpBar = (JProgressBar) ((BorderLayout) hpPanel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+    hpBar.setMaximum(maxHp);
+    hpBar.setValue(currentHp);
+    hpBar.setString(currentHp + "/" + maxHp);
+    hpBar.setStringPainted(true);
+}
 
 
+private JButton createItemButton(String name, String description, int i) throws IOException {
+    JButton itemButton = new JButton();
+
+    itemButton.setLayout(new BorderLayout());
+
+
+    JLabel imageLabel = new JLabel(new ImageIcon("path_to_item_image")); // Ganti dengan path gambar item
+    itemButton.add(imageLabel, BorderLayout.WEST);
+
+    JLabel detailsLabel = new JLabel("<html>" + name + ": " + description.replace("\n", "<br>") + "</html>");
+    itemButton.add(detailsLabel, BorderLayout.CENTER);
+
+    itemButton.setOpaque(false);
+    itemButton.setBorder(BorderFactory.createEmptyBorder());
+    itemButton.setContentAreaFilled(false);
+    itemButton.setFocusable(false);
+
+    itemButton.addActionListener(e -> {
+        System.out.println("Item button clicked: " + name);
+    });
+
+    return itemButton;
+}
+
+
+private Monster randomDungeon(){
+    Random random = new Random();
+    return Monster.get(random.nextInt(dungeon.monsterLenght()));
+}
 
 private JButton createPokemonButton(String image, String details, int i) {
     JButton pokemonButton = new JButton();
@@ -649,7 +759,10 @@ private JButton createPokemonButton(String image, String details, int i) {
         Monster[] monsters = {monster};
         Item[] rewards = {item};
         Dungeon dungeon = new Dungeon("Mystic Cave", monsters, rewards, 1, "asset/den4zwg-45a7fe9e-d38a-417c-815c-3e56972adf62.jpg", "asset/wizard1.gif", "Sapi");
+        ItemSeller seller = new ItemSeller(null, null, dungeon);
+        // seller.sellItem(seller.getInventory(), ABORT, seller);
         Player player = new Player("Hero", dungeon, "asset/wizard.gif");
+        player.buyItem(item, 3, seller);
         player.catchMonster(monster);
         player.catchMonster(monster2);
         player.catchMonster(monster3);
