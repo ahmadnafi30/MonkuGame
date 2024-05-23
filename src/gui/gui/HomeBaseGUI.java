@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import Entity.Locations.HomeBase;
+import Entity.Locations.Shop;
 import Entity.Monster.Monster;
 import Entity.NPC.NPC;
 import Entity.Player.Player;
@@ -18,7 +19,6 @@ import app.Monku;
 public class HomeBaseGUI extends JFrame implements ActionListener {
     private CardLayout dialogText;
     private JPanel dialogTextPanel;
-    private HomeBase homeBase = new HomeBase("Lab");
     private ArrayList<Component> dialogues = new ArrayList<>();
 
     public HomeBaseGUI() {
@@ -41,9 +41,9 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        Template.showNameLoc(homeBase, panelBG);
-
+        
         frame.setContentPane(panelBG);
+        Template.showNameLoc(Monku.player.getLocationPlayer(), panelBG, 100, 700, 900, 340, 10);
 
         JPanel professor = new JPanel(null) {
             @Override
@@ -59,7 +59,6 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
 
         dialogText = new CardLayout();
         dialogTextPanel = new JPanel(dialogText);
-
         JPanel dialogBox = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -69,15 +68,34 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
+        JButton mapButton = Template.mapButton(panelBG, frame);
+        mapButton.addActionListener(e -> {
+            createDialogCard("Selamat Berpetualang!");
+            dialogText.next(dialogTextPanel);
+            Timer timer = new Timer(100, new ActionListener() {
+               @Override
+               public void actionPerformed(ActionEvent e) {
+                   try{
+                       new MapGUI();
+                       frame.dispose();
+                   } catch (IOException ex) {
+                       ex.printStackTrace();
+                   }
+               } 
+            });
+            timer.start();
+            timer.setRepeats(false);;
+        });
 
         dialogBox.setBounds(3, 450, 980, 265);
-        dialogTextPanel.setBounds(120, 500, dialogBox.getWidth() - 160, 265);
+        dialogTextPanel.setBounds(120, 550, dialogBox.getWidth() - 160, 265);
         dialogTextPanel.setOpaque(false);
+        dialogBox.setOpaque(false);
         panelBG.add(dialogTextPanel);
         panelBG.add(dialogBox);
 
-        createDialogCard("Selamat datang kembali " + Monku.player.getName() + "!");        
-        createDialogCard("<html><p style=\"margin-left: 20px\">Hello " + Monku.player.getName() + "!</p>Apa yang ingin kamu lakukan?</html>");
+        createDialogCard("<html><p style=\"margin-left: 39px\">Selamat datang kembali </p><p style=\"margin-left: 39px\">" + Monku.player.getName() + "!</p></html>");        
+        createDialogCard("<html><p style=\"margin-left: 39px\">" + Monku.player.getName() + ",</p><p style=\"margin-left: 39px\">Apa yang ingin</p><p style=\"margin-left: 39px\"> kamu lakukan?</p></html>");
         
 
         // Create an invisible button to capture clicks and switch dialogs
@@ -147,7 +165,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
     }
 
     public void saveGame(JPanel panelBG, JFrame frame, JButton invis) {
-        homeBase.interactWithPlayer(Monku.player, 3, null);
+        ((HomeBase)Monku.player.getLocationPlayer()).interactWithPlayer(Monku.player, 3, null);
         createDialogCard("Game berhasill disimpan!");
         dialogText.next(dialogTextPanel);
         dialogText.removeLayoutComponent(getComponent(getCardPosition()));
@@ -169,7 +187,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             int indeksMonku = j;
     
             monsters.get(j).addActionListener(e -> {
-                homeBase.interactWithPlayer(Monku.player, 1, Monku.player.getMonsters().get(indeksMonku));
+                ((HomeBase)Monku.player.getLocationPlayer()).interactWithPlayer(Monku.player, 1, Monku.player.getMonsters().get(indeksMonku));
                 JLabel heal = new JLabel();
                 heal.setIcon(new ImageIcon("asset/healEffect.gif"));
                 heal.setOpaque(false);
@@ -286,7 +304,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         JLabel label = new JLabel(text, SwingConstants.CENTER);
-        label.setFont(new Font("Public Pixel", Font.BOLD, 30));
+        label.setFont(new Font("Public Pixel", Font.BOLD, 27));
         label.setForeground(Color.BLACK); 
         label.setVisible(true);
         panel.add(label);

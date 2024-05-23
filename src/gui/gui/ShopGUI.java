@@ -21,6 +21,7 @@ public class ShopGUI extends JFrame implements ActionListener {
     private JLabel coin;
 
     public ShopGUI() {
+        Monku.player.setLocation(Monku.shop);
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,6 +40,7 @@ public class ShopGUI extends JFrame implements ActionListener {
             }
         };
         frame.setContentPane(panelBG);
+        Template.showNameLoc(Monku.player.getLocationPlayer(), panelBG, 50, 650, 1000, 130, 10);
 
         dialogText = new CardLayout();
         dialogTextPanel = new JPanel(dialogText);
@@ -122,6 +124,19 @@ public class ShopGUI extends JFrame implements ActionListener {
         teleButton.addActionListener(e -> {
             options(panelBG, frame, "BECAK");
         });
+        
+        JButton mapButton = Template.mapButton(panelBG, frame);
+        mapButton.addActionListener(e -> {
+            createDialogCard("Senang berbisnis denganmu!");
+            dialogText.next(dialogTextPanel);
+            try {
+                new MapGUI();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            } finally{
+                frame.dispose();
+            }
+        });
     }
 
     private void options(JPanel panelBG, JFrame frame, String potionName) {
@@ -144,7 +159,7 @@ public class ShopGUI extends JFrame implements ActionListener {
 
     // Get the selected rarity as a String
         String selectedRarity = (rarityChoice >= 0) ? rarityOptions[rarityChoice] : null;
-
+        //if(Monku.shopKeeper.getItem(potionName, selectedRarity)){}
         try {
             // Attempt to parse input as an integer
             int quantity = Integer.parseInt(input);

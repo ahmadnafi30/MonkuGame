@@ -15,16 +15,16 @@ import gui.*;
 
 public class Monku {
 
+    public static Monster[] monsters = {new AirType("kehed", 4, 4, "asset/rhyhorn.gif"), new AirType("kehed", 4, 4, "asset/squirtle.gif"), new AirType("kehed", 4, 4, "asset/squirtle.gif"), new AirType("kehed", 4, 4, "asset/squirtle.gif")};
+    public static Item items[] = {new BuffPotion(null, "COMMON"), new BuffPotion(null, "RARE"), new BuffPotion(null, "EPIC"), new DefensivePotion(null, "COMMON"), new DefensivePotion(null, "RARE"), new DefensivePotion(null, "EPIC"), new HealthPotion(null, "COMMON"), new HealthPotion(null, "RARE"), new HealthPotion(null, "EPIC"), new PoisonPotion(null, "COMMON"), new PoisonPotion(null, "RARE"), new PoisonPotion(null, "EPIC"), new Teleportation(null, null),};
     public static Player player = new Player("", new HomeBase("HomeBase"), "");
     public static Monster monku;
     public static ProfessorPokemon professor = new ProfessorPokemon("Einstein", "Professor Monku");
     public static ItemSeller shopKeeper = new ItemSeller("Bowo", "ShopKeeper", new HomeBase("HomeBase"));
     public static Locations homeBase = new HomeBase("Lab");
-    public static Locations map;
-    public static Monster[] monsters = {new AirType("kehed", 4, 4, "asset/rhyhorn.gif"), new AirType("kehed", 4, 4, "asset/squirtle.gif"), new AirType("kehed", 4, 4, "asset/squirtle.gif"), new AirType("kehed", 4, 4, "asset/squirtle.gif")};
-    public static Item items[] = {new BuffPotion(null, "COMMON"), new BuffPotion(null, "RARE"), new BuffPotion(null, "EPIC"), new DefensivePotion(null, "COMMON"), new DefensivePotion(null, "RARE"), new DefensivePotion(null, "EPIC"), new HealthPotion(null, "COMMON"), new HealthPotion(null, "RARE"), new HealthPotion(null, "EPIC"), new PoisonPotion(null, "COMMON"), new PoisonPotion(null, "RARE"), new PoisonPotion(null, "EPIC"), new Teleportation(null, null),};
     public static Locations dungeon = new Dungeon("Dungeon", monsters, items, 0, null, null, null);
     public static Locations shop = new Shop("Rumah Penyihir", shopKeeper);
+    public static Locations map;
 
     // public static ProgressManagement progress;
 

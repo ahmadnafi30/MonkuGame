@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.AlphaComposite;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -17,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -28,15 +30,47 @@ import app.Monku;
 
 public class Template {
 
-    public static void showNameLoc(Locations loc, JPanel panelBG) {
-        TransparentLabel nameLoc = new TransparentLabel(loc.getName());
-        nameLoc.setFont(new Font("Arial", Font.BOLD, 100));
-        nameLoc.setBounds(0, 0, 500, 345);
-        nameLoc.setForeground(Color.WHITE);
+    public static void buttonPressedFx(JButton button) {Color originalColor = button.getBackground();
+        
+        // Change the button color to gray to simulate the pressed effect
+        button.setBackground(Color.GRAY);
+        button.setEnabled(false); // Disable the button
+        
+        // Create a timer to revert the button color and state after a short delay
+        Timer timer = new Timer(100, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Revert the button color to the original color
+                button.setBackground(originalColor);
+                // Re-enable the button
+                button.setEnabled(true);
+                // Stop the timer
+                ((Timer) e.getSource()).stop();
+            }
+        });
+        
+        // Ensure the timer only fires once
+        timer.setRepeats(false);
+        // Start the timer with the desired delay
+        timer.start();
+    }
+    public static JButton mapButton(JPanel panelBG, JFrame frame) {
+        JButton mapButton = addButtons(panelBG, null, "asset/map.png", 1000/10, 750/10, 1000, 750, 890, 0);
+        panelBG.add(mapButton);
+
+        return mapButton;
+    }
+
+    public static void showNameLoc(Locations loc, JPanel panelBG, int size, int height, int width, int x, int y) {
+        TransparentLabel nameLoc = new TransparentLabel(loc.getName().toUpperCase());
+        nameLoc.setFont(new Font("Public Pixel", Font.BOLD, size));
+        nameLoc.setForeground(Color.RED);
+        panelBG.setLayout(null); // Set layout to null for absolute positioning
+        nameLoc.setBounds(x, y, width, height); // Adjust size as needed
         panelBG.add(nameLoc);
 
         // Timer for fading effect
-        Timer timer = new Timer(50, new ActionListener() {
+        Timer timer = new Timer(60, new ActionListener() {
             private float alpha = 1.0f;
 
             @Override
