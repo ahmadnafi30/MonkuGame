@@ -49,9 +49,10 @@ public class DungeonGUI extends JFrame {
     JPanel listPanel;
     JPanel monsterDungeonPanel;
     JPanel monsterPlayerPanel;
+    JPanel monsterHpPanel;
     private Monster monsterBattle;
     private Monster monsterPlayer;
-    JPanel monsterHpPanel;
+    // JPanel monsterHpPanel;
     String[] skills = {"basic", "special", "elemental"};
     private Timer timerEffect;
 
@@ -434,7 +435,7 @@ public class DungeonGUI extends JFrame {
     monsterDungeonPanel.setBounds(575, 85, 300, 300);
     monsterDungeonPanel.setOpaque(false);
 
-    JPanel monsterHpPanel = createHpPanel(monsterBattle.getName(), monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, monsterBattle);
+    monsterHpPanel = createHpPanel(monsterBattle.getName(), monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, monsterBattle);
     monsterHpPanel.getComponent(1).setForeground(Color.WHITE);
     monsterHpPanel.setBounds(515, 120, 400, 40);
     panelBG.add(monsterHpPanel);
@@ -706,8 +707,13 @@ private JPanel createHpPanel(String name, int currentHp, int maxHp, int color, M
     hpPanel.add(healthLabel, BorderLayout.SOUTH);
     hpPanel.add(nameLabel, BorderLayout.NORTH);
 
+    if (hpPanel == null) {
+        hpPanel = new JPanel();
+    }
+
     return hpPanel;
 }
+
 
 private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monsterOrPlayer, int attackType) {
     ImageIcon[] effectIcons = new ImageIcon[2]; // Array untuk menyimpan dua ikon efek
@@ -966,6 +972,7 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
             moveTimer3.start();
             break;
     }
+
     if (hpPanel != null) {
         Component[] components = hpPanel.getComponents();
         for (Component component : components) {
