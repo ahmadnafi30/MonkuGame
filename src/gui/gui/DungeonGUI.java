@@ -499,7 +499,6 @@ public void popUp(Monster monster){
     if(isDead(monster)){}
 }
 private void addBattleButtons() {
-
     Monster monsterPlayer = player.deployMonster(indeksMonku);
     BufferedImage bcAttackImage;
     BufferedImage speAttackImage;
