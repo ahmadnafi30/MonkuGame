@@ -49,9 +49,10 @@ public class DungeonGUI extends JFrame {
     JPanel listPanel;
     JPanel monsterDungeonPanel;
     JPanel monsterPlayerPanel;
+    JPanel monsterHpPanel;
     private Monster monsterBattle;
     private Monster monsterPlayer;
-    JPanel monsterHpPanel;
+    // JPanel monsterHpPanel;
     String[] skills = {"basic", "special", "elemental"};
     private Timer timerEffect;
 
@@ -434,7 +435,7 @@ public class DungeonGUI extends JFrame {
     monsterDungeonPanel.setBounds(575, 85, 300, 300);
     monsterDungeonPanel.setOpaque(false);
 
-    JPanel monsterHpPanel = createHpPanel(monsterBattle.getName(), monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, monsterBattle);
+    monsterHpPanel = createHpPanel(monsterBattle.getName(), monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, monsterBattle);
     monsterHpPanel.getComponent(1).setForeground(Color.WHITE);
     monsterHpPanel.setBounds(515, 120, 400, 40);
     panelBG.add(monsterHpPanel);
@@ -571,23 +572,6 @@ private void addBattleButtons() {
     panelBG.add(monsterPlayerPanel);
 
     bcAttackButton.addActionListener(e -> {
-        System.out.println("Basic attack button pressed");
-        monsterBattle.getAttacked("basic", monsterPlayer, null);
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(),1,1);
-        System.out.println("Updating enemy HP panel");
-        System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
-        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
-        popUp(monsterBattle);
-
-        Timer timer = new Timer(200, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                bcAttackButton.setEnabled(true);
-            }
-        });
-        timer.setRepeats(false);
-        timer.start();
-    
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
         System.out.println("Updating player HP panel");
         updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,1);
@@ -595,7 +579,23 @@ private void addBattleButtons() {
         System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
     
-        // bcAttackButton.setEnabled(false);
+        // try {
+        //     Thread.sleep(7000); // Menunda selama 7 detik
+        // } catch (InterruptedException e3) {
+        //     // Tangani pengecualian jika diperlukan
+        //     e3.printStackTrace();
+        // }
+        
+
+        System.out.println("Basic attack button pressed");
+        monsterBattle.getAttacked("basic", monsterPlayer, null);
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(),1,1);
+        System.out.println("Updating enemy HP panel");
+        System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
+        popUp(monsterBattle);
+            
+    // bcAttackButton.setEnabled(false);
         
     });
 
@@ -707,8 +707,13 @@ private JPanel createHpPanel(String name, int currentHp, int maxHp, int color, M
     hpPanel.add(healthLabel, BorderLayout.SOUTH);
     hpPanel.add(nameLabel, BorderLayout.NORTH);
 
+    if (hpPanel == null) {
+        hpPanel = new JPanel();
+    }
+
     return hpPanel;
 }
+
 
 private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monsterOrPlayer, int attackType) {
     ImageIcon[] effectIcons = new ImageIcon[2]; // Array untuk menyimpan dua ikon efek
@@ -777,14 +782,15 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
                             x += deltaX;
                             y += deltaY;
                             effectLabel.setLocation(x, y);
-                            hpPanel.repaint();
+                            // hpPanel.repaint();
+                            // hpPanel.remove(effectLabel);
                             currentStep++;
                         } else {
                             ((Timer) e.getSource()).stop();
-                            hpPanel.remove(effectLabel);
-                            hpPanel.revalidate();
-                            hpPanel.repaint();
+                            // hpPanel.revalidate();
+                            // hpPanel.repaint();
                             effectLabel.setIcon(effectIcons[1]); 
+                            // hpPanel.remove(effectLabel);
                             Timer afterAttackTimer = new Timer(2000, new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
@@ -966,6 +972,7 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
             moveTimer3.start();
             break;
     }
+
     if (hpPanel != null) {
         Component[] components = hpPanel.getComponents();
         for (Component component : components) {
