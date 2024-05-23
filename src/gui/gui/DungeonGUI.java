@@ -430,7 +430,7 @@ public class DungeonGUI extends JFrame {
 
     JPanel monsterHpPanel = createHpPanel(monsterBattle.getName(), monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, monsterBattle);
     monsterHpPanel.getComponent(1).setForeground(Color.WHITE);
-    monsterHpPanel.setBounds(515, 100, 400, 30);
+    monsterHpPanel.setBounds(515, 120, 400, 40);
     panelBG.add(monsterHpPanel);
     panelBG.add(monsterDungeonPanel);
     // panelBG.add(hpBoxPanelMonster);
@@ -553,7 +553,7 @@ private void addBattleButtons() {
     monsterPlayerPanel.setOpaque(false);
 
     JPanel playerHpPanel = createHpPanel(monsterPlayer.getName(), monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(), 1, monsterPlayer);
-    playerHpPanel.setBounds(50, 600, 400, 30);
+    playerHpPanel.setBounds(50, 600, 400, 40);
 
     panelBG.add(playerHpPanel);
     panelBG.add(hpBoxPanelPlayer);
@@ -566,8 +566,8 @@ private void addBattleButtons() {
     bcAttackButton.addActionListener(e -> {
         System.out.println("Basic attack button pressed");
         monsterBattle.getAttacked("basic", monsterPlayer, null);
-        System.out.println("Updating enemy HP panel");
         updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Updating enemy HP panel");
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
         popUp(monsterBattle);
@@ -678,8 +678,13 @@ private JPanel createHpPanel(String name, int currentHp, int maxHp, int color, M
     hpPanel.setOpaque(false);
 
     JLabel nameLabel = new JLabel(name + ", Level: " + monster.getLevel());
-    nameLabel.setFont(new Font("Public Pixel", Font.BOLD, 15));
+    nameLabel.setFont(new Font("Public Pixel", Font.ITALIC, 15));
     nameLabel.setForeground(color == 0 ? Color.WHITE : Color.BLACK);
+
+    JLabel healthLabel = new JLabel("Health : " + currentHp + "/" + maxHp);
+    healthLabel.setFont(new Font("Public Pixel", Font.ITALIC, 8));
+    healthLabel.setForeground(color == 0 ? Color.WHITE : Color.BLACK); 
+    healthLabel.setName("healthpoint");
 
     JProgressBar hpBar = new JProgressBar(0, maxHp);
     hpBar.setValue(currentHp);
@@ -690,6 +695,7 @@ private JPanel createHpPanel(String name, int currentHp, int maxHp, int color, M
     hpBar.setName("hpBar"); 
 
     hpPanel.add(hpBar, BorderLayout.CENTER);
+    hpPanel.add(healthLabel, BorderLayout.SOUTH);
     hpPanel.add(nameLabel, BorderLayout.NORTH);
 
     return hpPanel;
@@ -699,14 +705,11 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp) {
     if (hpPanel != null) {
         Component[] components = hpPanel.getComponents();
         for (Component component : components) {
-            if (component instanceof JProgressBar) {
-                JProgressBar hpBar = (JProgressBar) component;
-                if ("hpBar".equals(hpBar.getName())) {  
-                    System.out.println("Updating HP bar: " + currentHp + "/" + maxHp);  
-                    hpBar.setMaximum(maxHp);
-                    hpBar.setValue(currentHp);
-                    hpBar.setString(currentHp + "/" + maxHp);
-                    hpBar.setStringPainted(true);
+            if (component instanceof JLabel) {
+                JLabel label = (JLabel) component;
+                if ("healthpoint".equals(label.getName())) {  
+                    System.out.println("Updating health label: " + currentHp + "/" + maxHp);  
+                    label.setText("Health : " + currentHp + "/" + maxHp);
                     break;
                 }
             }
@@ -715,6 +718,7 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp) {
         System.err.println("hpPanel is null");
     }
 }
+
 
 
 public boolean isDead(Monster monster) {
