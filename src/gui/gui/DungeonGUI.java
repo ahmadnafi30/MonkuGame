@@ -802,10 +802,170 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
             }
 
             break;
-        default:
+            case 2:
+                Image uhuy2 = new ImageIcon("path").getImage();
+                Image afterAttack2 = new ImageIcon("path").getImage();
+                int scaledWidth2 = 200;
+                int scaledHeight2 = 200;
+
+                BufferedImage resizedImg2 = new BufferedImage(scaledWidth2, scaledHeight2, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2_2 = resizedImg2.createGraphics();
+                g2_2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                g2_2.drawImage(uhuy2, 0, 0, scaledWidth2, scaledHeight2, null);
+                g2_2.dispose();
+
+                BufferedImage resizedImgAfterAttack2 = new BufferedImage(scaledWidth2, scaledHeight2, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g3_2 = resizedImgAfterAttack2.createGraphics();
+                g3_2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                g3_2.drawImage(afterAttack2, 0, 0, scaledWidth2, scaledHeight2, null);
+                g3_2.dispose();
+
+                effectIcons[0] = new ImageIcon(resizedImg2);
+                effectIcons[1] = new ImageIcon(resizedImgAfterAttack2);
+                effectLabel.setIcon(effectIcons[0]);
+
+                final int startX2;
+                final int startY2;
+                final int endX2;
+                final int endY2;
+
+                if (monsterOrPlayer == 0) { // Player attacks Monster
+                    startX2 = monsterPlayerPanel.getX();
+                    startY2 = monsterPlayerPanel.getY();
+                    endX2 = monsterDungeonPanel.getX();
+                    endY2 = monsterDungeonPanel.getY();
+                } else { // Monster attacks Player
+                    startX2 = monsterDungeonPanel.getX();
+                    startY2 = monsterDungeonPanel.getY();
+                    endX2 = monsterPlayerPanel.getX();
+                    endY2 = monsterPlayerPanel.getY();
+                }
+
+                effectLabel.setBounds(startX2, startY2, effectIcons[0].getIconWidth(), effectIcons[0].getIconHeight());
+                panelBG.add(effectLabel, JLayeredPane.PALETTE_LAYER);
+                panelBG.revalidate();
+                panelBG.repaint();
+
+                final int totalSteps2 = 10;
+                final int deltaX2 = (endX2 - startX2) / totalSteps2;
+                final int deltaY2 = (endY2 - startY2) / totalSteps2;
+                Timer moveTimer2 = new Timer(10, new ActionListener() {
+                    int currentStep2 = 0;
+                    int x2 = startX2;
+                    int y2 = startY2;
+    
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (currentStep2 < totalSteps2) {
+                            x2 += deltaX2;
+                            y2 += deltaY2;
+                            effectLabel.setLocation(x2, y2);
+                            hpPanel.repaint();
+                            currentStep2++;
+                        } else {
+                            ((Timer) e.getSource()).stop();
+                            hpPanel.remove(effectLabel);
+                            hpPanel.revalidate();
+                            hpPanel.repaint();
+                            effectLabel.setIcon(effectIcons[1]);
+                            Timer afterAttackTimer2 = new Timer(2000, new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    panelBG.remove(effectLabel);
+                                    panelBG.revalidate();
+                                    panelBG.repaint();
+                                }
+                            });
+                            afterAttackTimer2.setRepeats(false);
+                            afterAttackTimer2.start();
+                        }
+                    }
+                });
+                moveTimer2.start();
+                break;
+            case 3:
+            Image uhuy3 = new ImageIcon("path").getImage();
+            Image afterAttack3 = new ImageIcon("path").getImage();
+            int scaledWidth3 = 200;
+            int scaledHeight3 = 200;
+
+            BufferedImage resizedImg3 = new BufferedImage(scaledWidth3, scaledHeight3, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2_3 = resizedImg3.createGraphics();
+            g2_3.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2_3.drawImage(uhuy3, 0, 0, scaledWidth3, scaledHeight3, null);
+            g2_3.dispose();
+
+            BufferedImage resizedImgAfterAttack3 = new BufferedImage(scaledWidth3, scaledHeight3, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g3_3 = resizedImgAfterAttack3.createGraphics();
+            g3_3.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g3_3.drawImage(afterAttack3, 0, 0, scaledWidth3, scaledHeight3, null);
+            g3_3.dispose();
+
+            effectIcons[0] = new ImageIcon(resizedImg3);
+            effectIcons[1] = new ImageIcon(resizedImgAfterAttack3);
+            effectLabel.setIcon(effectIcons[0]);
+
+            final int startX3;
+            final int startY3;
+            final int endX3;
+            final int endY3;
+
+            if (monsterOrPlayer == 0) { // Player attacks Monster
+                startX3 = monsterPlayerPanel.getX();
+                startY3 = monsterPlayerPanel.getY();
+                endX3 = monsterDungeonPanel.getX();
+                endY3 = monsterDungeonPanel.getY();
+            } else { // Monster attacks Player
+                startX3 = monsterDungeonPanel.getX();
+                startY3 = monsterDungeonPanel.getY();
+                endX3 = monsterPlayerPanel.getX();
+                endY3 = monsterPlayerPanel.getY();
+            }
+
+            effectLabel.setBounds(startX3, startY3, effectIcons[0].getIconWidth(), effectIcons[0].getIconHeight());
+            panelBG.add(effectLabel, JLayeredPane.PALETTE_LAYER);
+            panelBG.revalidate();
+            panelBG.repaint();
+
+            final int totalSteps3 = 10;
+            final int deltaX3 = (endX3 - startX3) / totalSteps3;
+            final int deltaY3 = (endY3 - startY3) / totalSteps3;
+
+            Timer moveTimer3 = new Timer(10, new ActionListener() {
+                int currentStep3 = 0;
+                int x3 = startX3;
+                int y3 = startY3;
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (currentStep3 < totalSteps3) {
+                        x3 += deltaX3;
+                        y3 += deltaY3;
+                        effectLabel.setLocation(x3, y3);
+                        hpPanel.repaint();
+                        currentStep3++;
+                    } else {
+                        ((Timer) e.getSource()).stop();
+                        hpPanel.remove(effectLabel);
+                        hpPanel.revalidate();
+                        hpPanel.repaint();
+                        effectLabel.setIcon(effectIcons[1]);
+                        Timer afterAttackTimer3 = new Timer(2000, new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                panelBG.remove(effectLabel);
+                                panelBG.revalidate();
+                                panelBG.repaint();
+                            }
+                        });
+                        afterAttackTimer3.setRepeats(false);
+                        afterAttackTimer3.start();
+                    }
+                }
+            });
+            moveTimer3.start();
             break;
     }
-
     if (hpPanel != null) {
         Component[] components = hpPanel.getComponents();
         for (Component component : components) {
@@ -952,10 +1112,7 @@ private JButton createPokemonButton(String image, String details, int i) {
         Monster[] monsters = {monster};
         Item[] rewards = {item};
         Dungeon dungeon = new Dungeon("Mystic Cave", monsters, rewards, 1, "asset/den4zwg-45a7fe9e-d38a-417c-815c-3e56972adf62.jpg", "asset/wizard1.gif", "Sapi");
-        // ItemSeller seller = new ItemSeller(null, null, dungeon);
-        // seller.sellItem(seller.getInventory(), ABORT, seller);
         Player player = new Player("Hero", dungeon, "asset/wizard.gif");
-        // player.buyItem(item, 3, seller);
         player.catchMonster(monster);
         player.catchMonster(monster2);
         player.catchMonster(monster3);
