@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -46,9 +47,14 @@ public class DungeonGUI extends JFrame {
     private JLabel chatTextLabel;
     private int indeksMonku = -1;
     JPanel listPanel;
+    JPanel monsterDungeonPanel;
+    JPanel monsterPlayerPanel;
     private Monster monsterBattle;
+    private Monster monsterPlayer;
     JPanel monsterHpPanel;
     String[] skills = {"basic", "special", "elemental"};
+    private Timer timerEffect;
+
     public DungeonGUI(Dungeon dungeon, Player player) {
         this.dungeon = dungeon;
         this.player = player;
@@ -415,7 +421,7 @@ public class DungeonGUI extends JFrame {
 
     setMonsterDungeon();
 
-    JPanel monsterDungeonPanel = new JPanel(null) {
+    monsterDungeonPanel = new JPanel(null) {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -495,11 +501,12 @@ private void setMonsterDungeon(){
 }
 
 public void popUp(Monster monster){
-    // Kalo meninggal muncul popUp
-    if(isDead(monster)){}
+    if(isDead(monster)){
+
+    }
 }
 private void addBattleButtons() {
-    Monster monsterPlayer = player.deployMonster(indeksMonku);
+    monsterPlayer = player.deployMonster(indeksMonku);
     BufferedImage bcAttackImage;
     BufferedImage speAttackImage;
     BufferedImage eleAttackImage;
@@ -540,7 +547,7 @@ private void addBattleButtons() {
     hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
     hpBoxPanelPlayer.setOpaque(false);
 
-    JPanel monsterPlayerPanel = new JPanel(null) {
+    monsterPlayerPanel = new JPanel(null) {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -566,20 +573,12 @@ private void addBattleButtons() {
     bcAttackButton.addActionListener(e -> {
         System.out.println("Basic attack button pressed");
         monsterBattle.getAttacked("basic", monsterPlayer, null);
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(),1,1);
         System.out.println("Updating enemy HP panel");
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
         popUp(monsterBattle);
-    
-        monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        System.out.println("Updating player HP panel");
-        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
-        popUp(monsterPlayer);
-        System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
-        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
-    
-        bcAttackButton.setEnabled(false);
+
         Timer timer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
@@ -588,18 +587,28 @@ private void addBattleButtons() {
         });
         timer.setRepeats(false);
         timer.start();
+    
+        monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
+        System.out.println("Updating player HP panel");
+        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,1);
+        popUp(monsterPlayer);
+        System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
+    
+        // bcAttackButton.setEnabled(false);
+        
     });
 
     speAttackButton.addActionListener(e -> {
         System.out.println("Special attack button pressed");
         monsterBattle.getAttacked("special", monsterPlayer, null);
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(),1,2);
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
 
         popUp(monsterBattle);
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,2);
         popUp(monsterPlayer);
         System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
@@ -608,11 +617,11 @@ private void addBattleButtons() {
     eleAttackButton.addActionListener(e -> {
         System.out.println("Elemental attack button pressed");
         monsterBattle.getAttacked("elemental", monsterPlayer, null);
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0,3);
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
 
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,3);
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
     });
 
@@ -701,16 +710,120 @@ private JPanel createHpPanel(String name, int currentHp, int maxHp, int color, M
     return hpPanel;
 }
 
-private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp) {
+private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monsterOrPlayer, int attackType) {
+    ImageIcon[] effectIcons = new ImageIcon[2]; // Array untuk menyimpan dua ikon efek
+    JLabel effectLabel = new JLabel();
+
+
+    switch (attackType) {
+        case 1:
+            Image uhuy = new ImageIcon("asset/BattleEffect/EFECTOS506-ezgif.com-gif-maker.gif").getImage();
+            Image afterAttack = new ImageIcon("asset/BattleEffect/d9ti46b-827bbde3-d1da-4298-a4f5-267a240e43e0.gif").getImage();
+            int scaledWidth = 200;
+            int scaledHeight = 200;
+
+            BufferedImage resizedImg = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = resizedImg.createGraphics();
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2.drawImage(uhuy, 0, 0, scaledWidth, scaledHeight, null);
+            g2.dispose();
+
+            BufferedImage resizedImgAfterAttack = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g3 = resizedImgAfterAttack.createGraphics();
+            g3.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g3.drawImage(afterAttack, 0, 0, scaledWidth, scaledHeight, null);
+            g3.dispose();
+
+            effectIcons[0] = new ImageIcon(resizedImg);
+            effectIcons[1] = new ImageIcon(resizedImgAfterAttack);
+            effectLabel.setIcon(effectIcons[0]); 
+
+            if (effectIcons[0] != null) {
+
+                final int startX;
+                final int startY;
+                final int endX;
+                final int endY;
+    
+                if (monsterOrPlayer == 0) { // Player attacks Monster
+                    startX = monsterPlayerPanel.getX();
+                    startY = monsterPlayerPanel.getY();
+                    endX = monsterDungeonPanel.getX();
+                    endY = monsterDungeonPanel.getY();
+                } else { // Monster attacks Player
+                    startX = monsterDungeonPanel.getX();
+                    startY = monsterDungeonPanel.getY();
+                    endX = monsterPlayerPanel.getX();
+                    endY = monsterPlayerPanel.getY();
+                }
+    
+                effectLabel.setBounds(startX, startY, effectIcons[0].getIconWidth(), effectIcons[0].getIconHeight());
+                panelBG.add(effectLabel, JLayeredPane.PALETTE_LAYER);
+                panelBG.revalidate();
+                panelBG.repaint();
+    
+                final int totalSteps = 10;
+                final int deltaX = (endX - startX) / totalSteps;
+                final int deltaY = (endY - startY) / totalSteps;
+    
+                Timer moveTimer = new Timer(10, new ActionListener() {
+                    int currentStep = 0;
+                    int x = startX;
+                    int y = startY;
+    
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (currentStep < totalSteps) {
+                            x += deltaX;
+                            y += deltaY;
+                            effectLabel.setLocation(x, y);
+                            hpPanel.repaint();
+                            currentStep++;
+                        } else {
+                            ((Timer) e.getSource()).stop();
+                            hpPanel.remove(effectLabel);
+                            hpPanel.revalidate();
+                            hpPanel.repaint();
+                            effectLabel.setIcon(effectIcons[1]); 
+                            Timer afterAttackTimer = new Timer(2000, new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    panelBG.remove(effectLabel);
+                                    panelBG.revalidate();
+                                    panelBG.repaint();
+                                }
+                            });
+                            afterAttackTimer.setRepeats(false);
+                            afterAttackTimer.start();
+                        }
+                    }
+                });
+                moveTimer.start();
+            }
+
+            break;
+        default:
+            break;
+    }
+
     if (hpPanel != null) {
         Component[] components = hpPanel.getComponents();
         for (Component component : components) {
             if (component instanceof JLabel) {
                 JLabel label = (JLabel) component;
-                if ("healthpoint".equals(label.getName())) {  
-                    System.out.println("Updating health label: " + currentHp + "/" + maxHp);  
+                if ("healthpoint".equals(label.getName())) {
+                    System.out.println("Updating health label: " + currentHp + "/" + maxHp);
                     label.setText("Health : " + currentHp + "/" + maxHp);
                     break;
+                }
+            } else if (component instanceof JProgressBar) {
+                JProgressBar hpBar = (JProgressBar) component;
+                if ("hpBar".equals(hpBar.getName())) {
+                    System.out.println("Updating HP bar: " + currentHp + "/" + maxHp);
+                    hpBar.setMaximum(maxHp);
+                    hpBar.setValue(currentHp);
+                    hpBar.setString(currentHp + "/" + maxHp);
+                    hpBar.setStringPainted(true);
                 }
             }
         }
@@ -724,8 +837,6 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp) {
 public boolean isDead(Monster monster) {
     return monster.getHealthPoint() <= 0;
 }
-
-
 
 private JButton createItemButton(String name, String description, int i) throws IOException {
     JButton itemButton = new JButton();
