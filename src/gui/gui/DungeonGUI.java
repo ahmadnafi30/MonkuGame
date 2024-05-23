@@ -832,8 +832,6 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
     }
 }
 
-
-
 public boolean isDead(Monster monster) {
     return monster.getHealthPoint() <= 0;
 }
