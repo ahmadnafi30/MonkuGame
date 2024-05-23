@@ -499,7 +499,6 @@ public void popUp(Monster monster){
     if(isDead(monster)){}
 }
 private void addBattleButtons() {
-
     Monster monsterPlayer = player.deployMonster(indeksMonku);
     BufferedImage bcAttackImage;
     BufferedImage speAttackImage;
@@ -533,14 +532,13 @@ private void addBattleButtons() {
         }
     };
 
-    int hpBoxWidth = 510;  
-    int hpBoxHeight = 285;  
-    int hpBoxX = -5;       
-    int hpBoxY = 484;  
+    int hpBoxWidth = 510;
+    int hpBoxHeight = 285;
+    int hpBoxX = -5;
+    int hpBoxY = 484;
 
     hpBoxPanelPlayer.setBounds(hpBoxX, hpBoxY, hpBoxWidth, hpBoxHeight);
-    hpBoxPanelPlayer.setOpaque(false); 
-
+    hpBoxPanelPlayer.setOpaque(false);
 
     JPanel monsterPlayerPanel = new JPanel(null) {
         @Override
@@ -554,10 +552,8 @@ private void addBattleButtons() {
     monsterPlayerPanel.setBounds(75, 330, 300, 300);
     monsterPlayerPanel.setOpaque(false);
 
-    
     JPanel playerHpPanel = createHpPanel(monsterPlayer.getName(), monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(), 1, monsterPlayer);
-    playerHpPanel.setBounds(50, 600,400, 30);
-
+    playerHpPanel.setBounds(50, 600, 400, 30);
 
     panelBG.add(playerHpPanel);
     panelBG.add(hpBoxPanelPlayer);
@@ -570,54 +566,54 @@ private void addBattleButtons() {
     bcAttackButton.addActionListener(e -> {
         System.out.println("Basic attack button pressed");
         monsterBattle.getAttacked("basic", monsterPlayer, null);
-        //updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Updating enemy HP panel");
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
         popUp(monsterBattle);
-
+    
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        //updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        System.out.println("Updating player HP panel");
+        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
         popUp(monsterPlayer);
         System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
+    
         bcAttackButton.setEnabled(false);
-        Timer timer = new Timer(200, new ActionListener() { // Delay 200 milidetik (0.2 detik)
+        Timer timer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                bcAttackButton.setEnabled(true); // Mengaktifkan kembali tombol setelah 0.2 detik
+                bcAttackButton.setEnabled(true);
             }
         });
-        timer.setRepeats(false); // Hanya menjalankan sekali saja        
+        timer.setRepeats(false);
+        timer.start();
     });
 
     speAttackButton.addActionListener(e -> {
         System.out.println("Special attack button pressed");
         monsterBattle.getAttacked("special", monsterPlayer, null);
-        //updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
 
         popUp(monsterBattle);
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        //updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
         popUp(monsterPlayer);
         System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
     });
 
     eleAttackButton.addActionListener(e -> {
-        String elementalAttack;
-        if(skills[new Random().nextInt(2)].equals("elemental")){
-            
-        }
         System.out.println("Elemental attack button pressed");
-        monsterBattle.getAttacked("elemntal", monsterPlayer, null);
-        if(isDead(monsterBattle)){
-
-        }
+        monsterBattle.getAttacked("elemental", monsterPlayer, null);
         updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint());
+        System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
+
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        updateHpPanel(playerHpPanel,monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint());
+        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
     });
 
     usePotionButton.addActionListener(e -> {
@@ -650,7 +646,7 @@ private void addBattleButtons() {
         }
 
         JScrollPane scrollPane = new JScrollPane(listPanel);
-        scrollPane.setBounds(10, 10, hpBoxPanelPlayer.getWidth() - 20, hpBoxPanelPlayer.getHeight() - 20); // Atur batas sesuai kebutuhan
+        scrollPane.setBounds(10, 10, hpBoxPanelPlayer.getWidth() - 20, hpBoxPanelPlayer.getHeight() - 20);
 
         scrollPane.setViewportView(listPanel);
 
@@ -665,10 +661,7 @@ private void addBattleButtons() {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.getVerticalScrollBar().setBlockIncrement(50);
 
-        // Tambahkan JScrollPane ke panel
         panelBG.add(scrollPane);
-
-        // Perbaharui tampilan panel
         panelBG.revalidate();
         panelBG.repaint();
     });
@@ -677,29 +670,25 @@ private void addBattleButtons() {
     panelBG.repaint();
 }
 
-public boolean isDead(Monster monster) {
-    return monster.getHealthPoint() <= 0;
-}
+
 
 private JPanel createHpPanel(String name, int currentHp, int maxHp, int color, Monster monster) {
     JPanel hpPanel = new JPanel();
     hpPanel.setLayout(new BorderLayout());
     hpPanel.setOpaque(false);
-    int level = monster.getLevel();
-    JLabel levelMonster = new JLabel(String.valueOf(level));
 
-    JLabel nameLabel = new JLabel(name +  ", Level: " + String.valueOf(level));
+    JLabel nameLabel = new JLabel(name + ", Level: " + monster.getLevel());
     nameLabel.setFont(new Font("Public Pixel", Font.BOLD, 15));
-    nameLabel.setForeground(Color.black);
-    if (color == 0) {
-        nameLabel.setForeground(Color.WHITE);
-    }
+    nameLabel.setForeground(color == 0 ? Color.WHITE : Color.BLACK);
 
     JProgressBar hpBar = new JProgressBar(0, maxHp);
     hpBar.setValue(currentHp);
     hpBar.setForeground(Color.GREEN);
     hpBar.setBackground(Color.RED);
-    
+    hpBar.setString(currentHp + "/" + maxHp);
+    hpBar.setStringPainted(true);
+    hpBar.setName("hpBar"); 
+
     hpPanel.add(hpBar, BorderLayout.CENTER);
     hpPanel.add(nameLabel, BorderLayout.NORTH);
 
@@ -707,12 +696,31 @@ private JPanel createHpPanel(String name, int currentHp, int maxHp, int color, M
 }
 
 private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp) {
-    JProgressBar hpBar = (JProgressBar) ((BorderLayout) hpPanel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
-    hpBar.setMaximum(maxHp);
-    hpBar.setValue(currentHp);
-    hpBar.setString(currentHp + "/" + maxHp);
-    hpBar.setStringPainted(true);
+    if (hpPanel != null) {
+        Component[] components = hpPanel.getComponents();
+        for (Component component : components) {
+            if (component instanceof JProgressBar) {
+                JProgressBar hpBar = (JProgressBar) component;
+                if ("hpBar".equals(hpBar.getName())) {  
+                    System.out.println("Updating HP bar: " + currentHp + "/" + maxHp);  
+                    hpBar.setMaximum(maxHp);
+                    hpBar.setValue(currentHp);
+                    hpBar.setString(currentHp + "/" + maxHp);
+                    hpBar.setStringPainted(true);
+                    break;
+                }
+            }
+        }
+    } else {
+        System.err.println("hpPanel is null");
+    }
 }
+
+
+public boolean isDead(Monster monster) {
+    return monster.getHealthPoint() <= 0;
+}
+
 
 
 private JButton createItemButton(String name, String description, int i) throws IOException {
