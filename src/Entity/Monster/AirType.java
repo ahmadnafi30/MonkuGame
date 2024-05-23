@@ -3,6 +3,7 @@ package Entity.Monster;
 import java.util.List;
 
 import Entity.Item.Item;
+import Entity.Player.Player;
 
 public class AirType extends Monster {
 
@@ -68,8 +69,9 @@ public class AirType extends Monster {
         enemy.getAttacked("elemental", this, elementalAttack);
     }
     @Override
-    public void useItem(Item item) {}
-
+    public void useItem(Item item, Monster enemy, int turn, Player player) {
+        item.useItem(enemy, turn, player);
+    }
     @Override
     public void flee() {}
 }

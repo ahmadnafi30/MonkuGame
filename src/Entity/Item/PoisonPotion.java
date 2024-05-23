@@ -9,7 +9,7 @@ public class PoisonPotion extends Item{
     
 
     public PoisonPotion(String name, String rarity) {
-        super(name, "Give enemy passive damage", 0, rarity, 0);
+        super(name, "Give enemy passive damage", 0, rarity, 0, "asset/potions/PoisonPotion.png");
         switch (super.rarity) {
             case COMMON:
                 poisonAmount = 3;
@@ -36,13 +36,13 @@ public class PoisonPotion extends Item{
     @Override
     public String printDetailItemm() {
         return("""
-                Name: """ + super.name + """
-                Rarity: """ + super.rarity + """
-                Functionality: """ + super.functionality + """
-                Price: """ + super.price + """
-                Poison DMG Per Round: """ + poisonAmount + """
-                Duration: """ + duration + """
-                Price: """ + price + """
+                \nName: """ + super.name + """
+                \nRarity: """ + super.rarity + """
+                \nFunctionality: """ + super.functionality + """
+                \nPrice: """ + super.price + """
+                \nPoison DMG Per Round: """ + poisonAmount + """
+                \nDuration: """ + duration + """
+                \nPrice: """ + price + """
                 """);
     }
 

@@ -9,7 +9,7 @@ public class BuffPotion extends Item {
     private int oldAttackPower;
 
     public BuffPotion(String name, String rarity) {
-        super(name, "Gives you bonus attack power", 0, rarity, 0);
+        super(name, "Gives you bonus attack power", 0, rarity, 0, "asset/potions/BuffPotion.png");
         switch (super.rarity) {
             case COMMON:
                 attackPowerAmount = 5;
@@ -36,7 +36,7 @@ public class BuffPotion extends Item {
     @Override
     public String printDetailItemm() {
         return("""
-                Name: """ + super.name + """
+                \nName: """ + super.name + """
                 \nRarity: """ + super.rarity + """
                 \nFunctionality: """ + super.functionality + """
                 \nPrice: """ + super.price + """

@@ -8,7 +8,7 @@ public class HealthPotion extends Item {
     private int healthAmount;
 
     public HealthPotion(String name, String rarity) {
-        super(name, "Gives you bonus health", 0, rarity, 0);
+        super(name, "Gives you bonus health", 0, rarity, 0, "asset/potions/HealPotion.png");
         switch (super.rarity) {
             case COMMON:
                 healthAmount = 4;

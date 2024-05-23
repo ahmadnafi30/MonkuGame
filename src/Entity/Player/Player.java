@@ -181,6 +181,10 @@ public class Player implements ItemInteract, Battle {
         return monsters.get(i).getImage();
     }
 
+    public String getImgBack(int i){
+        return monsters.get(i).getImgBack();
+    }
+
     public void catchMonster(Monster monster) {
         this.monsters.add(monster);
         System.out.println("Monster " + monster.getName() + " berhasil dijinakkan");
@@ -254,7 +258,7 @@ public class Player implements ItemInteract, Battle {
     
 
     @Override
-    public void useItem(Item item) {
+    public void useItem(Item item, Monster enemy, int turn, Player player ) {
         if (inventory.containsKey(item) && inventory.get(item) > 0) {
             System.out.println("Player " + name + " uses " + item.name + "("+ item.rarity +")" + "!");
             inventory.put(item, inventory.get(item) - 1);
@@ -267,7 +271,7 @@ public class Player implements ItemInteract, Battle {
     public void flee() {
         for (Item item : inventory.keySet()) {
             if (item instanceof Teleportation) {
-                useItem(item);
+                useItem(item, null, 0 ,null);
                 System.out.println("Player " + name + " flees from the battle!");
                 return;
             }
@@ -354,5 +358,9 @@ public class Player implements ItemInteract, Battle {
 
     public void setLocation(Locations loc){
         this.locationPlayer = loc;
+    }
+
+    public void setCoin(int coin) {
+        this.coin += coin;
     }
 }

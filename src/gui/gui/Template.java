@@ -30,6 +30,32 @@ import app.Monku;
 
 public class Template {
 
+    public static void teksMenghilang(String text, JPanel panelBG, int size, int height, int width, int x, int y) {
+        TransparentLabel nameLoc = new TransparentLabel(text);
+        nameLoc.setFont(new Font("Public Pixel", Font.BOLD, size));
+        nameLoc.setForeground(Color.RED);
+        panelBG.setLayout(null); // Set layout to null for absolute positioning
+        nameLoc.setBounds(x, y, width, height); // Adjust size as needed
+        panelBG.add(nameLoc);
+
+        // Timer for fading effect
+        Timer timer = new Timer(60, new ActionListener() {
+            private float alpha = 1.0f;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                alpha -= 0.05f;
+                if (alpha <= 0) {
+                    alpha = 0;
+                    ((Timer) e.getSource()).stop();
+                }
+                nameLoc.setAlpha(alpha);
+            }
+        });
+
+        timer.setInitialDelay(0);
+        timer.start();
+    }
     public static void buttonPressedFx(JButton button) {Color originalColor = button.getBackground();
         
         // Change the button color to gray to simulate the pressed effect

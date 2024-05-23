@@ -10,7 +10,7 @@ public class DefensivePotion extends Item{
     
 
     public DefensivePotion(String name, String rarity) {
-        super(name, "Gives you bonus attack power", 0, rarity, 0);
+        super(name, "Gives you bonus attack power", 0, rarity, 0, "asset/potions/DefensePotion.png");
         switch (super.rarity) {
             case COMMON:
                 defencePowerAmount = 3;

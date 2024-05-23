@@ -20,6 +20,7 @@ public class ItemSeller extends NPC implements ItemInteract {
     public ItemSeller(String name, String job, Locations homeBase) {
         super(name, job);
         setItem(homeBase);
+        //printInventory();
     }
     
     public ItemSeller(String name, String job, int coin, Locations homeBase) {
@@ -45,8 +46,16 @@ public class ItemSeller extends NPC implements ItemInteract {
         inventory.put(new Teleportation("BECAK", homeBase), 20);
     }
     
+    public void printInventory() {
+        inventory.forEach((item, quantity) -> {
+            System.out.println(item.getClass() + " "+ item.getName());
+            printItemDetails(item);
+            System.out.println("Quantity: " + quantity);
+        });
+        System.out.println("Isi Inventory (" + inventory.size() + ")");
+    }
     public boolean hasItem(Item item) {
-        for(int i = 0; i < inventory.size(); i++) {
+        for(int i = 0; i < inventory.size() && inventory.get(item) != null; i++) {
             if(inventory.get(item) > 0) {
                 return true;
             }
@@ -78,15 +87,15 @@ public class ItemSeller extends NPC implements ItemInteract {
 
     private void printItemDetails(Item item) {
         if (item instanceof BuffPotion) {
-            ((BuffPotion) item).printDetailItemm();
+            System.out.println(((BuffPotion) item).printDetailItemm());
         } else if (item instanceof DefensivePotion) {
-            ((DefensivePotion) item).printDetailItemm();
+            System.out.println(((DefensivePotion) item).printDetailItemm());
         } else if (item instanceof HealthPotion) {
-            ((HealthPotion) item).printDetailItemm();
+            System.out.println(((HealthPotion) item).printDetailItemm());
         } else if (item instanceof PoisonPotion) {
-            ((PoisonPotion) item).printDetailItemm();
+            System.out.println(((PoisonPotion) item).printDetailItemm());
         } else if (item instanceof Teleportation) {
-            ((Teleportation) item).printDetailItemm();
+            System.out.println(((Teleportation) item).printDetailItemm());
         }
         System.out.println();
     }

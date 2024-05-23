@@ -28,6 +28,8 @@ public abstract class Monster implements Battle, Serializable {
     private int currentMaxElemAttackPower;
     private int currentMaxDefensePower;
     private String image;
+    private String imgBack;
+
     private int maxHpCurrentLevel;
 
     public Monster(Monster monster){
@@ -79,6 +81,8 @@ public abstract class Monster implements Battle, Serializable {
         this.defensePower = maxDefensePower / 2;
         this.currentMaxDefensePower = maxDefensePower / 2;
         this.image = image;
+        String[] spliitedImg = image.split(".gif");
+        this.imgBack = spliitedImg[0] + "-back.gif";
         setcurrentMaxHpLevel();
     }
 
@@ -159,7 +163,11 @@ public abstract class Monster implements Battle, Serializable {
          * "special" for special attack
          * "elemental" for elemental attack
          */
-
+        if(healthPoint <= 0) {
+            System.out.println(name + " is already dead!");
+            this.healthPoint = 0;
+            return true;
+        }
         int dmg = 0;
         int critical = 1;
         Random rand = new Random();
@@ -189,6 +197,7 @@ public abstract class Monster implements Battle, Serializable {
         System.out.println(name + " took " + dmg + " damage!");
         if(healthPoint <= 0) {
             System.out.println(name + " has been defeated!");
+            this.healthPoint = 0;
             return true;
         }
         return false;
@@ -659,5 +668,17 @@ public abstract class Monster implements Battle, Serializable {
     public static Monster get(int nextInt) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'get'");
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImgBack() {
+        return this.imgBack;
+    }
+
+    public void setImgBack(String imgBack) {
+        this.imgBack = imgBack;
     }
 }

@@ -2,6 +2,7 @@ package Entity.Monster;
 import java.util.List;
 
 import Entity.Item.Item;
+import Entity.Player.Player;
 
 public class WaterType extends Monster {
 
@@ -68,9 +69,8 @@ public class WaterType extends Monster {
     }
 
     @Override
-    public void useItem(Item item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'useItem'");
+    public void useItem(Item item, Monster enemy, int turn, Player player) {
+        item.useItem(enemy, turn, player);
     }
 
     @Override

@@ -96,11 +96,11 @@ public class ShopGUI extends JFrame implements ActionListener {
     }
 
     private void potionButtons(JPanel panelBG, JFrame frame) {
-        JButton healButton = addButtons(panelBG, null, "asset/HealPotion.png", 200, 200, 200, 200, 110, 20, "Heal Potion");
-        JButton defButton = addButtons(panelBG, null, "asset/DefensePotion.png", 200, 200, 200, 200, 150 + 110 + 10, 20, "Defense Potion");
-        JButton buffButton = addButtons(panelBG, null, "asset/BuffPotion.png", 200, 200, 200, 200, (150 * 2) + 110 + 10, 20, "Buff Potion");
-        JButton poisonButton = addButtons(panelBG, null, "asset/PoisonPotion.png", 200, 200, 200, 200, (150 * 3) + 110 + 10, 20, "Poison Potion");
-        JButton teleButton = addButtons(panelBG, null, "asset/healthPotion.png", 200, 200, 200, 200, (150 * 4) + 110 + 10, 20, "Health Potion");
+        JButton healButton = addButtons(panelBG, null, "asset/potions/HealPotion.png", 200, 200, 200, 200, 110, 20, "Heal Potion");
+        JButton defButton = addButtons(panelBG, null, "asset/potions/DefensePotion.png", 200, 200, 200, 200, 150 + 110 + 10, 20, "Defense Potion");
+        JButton buffButton = addButtons(panelBG, null, "asset/potions/BuffPotion.png", 200, 200, 200, 200, (150 * 2) + 110 + 10, 20, "Buff Potion");
+        JButton poisonButton = addButtons(panelBG, null, "asset/potions/PoisonPotion.png", 200, 200, 200, 200, (150 * 3) + 110 + 10, 20, "Poison Potion");
+        JButton teleButton = addButtons(panelBG, null, "asset/potions/Teleportation.png", 200, 200, 200, 200, (150 * 4) + 110 + 10, 20, "Health Potion");
         
         dialogBox.setVisible(false);
         dialogTextPanel.setVisible(false);

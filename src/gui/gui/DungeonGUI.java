@@ -1,6 +1,7 @@
 package gui;
 
 import Entity.Locations.Dungeon;
+import Entity.Locations.HomeBase;
 import Entity.Monster.AirType;
 import Entity.Monster.Monster;
 import Entity.NPC.ItemSeller;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Random;
 
 public class DungeonGUI extends JFrame {
@@ -50,16 +52,19 @@ public class DungeonGUI extends JFrame {
     JPanel monsterDungeonPanel;
     JPanel monsterPlayerPanel;
     JPanel monsterHpPanel;
+    JPanel playerHpPanel;
     private Monster monsterBattle;
     private Monster monsterPlayer;
     // JPanel monsterHpPanel;
     String[] skills = {"basic", "special", "elemental"};
     private Timer timerEffect;
+    private Item curItem;
+    private int turn = 0;
 
     public DungeonGUI(Dungeon dungeon, Player player) {
         this.dungeon = dungeon;
         this.player = player;
-
+        
         setTitle("Monku Games");
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,7 +82,7 @@ public class DungeonGUI extends JFrame {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-
+        Template.showNameLoc(dungeon, panelBG, 30, 700, 900, 340, 10);
         loadDetailImage();
         try {
             buttonBackgroundImage = ImageIO.read(new File("asset/text-box.png"));
@@ -411,6 +416,7 @@ public class DungeonGUI extends JFrame {
     ArrayList<JButton> pokemonButtons = new ArrayList<>();
     for (int i = 0; i < pokemonNames.size(); i++) {
         try {
+            //kalo player.getImage bukannya ngedapetin path gambar palyernya??? 
             BufferedImage pokemonImage = ImageIO.read(new File(player.getImage(i)));
             JButton button = createPokemonButton(player.getImage(i), player.printMonster(i), i);
             listPanel.add(button);
@@ -503,7 +509,7 @@ private void setMonsterDungeon(){
 
 public void popUp(Monster monster){
     if(isDead(monster)){
-
+        JOptionPane.showMessageDialog(this, "Monster is dead", "Reminder", JOptionPane.WARNING_MESSAGE);
     }
 }
 private void addBattleButtons() {
@@ -514,7 +520,7 @@ private void addBattleButtons() {
     BufferedImage usePotionImage;
     BufferedImage boxHpImage;
     BufferedImage boxHpImage2;
-
+    
     try {
         bcAttackImage = ImageIO.read(new File("asset/HPBAR/2.png"));
         speAttackImage = ImageIO.read(new File("asset/HPBAR/1.png"));
@@ -552,7 +558,7 @@ private void addBattleButtons() {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            ImageIcon originalIcon = new ImageIcon(player.getImage(indeksMonku));
+            ImageIcon originalIcon = new ImageIcon(player.getImgBack(indeksMonku));
             Image originalImage = originalIcon.getImage();
             g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
         }
@@ -572,6 +578,14 @@ private void addBattleButtons() {
     panelBG.add(monsterPlayerPanel);
 
     bcAttackButton.addActionListener(e -> {
+        if(curItem != null && !curItem.itemHasRanOut(turn)){
+            useItem(curItem, turn++, player);
+        }
+        if(curItem != null &&curItem.itemHasRanOut(turn)) {
+            Template.teksMenghilang(curItem.getName()+" habis", panelBG, 30, 650, 1000, 130, 10);
+            turn = 0;
+            curItem = null;
+        }
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
         System.out.println("Updating player HP panel");
         updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,1);
@@ -617,7 +631,7 @@ private void addBattleButtons() {
     eleAttackButton.addActionListener(e -> {
         System.out.println("Elemental attack button pressed");
         monsterBattle.getAttacked("elemental", monsterPlayer, null);
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0,3);
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 1,3);
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
 
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
@@ -630,8 +644,25 @@ private void addBattleButtons() {
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
+        JButton backButton = new JButton("Cancel");
+        backButton.setVisible(true);
+        
+        listPanel.add(backButton);
 
+        backButton.addActionListener(e1 -> {
+            listPanel.setVisible(false);
+            panelBG.remove(listPanel);
+            panelBG.revalidate();
+            panelBG.repaint();
+        });
+
+        //Map<Item, Integer> inventoryItems = player.getInventory();
         ArrayList<Item> inventoryItems = new ArrayList<>(player.getInventory().keySet());
+        player.getInventory().forEach((k, v) -> {
+            System.out.println(k.getName() + " = " + v);
+        });
+        System.out.println("Inventory items: " + inventoryItems);
+        
         for (int i = 0; i < inventoryItems.size(); i++) {
             try {
                 String detailItem = "";
@@ -647,7 +678,7 @@ private void addBattleButtons() {
                 } else if (item instanceof Teleportation) {
                     detailItem = ((Teleportation) item).printDetailItemm();
                 }
-                JButton button = createItemButton(item.getName(), detailItem, i);
+                JButton button = createItemButton(item, detailItem, i, listPanel);
                 listPanel.add(button);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -719,11 +750,10 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
     ImageIcon[] effectIcons = new ImageIcon[2]; // Array untuk menyimpan dua ikon efek
     JLabel effectLabel = new JLabel();
 
-
     switch (attackType) {
         case 1:
             Image uhuy = new ImageIcon("asset/BattleEffect/EFECTOS506-ezgif.com-gif-maker.gif").getImage();
-            Image afterAttack = new ImageIcon("asset/BattleEffect/d9ti46b-827bbde3-d1da-4298-a4f5-267a240e43e0.gif").getImage();
+            Image afterAttack = new ImageIcon("asset/BattleEffect/bam.gif").getImage();
             int scaledWidth = 200;
             int scaledHeight = 200;
 
@@ -744,7 +774,6 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
             effectLabel.setIcon(effectIcons[0]); 
 
             if (effectIcons[0] != null) {
-
                 final int startX;
                 final int startY;
                 final int endX;
@@ -790,6 +819,8 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
                             // hpPanel.revalidate();
                             // hpPanel.repaint();
                             effectLabel.setIcon(effectIcons[1]); 
+                            System.out.println("z :"+panelBG.getComponentZOrder(effectLabel));
+                            panelBG.setComponentZOrder(monsterDungeonPanel, panelBG.getComponentZOrder(effectLabel)-1);
                             // hpPanel.remove(effectLabel);
                             Timer afterAttackTimer = new Timer(2000, new ActionListener() {
                                 @Override
@@ -834,7 +865,12 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
                 final int startY2;
                 final int endX2;
                 final int endY2;
-
+                Timer timer = new Timer(2000, new ActionListener() {
+                   @Override 
+                   public void actionPerformed(ActionEvent e) {
+                       
+                   } 
+                });
                 if (monsterOrPlayer == 0) { // Player attacks Monster
                     startX2 = monsterPlayerPanel.getX();
                     startY2 = monsterPlayerPanel.getY();
@@ -1003,30 +1039,74 @@ public boolean isDead(Monster monster) {
     return monster.getHealthPoint() <= 0;
 }
 
-private JButton createItemButton(String name, String description, int i) throws IOException {
+private JButton createItemButton(Item item, String description, int i, JPanel panel) throws IOException {
     JButton itemButton = new JButton();
 
     itemButton.setLayout(new BorderLayout());
 
-
-    JLabel imageLabel = new JLabel(new ImageIcon("path_to_item_image")); // Ganti dengan path gambar item
+    JLabel imageLabel = new JLabel(new ImageIcon(item.getImgPath())); // Ganti dengan path gambar item
     itemButton.add(imageLabel, BorderLayout.WEST);
 
-    JLabel detailsLabel = new JLabel("<html>" + name + ": " + description.replace("\n", "<br>") + "</html>");
+    JLabel detailsLabel = new JLabel("<html>" + item.getName() + ": " + description.replace("\n", "<br>") + "</html>");
     itemButton.add(detailsLabel, BorderLayout.CENTER);
 
     itemButton.setOpaque(false);
     itemButton.setBorder(BorderFactory.createEmptyBorder());
     itemButton.setContentAreaFilled(false);
     itemButton.setFocusable(false);
+    itemButton.setVisible(true);
 
     itemButton.addActionListener(e -> {
-        System.out.println("Item button clicked: " + name);
+        System.out.println("Item button clicked: " + item.getName());
+        String[] confirm = {"Yes", "No"};
+        int confirmation = JOptionPane.showOptionDialog(
+            this,
+            "Apakah yakin?", 
+            "Beneran?", 
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.QUESTION_MESSAGE, 
+            null, 
+            confirm, 
+            confirm[0]
+        );
+        switch (confirmation) {
+            case 0:
+                useItem(item, turn, player);
+                System.out.println(item.getName());
+                break;
+            
+            case 1:
+                break;
+            default:
+                break;
+        }
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 1,3);
+updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,3);
     });
 
     return itemButton;
 }
 
+private void useItem(Item item, int turn, Player player) {
+    if (item.getName().equals("Jamu Kencur") || item.getName().equals("Jamu Kuat") || item.getName().equals("Susu Kambing")) {
+        item.useItem(monsterPlayer, turn, player);
+    } 
+    if(item.getName().equals("Lidah Buzzer")) {
+        item.useItem(monsterBattle, turn, player);
+    }
+
+    switch(item.getName()){
+        case "Jamu Kuat":
+            curItem = item;
+            break;
+        case "Susu Kambing":
+            curItem = item;
+            break;
+        case "Lidah Buzzer":
+            curItem = item;
+            break;
+    }
+}
 
 private Monster randomDungeon(){
     Random random = new Random();
@@ -1111,10 +1191,10 @@ private JButton createPokemonButton(String image, String details, int i) {
     }
 
     public static void main(String[] args) {
-        Monster monster = new AirType("kehed", 1, 4, "asset/rhyhorn.gif");
-        Monster monster2 = new AirType("dehek", 1, 4, "asset/squirtle.gif");
-        Monster monster3 = new AirType("heked", 1, 4, "asset/squirtle.gif");
-        Monster monster4 = new AirType("edehek", 1, 4, "asset/squirtle.gif");
+        Monster monster = new AirType("kehed", 1, 4, "asset/Charmander/charmander.gif");
+        Monster monster2 = new AirType("dehek", 1, 4, "asset/rhyhorn/rhyhorn.gif");
+        Monster monster3 = new AirType("heked", 1, 4, "asset/Squirtle/squirtle.gif");
+        Monster monster4 = new AirType("edehek", 1, 4, "asset/vanillite/vanillite.gif");
         Item item = new BuffPotion("Jamu Kuat", "COMMON");
         Monster[] monsters = {monster};
         Item[] rewards = {item};
@@ -1124,6 +1204,11 @@ private JButton createPokemonButton(String image, String details, int i) {
         player.catchMonster(monster2);
         player.catchMonster(monster3);
         player.catchMonster(monster4);
+        ItemSeller itemSeller = new ItemSeller("p", "p",  new HomeBase("p"));
+        player.setCoin(9000);
+        player.buyItem(itemSeller.getItem("Jamu Kencur", "COMMON"), 3, itemSeller);
+        player.buyItem(itemSeller.getItem("Ludah Buzzer", "COMMON"), 3, itemSeller);
+        player.buyItem(itemSeller.getItem("Susu Kambing", "RARE"), 3, itemSeller);
 
         SwingUtilities.invokeLater(() -> new DungeonGUI(dungeon, player));
     }

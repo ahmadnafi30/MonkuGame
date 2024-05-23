@@ -11,8 +11,41 @@ public abstract class Item implements Serializable{
     public String functionality;
     public int price;
     public Rarity rarity;
+    public String imgPath;
     public int duration;
 
+    //durasi per putaran
+
+    public Item(String name, String functionality, int price, String rarity, int duration, String imgPath) {
+        this.name = name;
+        this.functionality = functionality;
+        this.price = price;
+        this.duration = duration;
+        switch (rarity.toLowerCase()) {
+            case "common":
+                this.rarity = Rarity.COMMON;
+                break;
+            case "rare":
+                this.rarity = Rarity.RARE;
+                break;
+            case "epic":
+                this.rarity = Rarity.EPIC;
+                break;
+            default:
+                System.out.println("There is no such rarity as " + rarity);
+                break;
+        }
+        this.imgPath = imgPath;
+    }
+
+    public String getImgPath() {
+        return this.imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+    
     public String getName() {
         return this.name;
     }
@@ -52,29 +85,10 @@ public abstract class Item implements Serializable{
     public void setDuration(int duration) {
         this.duration = duration;
     }
-    //durasi per putaran
 
-    public Item(String name, String functionality, int price, String rarity, int duration) {
-        this.name = name;
-        this.functionality = functionality;
-        this.price = price;
-        this.duration = duration;
-        switch (rarity.toLowerCase()) {
-            case "common":
-                this.rarity = Rarity.COMMON;
-                break;
-            case "rare":
-                this.rarity = Rarity.RARE;
-                break;
-            case "epic":
-                this.rarity = Rarity.EPIC;
-                break;
-            default:
-                System.out.println("There is no such rarity as " + rarity);
-                break;
-        }
+    public boolean itemHasRanOut(int turn) {
+        return turn >= duration;
     }
-
     public abstract String printDetailItemm();
     public abstract void useItem(Monster monster, int turn, Player player);
     public abstract void itemRanOut(Monster monster, Player player);

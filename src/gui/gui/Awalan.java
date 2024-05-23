@@ -117,10 +117,10 @@ public class Awalan extends JFrame implements ActionListener {
     }
 
     public void monkuChoices(JPanel panelBG, JFrame frame, JButton invisibleButton){
-        ButtonWithIcon vanillitePair = Template.createButtonWithGIF(panelBG,"asset/vanillite.gif" , 140, 140, 77 + 44, 250);
-        ButtonWithIcon charmanderPair = Template.createButtonWithGIF(panelBG,"asset/charmander.gif" , 140, 140, 300 + 12, 250);
-        ButtonWithIcon rhyhornPair = Template.createButtonWithGIF(panelBG,"asset/rhyhorn.gif" , 140, 140, 460 + 44, 250);
-        ButtonWithIcon squirtlePair = Template.createButtonWithGIF(panelBG,"asset/squirtle.gif" , 140, 140, 620 + 80, 250);
+        ButtonWithIcon vanillitePair = Template.createButtonWithGIF(panelBG,"asset/vanillite/vanillite.gif" , 140, 140, 77 + 44, 250);
+        ButtonWithIcon charmanderPair = Template.createButtonWithGIF(panelBG,"asset/Charmander/charmander.gif" , 140, 140, 300 + 12, 250);
+        ButtonWithIcon rhyhornPair = Template.createButtonWithGIF(panelBG,"asset/rhyhorn/rhyhorn.gif" , 140, 140, 460 + 44, 250);
+        ButtonWithIcon squirtlePair = Template.createButtonWithGIF(panelBG,"asset/squirtle/squirtle.gif" , 140, 140, 620 + 80, 250);
 
         JButton vanillite = vanillitePair.getButton();
         // ImageIcon vanilliteIcon = vanillitePair.getIcon();

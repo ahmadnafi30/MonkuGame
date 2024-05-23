@@ -11,7 +11,7 @@ public class Teleportation extends Item{
     private int chance;
     
     public Teleportation(String name, Locations location) {
-        super(name, "Can Teleport You Anywhere", 0, "EPIC", 0);
+        super(name, "Can Teleport You Anywhere", 0, "EPIC", 0, "asset/potions/Teleportation.png");
         switch (super.rarity) {
             case COMMON:
                 chance = 20;
@@ -35,10 +35,10 @@ public class Teleportation extends Item{
     @Override
     public String printDetailItemm() {
         return("""
-                Name: """ + super.name + """
-                Rarity: """ + super.rarity + """
-                Functionality: """ + super.functionality + """
-                Price: """ + super.price + """
+                \nName: """ + super.name + """
+                \nRarity: """ + super.rarity + """
+                \nFunctionality: """ + super.functionality + """
+                \nPrice: """ + super.price + """
                 """);
     }
 
