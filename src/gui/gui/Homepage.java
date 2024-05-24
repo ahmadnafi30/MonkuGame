@@ -39,7 +39,7 @@ public class Homepage {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon originalIcon = new ImageIcon("asset/Monku Games (2).gif");
+                ImageIcon originalIcon = new ImageIcon("asset/Monku Games (3).gif");
                 Image originalImage = originalIcon.getImage();
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }

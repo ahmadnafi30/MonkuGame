@@ -257,8 +257,8 @@ public class Player implements ItemInteract, Battle {
 
     
 
-    @Override
-    public void useItem(Item item, Monster enemy, int turn, Player player ) {
+  
+    public void useItem(Item item ) {
         if (inventory.containsKey(item) && inventory.get(item) > 0) {
             System.out.println("Player " + name + " uses " + item.name + "("+ item.rarity +")" + "!");
             inventory.put(item, inventory.get(item) - 1);
@@ -362,5 +362,10 @@ public class Player implements ItemInteract, Battle {
 
     public void setCoin(int coin) {
         this.coin += coin;
+    }
+    @Override
+    public void useItem(Item item, Monster enemy, int turn, Player player) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'useItem'");
     }
 }

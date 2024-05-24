@@ -48,6 +48,8 @@ public class DungeonGUI extends JFrame {
     private JLabel chatLabel;
     private JLabel chatTextLabel;
     private int indeksMonku = -1;
+    private int indeksItem = -1;
+    private JButton selectedItemButton = null;
     JPanel listPanel;
     JPanel monsterDungeonPanel;
     JPanel monsterPlayerPanel;
@@ -60,6 +62,8 @@ public class DungeonGUI extends JFrame {
     private Timer timerEffect;
     private Item curItem;
     private int turn = 0;
+    JScrollPane scrollPane;
+    JScrollBar verticalScrollBar;
 
     public DungeonGUI(Dungeon dungeon, Player player) {
         this.dungeon = dungeon;
@@ -478,7 +482,11 @@ public class DungeonGUI extends JFrame {
             panelBG.remove(scrollPane);
             panelBG.remove(verticalScrollBar);
             panelBG.remove(hpBoxPanelPlayer);
-            addBattleButtons();
+            try {
+                addBattleButtons();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Please select a Pokémon first.", "Reminder", JOptionPane.WARNING_MESSAGE);
         }
@@ -512,7 +520,7 @@ public void popUp(Monster monster){
         JOptionPane.showMessageDialog(this, "Monster is dead", "Reminder", JOptionPane.WARNING_MESSAGE);
     }
 }
-private void addBattleButtons() {
+private void addBattleButtons() throws IOException {
     monsterPlayer = player.deployMonster(indeksMonku);
     BufferedImage bcAttackImage;
     BufferedImage speAttackImage;
@@ -644,53 +652,79 @@ private void addBattleButtons() {
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
+    
         JButton backButton = new JButton("Cancel");
         backButton.setVisible(true);
-        
         listPanel.add(backButton);
-
+        listPanel.setVisible(true);
+        panelBG.add(listPanel);
+        panelBG.revalidate();
+        panelBG.repaint();
+    
         backButton.addActionListener(e1 -> {
-            listPanel.setVisible(false);
+            // listPanel.setVisible(false);
             panelBG.remove(listPanel);
+            panelBG.remove(verticalScrollBar);
+            panelBG.remove(scrollPane);
+            // panelBG.remove(listPanel);
             panelBG.revalidate();
             panelBG.repaint();
         });
-
-        //Map<Item, Integer> inventoryItems = player.getInventory();
+    
         ArrayList<Item> inventoryItems = new ArrayList<>(player.getInventory().keySet());
         player.getInventory().forEach((k, v) -> {
             System.out.println(k.getName() + " = " + v);
         });
         System.out.println("Inventory items: " + inventoryItems);
-        
+    
         for (int i = 0; i < inventoryItems.size(); i++) {
-            try {
-                String detailItem = "";
-                Item item = inventoryItems.get(i);
-                if (item instanceof BuffPotion) {
-                    detailItem = ((BuffPotion) item).printDetailItemm();
-                } else if (item instanceof DefensivePotion) {
-                    detailItem = ((DefensivePotion) item).printDetailItemm();
-                } else if (item instanceof HealthPotion) {
-                    detailItem = ((HealthPotion) item).printDetailItemm();
-                } else if (item instanceof PoisonPotion) {
-                    detailItem = ((PoisonPotion) item).printDetailItemm();
-                } else if (item instanceof Teleportation) {
-                    detailItem = ((Teleportation) item).printDetailItemm();
-                }
-                JButton button = createItemButton(item, detailItem, i, listPanel);
-                listPanel.add(button);
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            String detailItem = "";
+            Item item = inventoryItems.get(i);
+            if (item instanceof BuffPotion) {
+                detailItem = ((BuffPotion) item).printDetailItemm();
+            } else if (item instanceof DefensivePotion) {
+                detailItem = ((DefensivePotion) item).printDetailItemm();
+            } else if (item instanceof HealthPotion) {
+                detailItem = ((HealthPotion) item).printDetailItemm();
+            } else if (item instanceof PoisonPotion) {
+                detailItem = ((PoisonPotion) item).printDetailItemm();
+            } else if (item instanceof Teleportation) {
+                detailItem = ((Teleportation) item).printDetailItemm();
             }
+            JButton button = createItemButton(item, detailItem, i, listPanel);
+            listPanel.add(button);
         }
-
-        JScrollPane scrollPane = new JScrollPane(listPanel);
+    
+        JButton pakaiButton = new JButton("Pakai");
+        pakaiButton.setVisible(true);
+        listPanel.add(pakaiButton);
+    
+        pakaiButton.addActionListener(e1 -> {
+            if (indeksItem != -1) {
+                Item selectedItem = inventoryItems.get(indeksItem);
+                useItem(selectedItem, turn, player);
+                updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, 4);
+                updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(), 0, 4);
+                System.out.println("Using item: " + selectedItem.getName());
+                listPanel.setVisible(false);
+                panelBG.remove(listPanel);
+                panelBG.remove(verticalScrollBar);
+                panelBG.remove(scrollPane);
+                // panelBG.remove();
+                panelBG.revalidate();
+                panelBG.repaint();
+            } else {
+                JOptionPane.showMessageDialog(panelBG, "Pilih item terlebih dahulu!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    
+        scrollPane = new JScrollPane(listPanel);
         scrollPane.setBounds(10, 10, hpBoxPanelPlayer.getWidth() - 20, hpBoxPanelPlayer.getHeight() - 20);
-
-        scrollPane.setViewportView(listPanel);
-
-        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        
+        verticalScrollBar = scrollPane.getVerticalScrollBar();
         verticalScrollBar.setUI(new BasicScrollBarUI() {
             @Override
             protected void configureScrollBarColors() {
@@ -700,14 +734,90 @@ private void addBattleButtons() {
         });
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.getVerticalScrollBar().setBlockIncrement(50);
-
+    
+        // hpBoxPanelPlayer.setLayout(null);
+        // hpBoxPanelPlayer.add(scrollPane);
+    
         panelBG.add(scrollPane);
+        panelBG.add(verticalScrollBar);
         panelBG.revalidate();
         panelBG.repaint();
-    });
-
+    });    
     panelBG.revalidate();
     panelBG.repaint();
+}
+
+private JButton createItemButton(Item item, String details, int i, JPanel panel) {
+    JButton itemButton = new JButton();
+
+    itemButton.setLayout(new BorderLayout());
+
+    JLabel imageLabel = new JLabel(new ImageIcon(item.getImgPath())); // Ganti dengan path gambar item
+    JLabel detailsLabel = new JLabel("<html>" + details.replace("\n", "<br>") + "</html>");
+
+    itemButton.add(imageLabel, BorderLayout.WEST);
+    itemButton.add(detailsLabel, BorderLayout.CENTER);
+    itemButton.setOpaque(false);
+    itemButton.setBorder(BorderFactory.createEmptyBorder());
+    itemButton.setContentAreaFilled(false);
+    itemButton.setFocusable(false);
+
+    itemButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            if (selectedItemButton != itemButton) {
+                itemButton.setBackground(Color.LIGHT_GRAY);
+                itemButton.setOpaque(true);
+            }
+        }
+
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            if (selectedItemButton != itemButton) {
+                itemButton.setBackground(null);
+                itemButton.setOpaque(false);
+            }
+        }
+    });
+
+    itemButton.addActionListener(e -> {
+        System.out.println("Item button clicked: " + details);
+        indeksItem = i;
+        if (selectedItemButton != null) {
+            selectedItemButton.setBackground(null);
+            selectedItemButton.setOpaque(false);
+        }
+        selectedItemButton = itemButton;
+        itemButton.setBackground(Color.WHITE);
+        itemButton.setOpaque(true);
+    });
+
+    return itemButton;
+}
+
+
+private void useItem(Item item, int turn, Player player) {
+    if (item.getName().equals("Jamu Kencur") || item.getName().equals("Jamu Kuat") || item.getName().equals("Susu Kambing")) {
+        item.useItem(monsterPlayer, turn, player);
+    } 
+    if(item.getName().equals("Lidah Buzzer")) {
+        item.useItem(monsterBattle, turn, player);
+    }
+
+    switch(item.getName()){
+        case "Jamu Kuat":
+            curItem = item;
+            break;
+        case "Susu Kambing":
+            curItem = item;
+            break;
+        case "Lidah Buzzer":
+            curItem = item;
+            break;
+    }
+
+    updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, 4);
+    updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(), 0, 4);
 }
 
 
@@ -861,69 +971,70 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
                 effectIcons[1] = new ImageIcon(resizedImgAfterAttack2);
                 effectLabel.setIcon(effectIcons[0]);
 
-                final int startX2;
-                final int startY2;
-                final int endX2;
-                final int endY2;
-                Timer timer = new Timer(2000, new ActionListener() {
-                   @Override 
-                   public void actionPerformed(ActionEvent e) {
-                       
-                   } 
-                });
-                if (monsterOrPlayer == 0) { // Player attacks Monster
-                    startX2 = monsterPlayerPanel.getX();
-                    startY2 = monsterPlayerPanel.getY();
-                    endX2 = monsterDungeonPanel.getX();
-                    endY2 = monsterDungeonPanel.getY();
-                } else { // Monster attacks Player
-                    startX2 = monsterDungeonPanel.getX();
-                    startY2 = monsterDungeonPanel.getY();
-                    endX2 = monsterPlayerPanel.getX();
-                    endY2 = monsterPlayerPanel.getY();
-                }
-
-                effectLabel.setBounds(startX2, startY2, effectIcons[0].getIconWidth(), effectIcons[0].getIconHeight());
-                panelBG.add(effectLabel, JLayeredPane.PALETTE_LAYER);
-                panelBG.revalidate();
-                panelBG.repaint();
-
-                final int totalSteps2 = 10;
-                final int deltaX2 = (endX2 - startX2) / totalSteps2;
-                final int deltaY2 = (endY2 - startY2) / totalSteps2;
-                Timer moveTimer2 = new Timer(10, new ActionListener() {
-                    int currentStep2 = 0;
-                    int x2 = startX2;
-                    int y2 = startY2;
-    
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (currentStep2 < totalSteps2) {
-                            x2 += deltaX2;
-                            y2 += deltaY2;
-                            effectLabel.setLocation(x2, y2);
-                            hpPanel.repaint();
-                            currentStep2++;
-                        } else {
-                            ((Timer) e.getSource()).stop();
-                            hpPanel.remove(effectLabel);
-                            hpPanel.revalidate();
-                            hpPanel.repaint();
-                            effectLabel.setIcon(effectIcons[1]);
-                            Timer afterAttackTimer2 = new Timer(2000, new ActionListener() {
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                    panelBG.remove(effectLabel);
-                                    panelBG.revalidate();
-                                    panelBG.repaint();
-                                }
-                            });
-                            afterAttackTimer2.setRepeats(false);
-                            afterAttackTimer2.start();
-                        }
+                if (effectIcons[0] != null) {
+                    final int startX;
+                    final int startY;
+                    final int endX;
+                    final int endY;
+        
+                    if (monsterOrPlayer == 0) { // Player attacks Monster
+                        startX = monsterPlayerPanel.getX();
+                        startY = monsterPlayerPanel.getY();
+                        endX = monsterDungeonPanel.getX();
+                        endY = monsterDungeonPanel.getY();
+                    } else { // Monster attacks Player
+                        startX = monsterDungeonPanel.getX();
+                        startY = monsterDungeonPanel.getY();
+                        endX = monsterPlayerPanel.getX();
+                        endY = monsterPlayerPanel.getY();
                     }
-                });
-                moveTimer2.start();
+        
+                    effectLabel.setBounds(startX, startY, effectIcons[0].getIconWidth(), effectIcons[0].getIconHeight());
+                    panelBG.add(effectLabel, JLayeredPane.PALETTE_LAYER);
+                    panelBG.revalidate();
+                    panelBG.repaint();
+        
+                    final int totalSteps = 10;
+                    final int deltaX = (endX - startX) / totalSteps;
+                    final int deltaY = (endY - startY) / totalSteps;
+        
+                    Timer moveTimer = new Timer(10, new ActionListener() {
+                        int currentStep = 0;
+                        int x = startX;
+                        int y = startY;
+        
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (currentStep < totalSteps) {
+                                x += deltaX;
+                                y += deltaY;
+                                effectLabel.setLocation(x, y);
+                                // hpPanel.repaint();
+                                // hpPanel.remove(effectLabel);
+                                currentStep++;
+                            } else {
+                                ((Timer) e.getSource()).stop();
+                                // hpPanel.revalidate();
+                                // hpPanel.repaint();
+                                effectLabel.setIcon(effectIcons[1]); 
+                                System.out.println("z :"+panelBG.getComponentZOrder(effectLabel));
+                                panelBG.setComponentZOrder(monsterDungeonPanel, panelBG.getComponentZOrder(effectLabel)-1);
+                                // hpPanel.remove(effectLabel);
+                                Timer afterAttackTimer = new Timer(2000, new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        panelBG.remove(effectLabel);
+                                        panelBG.revalidate();
+                                        panelBG.repaint();
+                                    }
+                                });
+                                afterAttackTimer.setRepeats(false);
+                                afterAttackTimer.start();
+                            }
+                        }
+                    });
+                    moveTimer.start();
+                }
                 break;
             case 3:
             Image uhuy3 = new ImageIcon("path").getImage();
@@ -947,65 +1058,70 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
             effectIcons[1] = new ImageIcon(resizedImgAfterAttack3);
             effectLabel.setIcon(effectIcons[0]);
 
-            final int startX3;
-            final int startY3;
-            final int endX3;
-            final int endY3;
-
-            if (monsterOrPlayer == 0) { // Player attacks Monster
-                startX3 = monsterPlayerPanel.getX();
-                startY3 = monsterPlayerPanel.getY();
-                endX3 = monsterDungeonPanel.getX();
-                endY3 = monsterDungeonPanel.getY();
-            } else { // Monster attacks Player
-                startX3 = monsterDungeonPanel.getX();
-                startY3 = monsterDungeonPanel.getY();
-                endX3 = monsterPlayerPanel.getX();
-                endY3 = monsterPlayerPanel.getY();
-            }
-
-            effectLabel.setBounds(startX3, startY3, effectIcons[0].getIconWidth(), effectIcons[0].getIconHeight());
-            panelBG.add(effectLabel, JLayeredPane.PALETTE_LAYER);
-            panelBG.revalidate();
-            panelBG.repaint();
-
-            final int totalSteps3 = 10;
-            final int deltaX3 = (endX3 - startX3) / totalSteps3;
-            final int deltaY3 = (endY3 - startY3) / totalSteps3;
-
-            Timer moveTimer3 = new Timer(10, new ActionListener() {
-                int currentStep3 = 0;
-                int x3 = startX3;
-                int y3 = startY3;
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (currentStep3 < totalSteps3) {
-                        x3 += deltaX3;
-                        y3 += deltaY3;
-                        effectLabel.setLocation(x3, y3);
-                        hpPanel.repaint();
-                        currentStep3++;
-                    } else {
-                        ((Timer) e.getSource()).stop();
-                        hpPanel.remove(effectLabel);
-                        hpPanel.revalidate();
-                        hpPanel.repaint();
-                        effectLabel.setIcon(effectIcons[1]);
-                        Timer afterAttackTimer3 = new Timer(2000, new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                panelBG.remove(effectLabel);
-                                panelBG.revalidate();
-                                panelBG.repaint();
-                            }
-                        });
-                        afterAttackTimer3.setRepeats(false);
-                        afterAttackTimer3.start();
-                    }
+            if (effectIcons[0] != null) {
+                final int startX;
+                final int startY;
+                final int endX;
+                final int endY;
+    
+                if (monsterOrPlayer == 0) { // Player attacks Monster
+                    startX = monsterPlayerPanel.getX();
+                    startY = monsterPlayerPanel.getY();
+                    endX = monsterDungeonPanel.getX();
+                    endY = monsterDungeonPanel.getY();
+                } else { // Monster attacks Player
+                    startX = monsterDungeonPanel.getX();
+                    startY = monsterDungeonPanel.getY();
+                    endX = monsterPlayerPanel.getX();
+                    endY = monsterPlayerPanel.getY();
                 }
-            });
-            moveTimer3.start();
+    
+                effectLabel.setBounds(startX, startY, effectIcons[0].getIconWidth(), effectIcons[0].getIconHeight());
+                panelBG.add(effectLabel, JLayeredPane.PALETTE_LAYER);
+                panelBG.revalidate();
+                panelBG.repaint();
+    
+                final int totalSteps = 10;
+                final int deltaX = (endX - startX) / totalSteps;
+                final int deltaY = (endY - startY) / totalSteps;
+    
+                Timer moveTimer = new Timer(10, new ActionListener() {
+                    int currentStep = 0;
+                    int x = startX;
+                    int y = startY;
+    
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (currentStep < totalSteps) {
+                            x += deltaX;
+                            y += deltaY;
+                            effectLabel.setLocation(x, y);
+                            // hpPanel.repaint();
+                            // hpPanel.remove(effectLabel);
+                            currentStep++;
+                        } else {
+                            ((Timer) e.getSource()).stop();
+                            // hpPanel.revalidate();
+                            // hpPanel.repaint();
+                            effectLabel.setIcon(effectIcons[1]); 
+                            System.out.println("z :"+panelBG.getComponentZOrder(effectLabel));
+                            panelBG.setComponentZOrder(monsterDungeonPanel, panelBG.getComponentZOrder(effectLabel)-1);
+                            // hpPanel.remove(effectLabel);
+                            Timer afterAttackTimer = new Timer(2000, new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    panelBG.remove(effectLabel);
+                                    panelBG.revalidate();
+                                    panelBG.repaint();
+                                }
+                            });
+                            afterAttackTimer.setRepeats(false);
+                            afterAttackTimer.start();
+                        }
+                    }
+                });
+                moveTimer.start();
+            }
             break;
     }
 
@@ -1039,74 +1155,6 @@ public boolean isDead(Monster monster) {
     return monster.getHealthPoint() <= 0;
 }
 
-private JButton createItemButton(Item item, String description, int i, JPanel panel) throws IOException {
-    JButton itemButton = new JButton();
-
-    itemButton.setLayout(new BorderLayout());
-
-    JLabel imageLabel = new JLabel(new ImageIcon(item.getImgPath())); // Ganti dengan path gambar item
-    itemButton.add(imageLabel, BorderLayout.WEST);
-
-    JLabel detailsLabel = new JLabel("<html>" + item.getName() + ": " + description.replace("\n", "<br>") + "</html>");
-    itemButton.add(detailsLabel, BorderLayout.CENTER);
-
-    itemButton.setOpaque(false);
-    itemButton.setBorder(BorderFactory.createEmptyBorder());
-    itemButton.setContentAreaFilled(false);
-    itemButton.setFocusable(false);
-    itemButton.setVisible(true);
-
-    itemButton.addActionListener(e -> {
-        System.out.println("Item button clicked: " + item.getName());
-        String[] confirm = {"Yes", "No"};
-        int confirmation = JOptionPane.showOptionDialog(
-            this,
-            "Apakah yakin?", 
-            "Beneran?", 
-            JOptionPane.DEFAULT_OPTION, 
-            JOptionPane.QUESTION_MESSAGE, 
-            null, 
-            confirm, 
-            confirm[0]
-        );
-        switch (confirmation) {
-            case 0:
-                useItem(item, turn, player);
-                System.out.println(item.getName());
-                break;
-            
-            case 1:
-                break;
-            default:
-                break;
-        }
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 1,3);
-updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,3);
-    });
-
-    return itemButton;
-}
-
-private void useItem(Item item, int turn, Player player) {
-    if (item.getName().equals("Jamu Kencur") || item.getName().equals("Jamu Kuat") || item.getName().equals("Susu Kambing")) {
-        item.useItem(monsterPlayer, turn, player);
-    } 
-    if(item.getName().equals("Lidah Buzzer")) {
-        item.useItem(monsterBattle, turn, player);
-    }
-
-    switch(item.getName()){
-        case "Jamu Kuat":
-            curItem = item;
-            break;
-        case "Susu Kambing":
-            curItem = item;
-            break;
-        case "Lidah Buzzer":
-            curItem = item;
-            break;
-    }
-}
 
 private Monster randomDungeon(){
     Random random = new Random();
