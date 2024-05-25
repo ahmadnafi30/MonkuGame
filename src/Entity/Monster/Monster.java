@@ -56,6 +56,8 @@ public abstract class Monster implements Battle, Serializable {
         currentMaxElemAttackPower = monster.currentMaxElemAttackPower;
         currentMaxDefensePower = monster.currentMaxDefensePower;
         maxHpCurrentLevel = monster.maxHpCurrentLevel;
+        image = monster.image;
+        imgBack = monster.imgBack;
     }
 
     public Monster(String name, int monsterPhase, String elementType, int maxMonsterPhase, String image) {
@@ -81,8 +83,36 @@ public abstract class Monster implements Battle, Serializable {
         this.defensePower = maxDefensePower / 2;
         this.currentMaxDefensePower = maxDefensePower / 2;
         this.image = image;
-        String[] spliitedImg = image.split(".gif");
-        this.imgBack = spliitedImg[0] + "-back.gif";
+        String[] splitedImg = image.split(".gif");
+        this.imgBack = splitedImg[0] + "-back.gif";
+        setcurrentMaxHpLevel();
+    }
+
+    public Monster(String name, int monsterPhase, String elementType, int maxMonsterPhase) {
+        this.elementalAttacks = new ArrayList<>();
+        this.name = name;
+        this.level = 1;
+        this.experiencePoint = 0;
+        this.monsterPhase = monsterPhase;
+        changeElementType(elementType);
+        
+        this.maxMonsterPhase = maxMonsterPhase;
+        setAttributesMax(monsterPhase);
+
+        // Initialize the current values to some defaults if needed, e.g., halfway between min and max
+        this.healthPoint = maxHealthPoint / 2;
+        this.currentMaxHealthPoint = maxHealthPoint / 2;
+        this.attackPower = maxAttackPower / 2;
+        this.currentMaxAttackPower = maxAttackPower / 2;
+        this.spcAttackPower = maxSpcAttackPower / 2;
+        this.currentMaxSpcAttackPower = maxSpcAttackPower / 2;
+        this.elemAttackPower = maxElemAttackPower / 2;
+        this.currentMaxElemAttackPower = maxElemAttackPower / 2;
+        this.defensePower = maxDefensePower / 2;
+        this.currentMaxDefensePower = maxDefensePower / 2;
+        this.image = "asset/" + name.toLowerCase() + "/"+ name.toLowerCase() + monsterPhase + ".gif";
+        String[] splitedImg = image.split(".gif");
+        this.imgBack = splitedImg[0] + "-back.gif";
         setcurrentMaxHpLevel();
     }
 
@@ -293,31 +323,31 @@ public abstract class Monster implements Battle, Serializable {
         }
         switch (element.toUpperCase()) {
             case "ICE":
-                if(!this.elementType[0].equals(ElementType.WATER) && !this.elementType[0].equals(ElementType.EARTH)){
+                if(!this.elementType[0].equals(ElementType.WATER) && !this.elementType[0].equals(ElementType.EARTH) && !this.elementType[0].equals(ElementType.ICE)){
                     System.out.println("Monster tidak dapat melakukan evolusi ke element type ICE!");
                     return false;
                 }
                 break;
             case "EARTH":
-                if(!this.elementType[0].equals(ElementType.ICE) && !this.elementType[0].equals(ElementType.FIRE)){
+                if(!this.elementType[0].equals(ElementType.ICE) && !this.elementType[0].equals(ElementType.FIRE) && !this.elementType[0].equals(ElementType.EARTH)){
                     System.out.println("Monster tidak dapat melakukan evolusi ke element type EARTH!");
                     return false;
                 }
                 break;
             case "FIRE":
-                if(!this.elementType[0].equals(ElementType.EARTH) && !this.elementType[0].equals(ElementType.AIR)){
+                if(!this.elementType[0].equals(ElementType.EARTH) && !this.elementType[0].equals(ElementType.AIR) && !this.elementType[0].equals(ElementType.FIRE)){
                     System.out.println("Monster tidak dapat melakukan evolusi ke element type FIRE!");
                     return false;
                 }
                 break;
             case "AIR":
-                if(!this.elementType[0].equals(ElementType.FIRE) && !this.elementType[0].equals(ElementType.WATER)){
+                if(!this.elementType[0].equals(ElementType.FIRE) && !this.elementType[0].equals(ElementType.WATER) && !this.elementType[0].equals(ElementType.AIR)){
                     System.out.println("Monster tidak dapat melakukan evolusi ke element type AIR!");
                     return false;
                 }
                 break;
             case "WATER":
-                if(!this.elementType[0].equals(ElementType.ICE) && !this.elementType[0].equals(ElementType.AIR)){
+                if(!this.elementType[0].equals(ElementType.ICE) && !this.elementType[0].equals(ElementType.AIR) && !this.elementType[0].equals(ElementType.WATER)){
                     System.out.println("Monster tidak dapat melakukan evolusi ke element type WATER!");
                     return false;
                 }
@@ -344,7 +374,7 @@ public abstract class Monster implements Battle, Serializable {
         }
         setAttributesMax(monsterPhase);
         monsterPhase++;
-        setImage(getImage().split(".gif")[0] + monsterPhase + ".gif");
+        setImage("asset/" + name.toLowerCase() + "/"+ name.toLowerCase() + monsterPhase + ".gif");
         experiencePoint = 0;
         level = 0;
         return true;

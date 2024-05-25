@@ -83,18 +83,6 @@ public class Template {
     public static JButton mapButton(JPanel panelBG, JFrame frame) {
         JButton mapButton = addButtons(panelBG, null, "asset/map.png", 1000/10, 750/10, 1000, 750, 890, 0);
         panelBG.add(mapButton);
-        mapButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                try {
-                    new MapGUI();
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-                }
-        });
         return mapButton;
     }
 

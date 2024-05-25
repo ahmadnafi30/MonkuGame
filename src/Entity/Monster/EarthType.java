@@ -11,6 +11,10 @@ public class EarthType extends Monster {
         super(name, monsterPhase, "EARTH", maxMonsterPhase, image);
     }
 
+    public EarthType(String name, int monsterPhase, int maxMonsterPhase) {
+        super(name, monsterPhase, "AIR", maxMonsterPhase);
+    }
+
     public EarthType(Monster earthType){
         super(earthType);
     }

@@ -108,18 +108,17 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             int cardCount = getCardPosition();
             dialogText.next(dialogTextPanel);
             System.out.println(cardCount);
+            System.out.println(isLastCard());
             if (cardCount == 0 || cardCount == 1) {
+                createDialogCard("<html><p style=\"margin-left: 39px\">" + Monku.player.getName() + ",</p><p style=\"margin-left: 39px\">Apa yang ingin</p><p style=\"margin-left: 39px\"> kamu lakukan?</p></html>");
+                dialogText.next(dialogTextPanel);
                 showOptions(invisibleButton, panelBG, frame);
-                invisibleButton.setEnabled(false);
             }
             if (isLastCard()) {
-                Monku.player.printDetailPlayer();
-                // Transition to new scene
-                cardCount = 1;
-                
             } else {
                 dialogText.next(dialogTextPanel);
             }
+            removeAllDialogCards();
         });
 
         panelBG.add(invisibleButton);
@@ -141,7 +140,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         switch (choice) {
             case 0:
                 createDialogCard("Saving game...");
-
+                dialogText.next(dialogTextPanel);
                 Timer timer = new Timer(1000, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -149,13 +148,15 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                     }
                 });
                 timer.start();
+                timer.setRepeats(false);
                 break;
             case 1:
                 createDialogCard("Pilih monster yang ingin kamu heal");
+                
                 monkuChoicesHeal(panelBG, frame, invis);
                 break;
             case 2:
-                createDialogCard("Pilih monster yang ingin kamu evolve");
+                createDialogCard("<html><p style=\"margin-left: 39px\">Pilih monster yang </p><p style=\"margin-left: 39px\">ingin kamu evolve</p></html>");
                 monkuChoicesEvolve(panelBG, frame, invis);
                 break;
             default:
@@ -166,9 +167,9 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
 
     public void saveGame(JPanel panelBG, JFrame frame, JButton invis) {
         ((HomeBase)Monku.player.getLocationPlayer()).interactWithPlayer(Monku.player, 3, null);
-        createDialogCard("Game berhasill disimpan!");
+        createDialogCard("<html><p style=\"margin-left: 39px\">Game berhasil disimpan!</p></html>");
+        
         dialogText.next(dialogTextPanel);
-        dialogText.removeLayoutComponent(getComponent(getCardPosition()));
     }
 
     public void monkuChoicesHeal(JPanel panelBG, JFrame frame, JButton invis) {
@@ -189,27 +190,29 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             int indeksMonku = j;
     
             monsters.get(j).addActionListener(e -> {
-                ((HomeBase)Monku.player.getLocationPlayer()).interactWithPlayer(Monku.player, 1, Monku.player.getMonsters().get(indeksMonku));
+                Monku.professor.healPokemon(Monku.player, monsterPlyr.getName());
                 JLabel heal = new JLabel();
+                heal.setIcon(new ImageIcon("asset/healEffect.gif"));
                 heal.setOpaque(false);
                 panelBG.add(heal);
                 heal.setBounds(pos, 250, 140, 140);
                 panelBG.setComponentZOrder(heal, 0); // Set heal to be the top component
                 heal.setVisible(true);
-    
+                System.out.println(monsterPlyr.getImage());
+                
                 // Timer to remove heal effect after a delay
                 Timer timer = new Timer(2000, event -> {
                     panelBG.remove(heal);
                     panelBG.revalidate();
                     panelBG.repaint();
-                    createDialogCard("Darah "+name + " telah penuh!");
+                    createDialogCard("<html><p style=\"margin-left: 39px\">Darah "+monsterPlyr.getName()+"</p><p style=\"margin-left: 39px\">telah penuh!</p></html>");
                     dialogText.next(dialogTextPanel);
-                    dialogText.removeLayoutComponent(getComponent(getCardPosition()));
-                    invis.setEnabled(true);
+                    monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
                     monster.setVisible(false);
                 });
                 timer.setRepeats(false);
                 timer.start();
+                monsterPlyr.displayDetailMonster();
             });
             panelBG.add(monsters.get(j));
         }
@@ -254,7 +257,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 String choice = (String) JOptionPane.showInputDialog(null, "Pilih element evolve", "Evolve", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                 Monku.professor.evolvePokemon(monsterPlyr, choice);
                 JLabel heal = new JLabel();
-                heal.setIcon(new ImageIcon("asset/healEffect.gif"));
+                heal.setIcon(new ImageIcon("asset/evolveFx.gif"));
                 heal.setOpaque(false);
                 panelBG.add(heal);
                 heal.setBounds(pos, 250, 140, 140);
@@ -268,7 +271,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                     panelBG.remove(heal);
                     panelBG.revalidate();
                     panelBG.repaint();
-                    createDialogCard(monsterPlyr.getName() + " \ntelah berevolusi!");
+                    createDialogCard("<html><p style=\"margin-left: 39px\">"+monsterPlyr.getName()+"</p><p style=\"margin-left: 39px\">telah berevolusi!</p></html>");
                     dialogText.next(dialogTextPanel);
                     invis.setEnabled(true);
                     monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
@@ -276,6 +279,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 });
                 timer.setRepeats(false);
                 timer.start();
+                monsterPlyr.displayDetailMonster();
             });
     
             panelBG.add(monsters.get(j));
@@ -292,10 +296,29 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         return false;
     }
 
-    private void removeDialog(Component dialog) {
-        dialogTextPanel.remove(getComponent(dialog));
-        dialogues.remove(dialog);
+    
+    private void removeDialogCard(int index) {
+        if (index >= 0 && index < dialogTextPanel.getComponentCount()) {
+            Component componentToRemove = dialogTextPanel.getComponent(index);
+            dialogTextPanel.remove(componentToRemove);
+            dialogues.remove(componentToRemove);
+            dialogTextPanel.revalidate();
+            dialogTextPanel.repaint();
+        } else {
+            System.out.println("Invalid index. Unable to remove dialog card.");
+        }
     }
+
+    
+    public void removeDialogCardByText(String text) {
+        int index = findDialogCardIndexByText(text);
+        if (index != -1) {
+            removeDialogCard(index);
+        } else {
+            System.out.println("Dialog card with the specified text not found.");
+        }
+    }
+    
     public Component getComponent(Component dialog) {
         for(Component comp : dialogues){
             if(comp == dialog){
@@ -315,16 +338,6 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         return -1;
     }
 
-    private void newScene() {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                new MapGUI();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
     private void createDialogCard(String text) {
         JPanel panel = new JPanel();
         panel.setOpaque(false);
@@ -334,7 +347,32 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         label.setVisible(true);
         panel.add(label);
         dialogTextPanel.add(panel);
-        dialogues.add(label);
+        dialogues.add(panel);
+    }
+
+    private int findDialogCardIndexByText(String text) {
+        for (int i = 0; i < dialogues.size(); i++) {
+            if (dialogues.get(i) instanceof JPanel) {
+                JPanel panel = (JPanel) dialogues.get(i);
+                for (Component component : panel.getComponents()) {
+                    if (component instanceof JLabel) {
+                        JLabel label = (JLabel) component;
+                        System.out.println(label.getText());
+                        if (label.getText().contains(text)) {
+                            return i;
+                        }
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    
+    public void removeAllDialogCards() {
+        dialogTextPanel.removeAll();
+        dialogues.clear();
+        dialogTextPanel.revalidate();
+        dialogTextPanel.repaint();
     }
 
     @Override
@@ -345,8 +383,8 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(HomeBaseGUI::new);
-        Monku.player.catchMonster(new FireType("Charmander", 1, 4, "asset/Charmander/charmander.gif"));
-        Monku.player.getMonsters().get(0).setLevel(20);
+        Monku.player.catchMonster(new FireType("Charmander", 2, 3));
+        Monku.player.getMonsters().get(0).setLevel(40);
     }
 
 }

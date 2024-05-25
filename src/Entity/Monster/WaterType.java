@@ -10,6 +10,10 @@ public class WaterType extends Monster {
         super(name, monsterPhase, "WATER", maxMonsterPhase, image);
     }
 
+    public WaterType(String name, int monsterPhase, int maxMonsterPhase) {
+        super(name, monsterPhase, "AIR", maxMonsterPhase);
+    }
+
     public WaterType(Monster waterType) {
         super(waterType);
     }

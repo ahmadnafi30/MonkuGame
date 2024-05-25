@@ -10,6 +10,9 @@ public class AirType extends Monster {
     public AirType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "AIR", maxMonsterPhase, image);
     }
+    public AirType(String name, int monsterPhase, int maxMonsterPhase) {
+        super(name, monsterPhase, "AIR", maxMonsterPhase);
+    }
 
     public AirType(Monster monster){
         super(monster);

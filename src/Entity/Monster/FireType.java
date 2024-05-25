@@ -10,6 +10,9 @@ public class FireType extends Monster {
     public FireType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "FIRE", maxMonsterPhase, image);
     }
+    public FireType(String name, int monsterPhase, int maxMonsterPhase) {
+        super(name, monsterPhase, "AIR", maxMonsterPhase);
+    }
     public FireType(Monster fireType){
         super(fireType);
     }
