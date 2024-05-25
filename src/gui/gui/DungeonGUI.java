@@ -81,7 +81,7 @@ public class DungeonGUI extends JFrame {
         setLocationRelativeTo(null);
         ImageIcon icon = new ImageIcon("asset/Screenshot 2024-05-15 192702.png");
         setIconImages(Collections.singletonList(icon.getImage()));
-
+        // System.out.println(dungeon.getima);
         panelBG = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -104,19 +104,6 @@ public class DungeonGUI extends JFrame {
 
         dialogText = new CardLayout();
         dialogTextPanel = new JPanel(dialogText);
-
-        dialogBox = new JPanel(null) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                ImageIcon originalIcon = new ImageIcon("asset/dialog box with pokeball.png");
-                Image originalImage = originalIcon.getImage();
-                g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-
-        configureDialogBox();
-
         guard = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -128,6 +115,19 @@ public class DungeonGUI extends JFrame {
         };
 
         configureGuard();
+        dialogBox = new JPanel(null) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon originalIcon = new ImageIcon("asset/dialog box with pokeball.png");
+                Image originalImage = originalIcon.getImage();
+                g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        configureDialogBox();
+        System.out.println(dungeon.getGuardImage());
+        
         JButton mapButton = Template.mapButton(panelBG, this);
         mapButton.addActionListener(e -> {
             try {
@@ -197,10 +197,11 @@ public class DungeonGUI extends JFrame {
     }
 
     private void configureGuard() {
-        int guardX = (getWidth() - 700) / 2 + 50;
-        int guardY = (getHeight() - 265) / 2 + 50;
-
+        int guardX = (getWidth() - 700) / 2 + 30;
+        int guardY = (getHeight() - 265) / 2 +50;
+        guard.setOpaque(false);
         guard.setBounds(guardX, guardY, 149, 148);
+        //panelBG.setComponentZOrder(guard, getComponents().length-1);
         panelBG.add(guard);
     }
 
@@ -459,7 +460,7 @@ public class DungeonGUI extends JFrame {
         }
     };
 
-    monsterDungeonPanel.setBounds(575, 85, 300, 300);
+    monsterDungeonPanel.setBounds(575, 75, 300, 300);
     monsterDungeonPanel.setOpaque(false);
 
     monsterHpPanel = createHpPanel(monsterBattle.getName(), monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, monsterBattle);
@@ -534,6 +535,7 @@ private void setMonsterDungeon(){
 
 public void popUp() {
     if (isDead(monsterBattle)) {
+        player.addCoin(15*dungeon.getLevel());
         int buttonWidth = 600;
         int buttonHeight = 300;
         monsterBattle.setHealthPoint(monsterBattle.getCurrentMaxHealthPoint());

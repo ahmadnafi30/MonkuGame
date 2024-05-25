@@ -2,6 +2,7 @@ package gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import Entity.DataStorage;
 import Entity.Locations.HomeBase;
@@ -239,6 +240,29 @@ public class Homepage {
         });
         timer.setRepeats(false);
         timer.start();
+    }
+
+    public void characters(){
+        JPanel listPanel = new JPanel();
+    listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+    listPanel.setOpaque(false);
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+    scrollPane.setBounds(10, 10, 100, 100); 
+    scrollPane.setOpaque(false);
+    scrollPane.getViewport().setOpaque(false); 
+    scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+    JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+    verticalScrollBar.setUI(new BasicScrollBarUI() {
+        @Override
+        protected void configureScrollBarColors() {
+            this.thumbColor = Color.GRAY; 
+            this.trackColor = new Color(0, 0, 0, 0); 
+        }
+    });
+
+    scrollPane.getVerticalScrollBar().setUnitIncrement(16);  
+    scrollPane.getVerticalScrollBar().setBlockIncrement(50); 
     }
 
     public static void main(String[] args) {

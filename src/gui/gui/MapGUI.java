@@ -95,7 +95,7 @@ public class MapGUI {
         dungeonButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleButtonPress(dungeonButton, scaledDungeonIconPressed, frame, () -> new DungeonGUI((Dungeon)Monku.dungeon, Monku.player));
+                handleButtonPress(dungeonButton, scaledDungeonIconPressed, frame, () -> new DungeonGUI((Dungeon)Monku.infernoDungeon, Monku.player));
             }
             }
         );
@@ -138,7 +138,7 @@ public class MapGUI {
         Icon originalIcon = button.getIcon();
         button.setIcon(new ImageIcon(pressedIcon)); // Change to pressed icon
 
-        Timer timer = new Timer(100, new ActionListener() { // Delay to show the pressed effect
+        Timer timer = new Timer(100, new ActionListener() { 
             @Override
             public void actionPerformed(ActionEvent evt) {
                 button.setIcon(originalIcon); // Revert to the original icon
