@@ -2,14 +2,7 @@ package gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 
-import Entity.DataStorage;
-import Entity.Locations.HomeBase;
-import Entity.Monster.Monster;
-import Entity.NPC.NPC;
-import Entity.NPC.ProfessorPokemon;
-import Entity.Player.Player;
 import app.Monku;
 
 import java.awt.*;
@@ -18,14 +11,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Collections;
 
 public class Homepage {
+    private String[] imageChar = {
+            "asset/Char/acetrainer-gen3jp.png",
+            "asset/Char/acetrainer-gen4.png",
+            "asset/Char/acetrainer-gen7.png",
+            "asset/Char/acetrainerf-gen4.png",
+            "asset/Char/acetrainerf-gen7.png",
+            "asset/Char/akari.png"
+    };
+
+    private String characterSelected = imageChar[0];
+
+    private JPanel panel;
 
     public Homepage() throws IOException {
         JFrame frame = new JFrame("Monku Games");
@@ -36,7 +38,7 @@ public class Homepage {
         ImageIcon icon = new ImageIcon("asset/Screenshot 2024-05-15 192702.png");
         frame.setIconImages(Collections.singletonList(icon.getImage()));
 
-        JPanel panel = new JPanel(null) {
+        panel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -50,7 +52,6 @@ public class Homepage {
         int buttonWidth = 150;
         int buttonHeight = 40;
         int spacing = 20;
-
         int totalButtonWidth = buttonWidth * 2 + spacing;
         int xStart = (frame.getWidth() - totalButtonWidth) / 2;
         int yPosition = frame.getHeight() - buttonHeight - 200;
@@ -59,25 +60,11 @@ public class Homepage {
         Image scaledButtonImage = buttonIcon.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
         BufferedImage buttonPressedIcon = ImageIO.read(new File("asset/toppng.com-text-box-pixel-art-cupcake-601x211.png"));
         Image scaledButtonPressedImage = buttonPressedIcon.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
-        JButton newGameButton = new JButton("NEW GAME", new ImageIcon(scaledButtonImage));
-        newGameButton.setBounds(xStart, yPosition - 30, buttonWidth, buttonHeight);
-        newGameButton.setFont(new Font("Public Pixel", Font.BOLD, 13));
-        newGameButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        newGameButton.setVerticalTextPosition(SwingConstants.CENTER);
-        newGameButton.setBorder(BorderFactory.createEmptyBorder());
-        newGameButton.setForeground(Color.BLACK);
-        newGameButton.setContentAreaFilled(false);
+
+        JButton newGameButton = createStyledButton("NEW GAME", scaledButtonImage, xStart, yPosition - 30, buttonWidth, buttonHeight);
         panel.add(newGameButton);
 
-        JButton loadGameButton = new JButton("LOAD GAME", new ImageIcon(scaledButtonImage));
-        loadGameButton.setBounds(xStart + buttonWidth + spacing, yPosition - 30, buttonWidth, buttonHeight);
-        loadGameButton.setFont(new Font("Public Pixel", Font.BOLD, 13));
-        loadGameButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        loadGameButton.setVerticalTextPosition(SwingConstants.CENTER);
-        loadGameButton.setIconTextGap(-buttonWidth / 2); // Adjust icon-text gap
-        loadGameButton.setBorder(BorderFactory.createEmptyBorder());
-        loadGameButton.setForeground(Color.BLACK);
-        loadGameButton.setContentAreaFilled(false);
+        JButton loadGameButton = createStyledButton("LOAD GAME", scaledButtonImage, xStart + buttonWidth + spacing, yPosition - 30, buttonWidth, buttonHeight);
         panel.add(loadGameButton);
 
         JButton aboutUsButton = new JButton("ABOUT US");
@@ -90,7 +77,7 @@ public class Homepage {
         panel.add(aboutUsButton);
 
         addAboutUsActionListener(aboutUsButton, frame);
-        addPlayGameActionListener(newGameButton, scaledButtonPressedImage,frame);
+        addPlayGameActionListener(newGameButton, scaledButtonPressedImage, frame);
         addPlayGameActionListenerByLoadGames(loadGameButton, scaledButtonPressedImage, frame);
         addButtonHoverEffects(newGameButton);
         addButtonHoverEffects(loadGameButton);
@@ -101,6 +88,36 @@ public class Homepage {
 
         frame.setContentPane(panel);
         frame.setVisible(true);
+    }
+
+    private JButton createButton(BufferedImage charImage, String imagePath) {
+        JButton button = new JButton(new ImageIcon(charImage));
+        button.setBounds(0, 0, charImage.getWidth(), charImage.getHeight());
+        button.setBackground(Color.WHITE);
+        button.setOpaque(true);
+        button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        button.setContentAreaFilled(true);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                characterSelected = imagePath;
+                Monku.player.setImage(characterSelected);
+                button.setBackground(Color.GRAY); // Change background color to gray when selected
+            }
+        });
+        return button;
+    }
+
+    private JButton createStyledButton(String text, Image icon, int x, int y, int width, int height) {
+        JButton button = new JButton(text, new ImageIcon(icon));
+        button.setBounds(x, y, width, height);
+        button.setFont(new Font("Public Pixel", Font.BOLD, 13));
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        button.setVerticalTextPosition(SwingConstants.CENTER);
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setForeground(Color.BLACK);
+        button.setContentAreaFilled(false);
+        return button;
     }
 
     private void addAboutUsActionListener(JButton aboutUsButton, JFrame frame) {
@@ -124,7 +141,48 @@ public class Homepage {
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleButtonPress(newGameButton, buttonPressed, frame, () -> new Awalan(1));
+                JPanel charPanel = new JPanel();
+                charPanel.setLayout(new GridLayout(0, 1, 10, 10)); 
+
+                for (String s : imageChar) {
+                    try {
+                        BufferedImage charImage = ImageIO.read(new File(s));
+                        JButton button = createButton(charImage, s);
+                        addCharButtonHoverEffect(button);
+                        charPanel.add(button);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+
+                JScrollPane scrollPane = new JScrollPane(charPanel);
+                scrollPane.setBounds(385, 230, 200, 200);
+
+                JButton okButton = new JButton("OK");
+                okButton.setBounds((frame.getWidth() - 100) / 2 - 20, 450, 100, 40);
+                addButtonPressedEffect(okButton);
+
+                panel.removeAll();
+                panel.add(scrollPane);
+                panel.add(okButton);
+                panel.revalidate();
+                panel.repaint();
+
+                okButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (Monku.player.getImage() == null) {
+                            JOptionPane.showMessageDialog(frame, "Please select a character", "Error", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            frame.dispose();
+                            new Awalan(1);
+                        }
+                    }
+                });
+
+                handleButtonPress(newGameButton, buttonPressed, frame, () -> {
+                    // Any additional actions when new game button is pressed
+                });
             }
         });
     }
@@ -138,7 +196,7 @@ public class Homepage {
             }
         });
     }
-    
+
     private void addButtonHoverEffects(JButton button) {
         button.addMouseListener(new MouseAdapter() {
             private Timer hoverTimer;
@@ -198,43 +256,53 @@ public class Homepage {
             }
         });
     }
+
     private void addButtonPressedEffect(JButton button) {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Simpan warna asli tombol
                 Color originalBackground = button.getBackground();
                 Color originalForeground = button.getForeground();
-    
-                // Ubah tampilan tombol untuk memberikan efek ketika ditekan
                 button.setBackground(Color.GRAY);
                 button.setForeground(Color.WHITE);
-    
-                // Buat timer untuk mengembalikan tampilan tombol ke kondisi semula setelah beberapa waktu
                 Timer timer = new Timer(200, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        // Kembalikan tampilan tombol ke kondisi semula
                         button.setBackground(originalBackground);
                         button.setForeground(originalForeground);
                     }
                 });
-    
-                // Mulai timer
-                timer.setRepeats(false); // Set timer agar berhenti setelah satu kali pengulangan
+                timer.setRepeats(false);
                 timer.start();
             }
         });
     }
+
+    private void addCharButtonHoverEffect(JButton button) {
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(new Color(0, 0, 0, 0)); // Set background to transparent
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (characterSelected != null && characterSelected.equals(button.getActionCommand())) {
+                    button.setBackground(Color.GRAY); // Set background to gray if selected
+                } else {
+                    button.setBackground(Color.WHITE); // Set background to white otherwise
+                }
+            }
+        });
+    }
+
     private void handleButtonPress(JButton button, Image pressedIcon, JFrame frame, Runnable action) {
         Icon originalIcon = button.getIcon();
-        button.setIcon(new ImageIcon(pressedIcon)); // Change to pressed icon
-
-        Timer timer = new Timer(500, new ActionListener() { // Delay to show the pressed effect
+        button.setIcon(new ImageIcon(pressedIcon));
+        Timer timer = new Timer(500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                button.setIcon(originalIcon); // Revert to the original icon
-                frame.dispose();
+                button.setIcon(originalIcon);
                 action.run();
             }
         });
@@ -242,37 +310,14 @@ public class Homepage {
         timer.start();
     }
 
-    public void characters(){
-        JPanel listPanel = new JPanel();
-    listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-    listPanel.setOpaque(false);
-        JScrollPane scrollPane = new JScrollPane(listPanel);
-    scrollPane.setBounds(10, 10, 100, 100); 
-    scrollPane.setOpaque(false);
-    scrollPane.getViewport().setOpaque(false); 
-    scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-    JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
-    verticalScrollBar.setUI(new BasicScrollBarUI() {
-        @Override
-        protected void configureScrollBarColors() {
-            this.thumbColor = Color.GRAY; 
-            this.trackColor = new Color(0, 0, 0, 0); 
-        }
-    });
-
-    scrollPane.getVerticalScrollBar().setUnitIncrement(16);  
-    scrollPane.getVerticalScrollBar().setBlockIncrement(50); 
-    }
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
                 new Homepage();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         });
-    }   
+    }
 }
+

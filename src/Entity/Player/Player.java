@@ -30,6 +30,10 @@ public class Player implements ItemInteract, Battle {
     private Locations locationPlayer;
     private String image;
 
+    public void setImage(String s){
+        this.image = s;
+    }
+
     public Player() {}
     // constructor buat load game
     public Player(String name, int level, int exp, Map<Item,Integer> inventory, int coin, ArrayList<Monster> monsters, Duration timePlayed, Instant startTime, Locations locationPlayer, String image) {

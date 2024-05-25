@@ -292,6 +292,7 @@ public class DungeonGUI extends JFrame {
                 g.drawImage(buttonBackgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
+        buttonBackgroundPanel.setOpaque(false);
     
         buttonBackgroundPanel.setBounds((getWidth() - buttonWidth) / 2 + 200, (getHeight() - buttonHeight) / 2 - 100, buttonWidth, buttonHeight);
         panelBG.add(buttonBackgroundPanel);
@@ -548,6 +549,7 @@ public void popUp() {
         };
     
         buttonBackgroundPanel.setBounds((getWidth() - buttonWidth) / 2, (getHeight() - buttonHeight) / 2 - 100, buttonWidth, buttonHeight);
+        buttonBackgroundPanel.setOpaque(false);
         panelBG.add(buttonBackgroundPanel);
     
         BufferedImage iconInteract = null;
@@ -559,8 +561,8 @@ public void popUp() {
     
         Image scaledButtonImage = iconInteract.getScaledInstance(150, 50, Image.SCALE_SMOOTH);
 
-        JLabel defeatLabel = new JLabel("Monster " + monsterBattle.getName() + " is defeated!");
-        defeatLabel.setBounds(buttonBackgroundPanel.getX(), buttonBackgroundPanel.getY() + 20 , buttonBackgroundPanel.getWidth() - 20, 30);
+        JLabel defeatLabel = new JLabel("Monster " + monsterBattle.getName() + " mati! Kamu menang!");
+        defeatLabel.setBounds(buttonBackgroundPanel.getX() -60, buttonBackgroundPanel.getY() + 20 , buttonBackgroundPanel.getWidth() - 20, 30);
         defeatLabel.setFont(new Font("Purisa Bold", Font.BOLD, 15));
         
         buttonBackgroundPanel.add(defeatLabel, 0);
@@ -583,6 +585,7 @@ public void popUp() {
 
         tangkap.setBounds((buttonBackgroundPanel.getWidth() - 150) / 2 - 100, 200 - 20, 150, 50);
         tangkap.setFont(new Font("Public Pixel", Font.BOLD, 15));
+        tangkap.setOpaque(false);
         tangkap.setHorizontalTextPosition(SwingConstants.CENTER);
         tangkap.setVerticalTextPosition(SwingConstants.CENTER);
         tangkap.setBorder(BorderFactory.createEmptyBorder());
@@ -617,7 +620,7 @@ public void popUp() {
             }
         };
         monsterDead.setBounds(buttonBackgroundPanel.getX() + 40, buttonBackgroundPanel.getY() - 100, 150, 150);
-        
+        monsterDead.setOpaque(false);
         buttonBackgroundPanel.add(monsterDead);
         
         panelBG.setLayout(null); 
@@ -647,8 +650,8 @@ public void popUp() {
     
         Image scaledButtonImage = iconInteract.getScaledInstance(150, 50, Image.SCALE_SMOOTH);
 
-        JLabel defeatLabel = new JLabel("Monster " + monsterPlayer.getName() + " is defeated! You LOSE");
-        defeatLabel.setBounds(buttonBackgroundPanel.getX(), buttonBackgroundPanel.getY() + 20 , buttonBackgroundPanel.getWidth() - 20, 30);
+        JLabel defeatLabel = new JLabel("Monster " + monsterPlayer.getName() + " mati! Kamu KALAH");
+        defeatLabel.setBounds(buttonBackgroundPanel.getX() -60, buttonBackgroundPanel.getY() + 20 , buttonBackgroundPanel.getWidth() - 20, 30);
         defeatLabel.setFont(new Font("Purisa Bold", Font.BOLD, 15));
         
         buttonBackgroundPanel.add(defeatLabel, 0);
@@ -656,6 +659,7 @@ public void popUp() {
         goToHomeBase = new JButton("HomeBase", new ImageIcon(scaledButtonImage));
         goToHomeBase.addActionListener(e -> {
             System.out.println("Battle button pressed");
+            dispose();
             new HomeBaseGUI();
         });
 
@@ -671,6 +675,7 @@ public void popUp() {
         goToDungeon.addActionListener(e -> {
             System.out.println("Exit button pressed");
             panelBG.removeAll();
+            dispose();
             new DungeonGUI(dungeon, player);
 
         });
@@ -695,7 +700,7 @@ public void popUp() {
             }
         };
         monsterDead.setBounds(buttonBackgroundPanel.getX() + 40, buttonBackgroundPanel.getY() - 100, 150, 150);
-        
+        monsterDead.setOpaque(false);
         buttonBackgroundPanel.add(monsterDead);
         
         panelBG.setLayout(null); 

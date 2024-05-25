@@ -234,7 +234,7 @@ public abstract class Monster implements Battle, Serializable {
     }
 
     private void setAttributesMax(int monsterPhase){
-        if(monsterPhase == maxMonsterPhase) {
+        if(monsterPhase-1 == maxMonsterPhase) {
             return;
         }
         Random rand = new Random();
