@@ -515,11 +515,108 @@ private void setMonsterDungeon(){
     //     }
 }
 
-public void popUp(Monster monster){
-    if(isDead(monster)){
-        JOptionPane.showMessageDialog(this, "Monster is dead", "Reminder", JOptionPane.WARNING_MESSAGE);
+public void popUp() {
+    if (isDead(monsterBattle)) {
+        JPanel showPanelDeadPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon originalIcon = new ImageIcon("asset/dialog box with pokeball.png");
+                Image originalImage = originalIcon.getImage();
+                g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        showPanelDeadPanel.setBounds(200, 200, 500, 300);
+
+        JPanel monsterDead = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon originalIcon = new ImageIcon(monsterBattle.getImage());
+                Image originalImage = originalIcon.getImage();
+                g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        monsterDead.setBounds(showPanelDeadPanel.getX() + (showPanelDeadPanel.getWidth() / 2) - 50, 200, 150, 150);
+
+        JLabel defeatLabel = new JLabel("Monster is defeated!");
+        defeatLabel.setBounds(showPanelDeadPanel.getX() + 150, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 150, 200, 30);
+        defeatLabel.setFont(new Font("Purisa Bold", Font.BOLD, 15));
+
+        JButton catchButton = new JButton("Catch");
+        JButton noButton = new JButton("No");
+
+        catchButton.setBounds(showPanelDeadPanel.getX() + 150, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 100, 100, 30);
+        noButton.setBounds(showPanelDeadPanel.getX() + 260, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 100, 100, 30);
+
+        catchButton.addActionListener(e -> {
+            // Logic for catching the monster
+            System.out.println("Monster caught!");
+        });
+
+        noButton.addActionListener(e -> {
+            // Logic for not catching the monster
+            System.out.println("Monster not caught!");
+        });
+
+        panelBG.setLayout(null); 
+        panelBG.add(monsterDead);
+        panelBG.add(showPanelDeadPanel);
+        panelBG.add(defeatLabel);
+        panelBG.setComponentZOrder(showPanelDeadPanel, 0); 
+        panelBG.setComponentZOrder(monsterDead, 1);
+        panelBG.setComponentZOrder(defeatLabel, 2);
+        panelBG.setComponentZOrder(catchButton, 2);
+        panelBG.setComponentZOrder(noButton, 2);
+        panelBG.add(catchButton);
+        panelBG.add(noButton);
+        panelBG.revalidate();
+        panelBG.repaint();
+    } else if (isDead(monsterPlayer)) {
+        JPanel showPanelDeadPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon originalIcon = new ImageIcon("asset/dialog box with pokeball.png");
+                Image originalImage = originalIcon.getImage();
+                g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        showPanelDeadPanel.setBounds(200, 200, 500, 300);
+
+        JPanel monsterDead = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon originalIcon = new ImageIcon(monsterPlayer.getImage());
+                Image originalImage = originalIcon.getImage();
+                g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        monsterDead.setBounds(showPanelDeadPanel.getX() + (showPanelDeadPanel.getWidth() / 2) - 50, 200, 150, 150);
+
+        JLabel defeatLabel = new JLabel("Your monster is defeated!");
+        defeatLabel.setBounds(showPanelDeadPanel.getX() + 150, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 150, 200, 30);
+        defeatLabel.setFont(new Font("Purisa Bold", Font.BOLD, 15));
+
+        JButton goHomeBase = new JButton("Go to HomeBase");
+        JButton noButton = new JButton("No");
+
+        goHomeBase.setBounds(showPanelDeadPanel.getX() + 150, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 100, 100, 30);
+        noButton.setBounds(showPanelDeadPanel.getX() + 260, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 100, 100, 30);
+
+        panelBG.setLayout(null); 
+        panelBG.add(monsterDead);
+        panelBG.add(showPanelDeadPanel);
+        panelBG.add(defeatLabel);
+        panelBG.setComponentZOrder(showPanelDeadPanel, 0); 
+        panelBG.setComponentZOrder(monsterDead, 1);
+        panelBG.setComponentZOrder(defeatLabel, 2);
+        panelBG.revalidate();
+        panelBG.repaint();
     }
 }
+
 private void addBattleButtons() throws IOException {
     monsterPlayer = player.deployMonster(indeksMonku);
     BufferedImage bcAttackImage;
@@ -597,7 +694,7 @@ private void addBattleButtons() throws IOException {
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
         System.out.println("Updating player HP panel");
         updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,1);
-        popUp(monsterPlayer);
+        popUp();
         System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
     
@@ -615,7 +712,7 @@ private void addBattleButtons() throws IOException {
         System.out.println("Updating enemy HP panel");
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
-        popUp(monsterBattle);
+        popUp();
             
     // bcAttackButton.setEnabled(false);
         
@@ -628,10 +725,10 @@ private void addBattleButtons() throws IOException {
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
 
-        popUp(monsterBattle);
+        popUp();
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
         updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,2);
-        popUp(monsterPlayer);
+        popUp();
         System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
     });
@@ -641,10 +738,11 @@ private void addBattleButtons() throws IOException {
         monsterBattle.getAttacked("elemental", monsterPlayer, null);
         updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 1,3);
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
-
+        popUp();
         monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
         updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,3);
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
+        popUp();
     });
 
     usePotionButton.addActionListener(e -> {
