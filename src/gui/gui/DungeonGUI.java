@@ -50,20 +50,25 @@ public class DungeonGUI extends JFrame {
     private int indeksMonku = -1;
     private int indeksItem = -1;
     private JButton selectedItemButton = null;
-    JPanel listPanel;
-    JPanel monsterDungeonPanel;
-    JPanel monsterPlayerPanel;
-    JPanel monsterHpPanel;
-    JPanel playerHpPanel;
+    private JPanel listPanel;
+    private JPanel monsterDungeonPanel;
+    private JPanel monsterPlayerPanel;
+    private JPanel monsterHpPanel;
+    private JPanel playerHpPanel;
     private Monster monsterBattle;
     private Monster monsterPlayer;
-    // JPanel monsterHpPanel;
+    private JButton goToHomeBase;
+    // private JPanel monsterHpPanel;
     String[] skills = {"basic", "special", "elemental"};
     private Timer timerEffect;
     private Item curItem;
     private int turn = 0;
     JScrollPane scrollPane;
     JScrollBar verticalScrollBar;
+    private JButton tangkap;
+    private JButton goToDungeon;
+    private JPanel monsterDead; 
+
 
     public DungeonGUI(Dungeon dungeon, Player player) {
         this.dungeon = dungeon;
@@ -123,8 +128,10 @@ public class DungeonGUI extends JFrame {
         };
 
         configureGuard();
+        panelBG.add(Template.mapButton(panelBG, this));
 
         createDialogCards();
+
 
         panelBG.add(detailDungeon);
         panelBG.revalidate();
@@ -517,18 +524,78 @@ private void setMonsterDungeon(){
 
 public void popUp() {
     if (isDead(monsterBattle)) {
-        JPanel showPanelDeadPanel = new JPanel() {
+        int buttonWidth = 600;
+        int buttonHeight = 300;
+        monsterBattle.setHealthPoint(monsterBattle.getCurrentMaxHealthPoint());
+        buttonBackgroundPanel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon originalIcon = new ImageIcon("asset/dialog box with pokeball.png");
-                Image originalImage = originalIcon.getImage();
-                g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+                g.drawImage(buttonBackgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        showPanelDeadPanel.setBounds(200, 200, 500, 300);
+    
+        buttonBackgroundPanel.setBounds((getWidth() - buttonWidth) / 2, (getHeight() - buttonHeight) / 2 - 100, buttonWidth, buttonHeight);
+        panelBG.add(buttonBackgroundPanel);
+    
+        BufferedImage iconInteract = null;
+        try {
+            iconInteract = ImageIO.read(new File("asset/b4c70567-4596-46d2-a276-4820ae3adaf5.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+        Image scaledButtonImage = iconInteract.getScaledInstance(150, 50, Image.SCALE_SMOOTH);
 
-        JPanel monsterDead = new JPanel() {
+        JLabel defeatLabel = new JLabel("Monster " + monsterBattle.getName() + " is defeated!");
+        defeatLabel.setBounds(buttonBackgroundPanel.getX(), buttonBackgroundPanel.getY() + 20 , buttonBackgroundPanel.getWidth() - 20, 30);
+        defeatLabel.setFont(new Font("Purisa Bold", Font.BOLD, 15));
+        
+        buttonBackgroundPanel.add(defeatLabel, 0);
+    
+        tangkap = new JButton("Catch", new ImageIcon(scaledButtonImage));
+        tangkap.addActionListener(e -> {
+            System.out.println("Battle button pressed");
+            buttonBackgroundPanel.removeAll();
+            buttonBackgroundPanel.remove(tangkap);
+            JLabel catchJLabel = new JLabel("Monster " + monsterBattle.getName() + " wes ditangkep, sekien wis ning kantong yoh");
+            catchJLabel.setBounds(buttonBackgroundPanel.getX() - 100, buttonBackgroundPanel.getY() + 20 , buttonBackgroundPanel.getWidth() - 20, 30);
+            catchJLabel.setFont(new Font("Purisa Bold", Font.BOLD, 15));
+            goToDungeon.setBounds((buttonBackgroundPanel.getWidth() - 150) / 2, 200- 20, 150, 50);
+            buttonBackgroundPanel.add(catchJLabel, 0);
+            goToDungeon.setBounds((buttonBackgroundPanel.getWidth() - 150) / 2, 200- 20, 150, 50);
+            buttonBackgroundPanel.add(goToDungeon);
+            player.catchMonster(monsterBattle);
+            // buttonBackgroundPanel.remove(defeatLabel);
+        });
+
+        tangkap.setBounds((buttonBackgroundPanel.getWidth() - 150) / 2 - 100, 200 - 20, 150, 50);
+        tangkap.setFont(new Font("Public Pixel", Font.BOLD, 15));
+        tangkap.setHorizontalTextPosition(SwingConstants.CENTER);
+        tangkap.setVerticalTextPosition(SwingConstants.CENTER);
+        tangkap.setBorder(BorderFactory.createEmptyBorder());
+        tangkap.setForeground(Color.BLACK);
+        tangkap.setContentAreaFilled(false);
+    
+        goToDungeon = new JButton("Dungeon", new ImageIcon(scaledButtonImage));
+        goToDungeon.addActionListener(e -> {
+            System.out.println("Exit button pressed");
+            panelBG.removeAll();
+            new DungeonGUI(dungeon, player);
+
+        });
+        goToDungeon.setBounds((buttonBackgroundPanel.getWidth() - 150) / 2 + 90, 200- 20, 150, 50);
+        goToDungeon.setFont(new Font("Public Pixel", Font.BOLD, 15));
+        goToDungeon.setHorizontalTextPosition(SwingConstants.CENTER);
+        goToDungeon.setVerticalTextPosition(SwingConstants.CENTER);
+        goToDungeon.setBorder(BorderFactory.createEmptyBorder());
+        goToDungeon.setForeground(Color.BLACK);
+        goToDungeon.setContentAreaFilled(false);
+    
+        buttonBackgroundPanel.add(tangkap);
+        buttonBackgroundPanel.add(goToDungeon);
+    
+        monsterDead = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -537,54 +604,76 @@ public void popUp() {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        monsterDead.setBounds(showPanelDeadPanel.getX() + (showPanelDeadPanel.getWidth() / 2) - 50, 200, 150, 150);
-
-        JLabel defeatLabel = new JLabel("Monster is defeated!");
-        defeatLabel.setBounds(showPanelDeadPanel.getX() + 150, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 150, 200, 30);
-        defeatLabel.setFont(new Font("Purisa Bold", Font.BOLD, 15));
-
-        JButton catchButton = new JButton("Catch");
-        JButton noButton = new JButton("No");
-
-        catchButton.setBounds(showPanelDeadPanel.getX() + 150, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 100, 100, 30);
-        noButton.setBounds(showPanelDeadPanel.getX() + 260, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 100, 100, 30);
-
-        catchButton.addActionListener(e -> {
-            // Logic for catching the monster
-            System.out.println("Monster caught!");
-        });
-
-        noButton.addActionListener(e -> {
-            // Logic for not catching the monster
-            System.out.println("Monster not caught!");
-        });
-
+        monsterDead.setBounds(buttonBackgroundPanel.getX() + 40, buttonBackgroundPanel.getY() - 100, 150, 150);
+        
+        buttonBackgroundPanel.add(monsterDead);
+        
         panelBG.setLayout(null); 
-        panelBG.add(monsterDead);
-        panelBG.add(showPanelDeadPanel);
-        panelBG.add(defeatLabel);
-        panelBG.setComponentZOrder(showPanelDeadPanel, 0); 
-        panelBG.setComponentZOrder(monsterDead, 1);
-        panelBG.setComponentZOrder(defeatLabel, 2);
-        panelBG.setComponentZOrder(catchButton, 2);
-        panelBG.setComponentZOrder(noButton, 2);
-        panelBG.add(catchButton);
-        panelBG.add(noButton);
-        panelBG.revalidate();
+        panelBG.setComponentZOrder(buttonBackgroundPanel, 0); 
         panelBG.repaint();
     } else if (isDead(monsterPlayer)) {
-        JPanel showPanelDeadPanel = new JPanel() {
+        int buttonWidth = 600;
+        int buttonHeight = 300;
+        monsterBattle.setHealthPoint(monsterBattle.getCurrentMaxHealthPoint());
+        buttonBackgroundPanel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon originalIcon = new ImageIcon("asset/dialog box with pokeball.png");
-                Image originalImage = originalIcon.getImage();
-                g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+                g.drawImage(buttonBackgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        showPanelDeadPanel.setBounds(200, 200, 500, 300);
+    
+        buttonBackgroundPanel.setBounds((getWidth() - buttonWidth) / 2, (getHeight() - buttonHeight) / 2 - 100, buttonWidth, buttonHeight);
+        panelBG.add(buttonBackgroundPanel);
+    
+        BufferedImage iconInteract = null;
+        try {
+            iconInteract = ImageIO.read(new File("asset/b4c70567-4596-46d2-a276-4820ae3adaf5.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+        Image scaledButtonImage = iconInteract.getScaledInstance(150, 50, Image.SCALE_SMOOTH);
 
-        JPanel monsterDead = new JPanel() {
+        JLabel defeatLabel = new JLabel("Monster " + monsterPlayer.getName() + " is defeated! You LOSE");
+        defeatLabel.setBounds(buttonBackgroundPanel.getX(), buttonBackgroundPanel.getY() + 20 , buttonBackgroundPanel.getWidth() - 20, 30);
+        defeatLabel.setFont(new Font("Purisa Bold", Font.BOLD, 15));
+        
+        buttonBackgroundPanel.add(defeatLabel, 0);
+    
+        goToHomeBase = new JButton("HomeBase", new ImageIcon(scaledButtonImage));
+        goToHomeBase.addActionListener(e -> {
+            System.out.println("Battle button pressed");
+            new HomeBaseGUI();
+        });
+
+        goToHomeBase.setBounds((buttonBackgroundPanel.getWidth() - 150) / 2 - 100, 200 - 20, 150, 50);
+        goToHomeBase.setFont(new Font("Public Pixel", Font.BOLD, 15));
+        goToHomeBase.setHorizontalTextPosition(SwingConstants.CENTER);
+        goToHomeBase.setVerticalTextPosition(SwingConstants.CENTER);
+        goToHomeBase.setBorder(BorderFactory.createEmptyBorder());
+        goToHomeBase.setForeground(Color.BLACK);
+        goToHomeBase.setContentAreaFilled(false);
+    
+        goToDungeon = new JButton("Dungeon", new ImageIcon(scaledButtonImage));
+        goToDungeon.addActionListener(e -> {
+            System.out.println("Exit button pressed");
+            panelBG.removeAll();
+            new DungeonGUI(dungeon, player);
+
+        });
+        goToDungeon.setBounds((buttonBackgroundPanel.getWidth() - 150) / 2 + 90, 200- 20, 150, 50);
+        goToDungeon.setFont(new Font("Public Pixel", Font.BOLD, 15));
+        goToDungeon.setHorizontalTextPosition(SwingConstants.CENTER);
+        goToDungeon.setVerticalTextPosition(SwingConstants.CENTER);
+        goToDungeon.setBorder(BorderFactory.createEmptyBorder());
+        goToDungeon.setForeground(Color.BLACK);
+        goToDungeon.setContentAreaFilled(false);
+    
+        buttonBackgroundPanel.add(goToHomeBase);
+        buttonBackgroundPanel.add(goToDungeon);
+    
+        monsterDead = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -593,26 +682,12 @@ public void popUp() {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        monsterDead.setBounds(showPanelDeadPanel.getX() + (showPanelDeadPanel.getWidth() / 2) - 50, 200, 150, 150);
-
-        JLabel defeatLabel = new JLabel("Your monster is defeated!");
-        defeatLabel.setBounds(showPanelDeadPanel.getX() + 150, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 150, 200, 30);
-        defeatLabel.setFont(new Font("Purisa Bold", Font.BOLD, 15));
-
-        JButton goHomeBase = new JButton("Go to HomeBase");
-        JButton noButton = new JButton("No");
-
-        goHomeBase.setBounds(showPanelDeadPanel.getX() + 150, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 100, 100, 30);
-        noButton.setBounds(showPanelDeadPanel.getX() + 260, showPanelDeadPanel.getY() + showPanelDeadPanel.getHeight() - 100, 100, 30);
-
+        monsterDead.setBounds(buttonBackgroundPanel.getX() + 40, buttonBackgroundPanel.getY() - 100, 150, 150);
+        
+        buttonBackgroundPanel.add(monsterDead);
+        
         panelBG.setLayout(null); 
-        panelBG.add(monsterDead);
-        panelBG.add(showPanelDeadPanel);
-        panelBG.add(defeatLabel);
-        panelBG.setComponentZOrder(showPanelDeadPanel, 0); 
-        panelBG.setComponentZOrder(monsterDead, 1);
-        panelBG.setComponentZOrder(defeatLabel, 2);
-        panelBG.revalidate();
+        panelBG.setComponentZOrder(buttonBackgroundPanel, 0); 
         panelBG.repaint();
     }
 }
@@ -691,21 +766,6 @@ private void addBattleButtons() throws IOException {
             turn = 0;
             curItem = null;
         }
-        monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        System.out.println("Updating player HP panel");
-        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,1);
-        popUp();
-        System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
-        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
-    
-        // try {
-        //     Thread.sleep(7000); // Menunda selama 7 detik
-        // } catch (InterruptedException e3) {
-        //     // Tangani pengecualian jika diperlukan
-        //     e3.printStackTrace();
-        // }
-        
-
         System.out.println("Basic attack button pressed");
         monsterBattle.getAttacked("basic", monsterPlayer, null);
         updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(),1,1);
@@ -713,6 +773,29 @@ private void addBattleButtons() throws IOException {
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
         popUp();
+        
+        // try {
+        //     Thread.sleep(7000); // Menunda selama 7 detik
+        // } catch (InterruptedException e3) {
+        //     // Tangani pengecualian jika diperlukan
+        //     e3.printStackTrace();
+        // }
+        
+        // Timer timer = new Timer(10, new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+                monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
+                System.out.println("Updating player HP panel");
+                updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,1);
+                popUp();
+                System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
+                System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
+        //     }
+        // } 
+        // );    
+        // timer.start();
+        // timer.stop();
+        // timer.setRepeats(false);
             
     // bcAttackButton.setEnabled(false);
         
@@ -1346,6 +1429,7 @@ private JButton createPokemonButton(String image, String details, int i) {
         Item[] rewards = {item};
         Dungeon dungeon = new Dungeon("Mystic Cave", monsters, rewards, 1, "asset/den4zwg-45a7fe9e-d38a-417c-815c-3e56972adf62.jpg", "asset/wizard1.gif", "Sapi");
         Player player = new Player("Hero", dungeon, "asset/wizard.gif");
+        monster2.setAttackPower(900);
         player.catchMonster(monster);
         player.catchMonster(monster2);
         player.catchMonster(monster3);
