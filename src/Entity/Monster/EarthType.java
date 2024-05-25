@@ -1,14 +1,23 @@
 package Entity.Monster;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Entity.Item.Item;
 import Entity.Player.Player;
 
 public class EarthType extends Monster {
-
+    List<ElementalAttack> choices = new ArrayList<ElementalAttack>();
     public EarthType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "EARTH", maxMonsterPhase, image);
+        choices.add(new ElementalAttack("Tackle", 40, ElementType.EARTH));
+        choices.add(new ElementalAttack("Mud-Slap", 55, ElementType.EARTH));
+        choices.add(new ElementalAttack("Earthquake", 100, ElementType.EARTH));
+        choices.add(new ElementalAttack("Dig", 80, ElementType.EARTH));
+        choices.add(new ElementalAttack("Mud Shot", 55, ElementType.EARTH));
+        choices.add(new ElementalAttack("Sand Tomb", 35, ElementType.EARTH));
+        choices.add(new ElementalAttack("Magnitude", 70, ElementType.EARTH));
+        choices.add(new ElementalAttack("Earth Power", 90, ElementType.EARTH));
     }
 
     public EarthType(String name, int monsterPhase, int maxMonsterPhase) {

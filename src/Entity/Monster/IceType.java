@@ -1,14 +1,24 @@
 package Entity.Monster;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Entity.Item.Item;
 import Entity.Player.Player;
 
 public class IceType extends Monster{
-    
+    List<ElementalAttack> choices = new ArrayList<>();
     public IceType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "ICE", maxMonsterPhase, image);
+        elementalAttacks.add(new ElementalAttack("Ice Beam", 90, ElementType.ICE));
+        elementalAttacks.add(new ElementalAttack("Hydro Pump", 110, ElementType.ICE));
+        elementalAttacks.add(new ElementalAttack("Blizzard", 120, ElementType.ICE));
+        elementalAttacks.add(new ElementalAttack("Frost Breath", 60, ElementType.ICE));
+        elementalAttacks.add(new ElementalAttack("Icicle Spear", 25, ElementType.ICE)); // Typically hits 2-5 times
+        elementalAttacks.add(new ElementalAttack("Avalanche", 60, ElementType.ICE)); // Power doubles if the user has taken damage in the same turn
+        elementalAttacks.add(new ElementalAttack("Ice Fang", 65, ElementType.ICE));
+        elementalAttacks.add(new ElementalAttack("Icy Wind", 55, ElementType.ICE));
+        elementalAttacks.add(new ElementalAttack("Ice Shard", 40, ElementType.ICE)); // Typically a priority move
     }
 
     public IceType(String name, int monsterPhase, int maxMonsterPhase) {

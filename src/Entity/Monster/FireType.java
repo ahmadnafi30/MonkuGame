@@ -1,5 +1,6 @@
 package Entity.Monster;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Entity.Item.Item;
@@ -7,8 +8,17 @@ import Entity.Player.Player;
 
 public class FireType extends Monster {
 
+    List<ElementalAttack> choices = new ArrayList<ElementalAttack>();
     public FireType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "FIRE", maxMonsterPhase, image);
+        choices.add(new ElementalAttack("Ember", 40, ElementType.FIRE));
+        choices.add(new ElementalAttack("Flame Thrower", 90, ElementType.FIRE));
+        choices.add(new ElementalAttack("Fire Blast", 110, ElementType.FIRE));
+        choices.add(new ElementalAttack("Fire Spin", 35, ElementType.FIRE));
+        choices.add(new ElementalAttack("Heat Wave", 95, ElementType.FIRE));
+        choices.add(new ElementalAttack("Inferno", 100, ElementType.FIRE));
+        choices.add(new ElementalAttack("Flame Charge", 50, ElementType.FIRE));
+        choices.add(new ElementalAttack("Overheat", 130, ElementType.FIRE));
     }
     public FireType(String name, int monsterPhase, int maxMonsterPhase) {
         super(name, monsterPhase, "FIRE", maxMonsterPhase);

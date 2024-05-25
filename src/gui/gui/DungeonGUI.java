@@ -534,6 +534,7 @@ private void setMonsterDungeon(){
 
 public void popUp() {
     if (isDead(monsterBattle)) {
+        player.addCoin(15*dungeon.getLevel());
         int buttonWidth = 600;
         int buttonHeight = 300;
         monsterBattle.setHealthPoint(monsterBattle.getCurrentMaxHealthPoint());

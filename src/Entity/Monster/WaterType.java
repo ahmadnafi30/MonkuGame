@@ -1,13 +1,22 @@
 package Entity.Monster;
+import java.util.ArrayList;
 import java.util.List;
 
 import Entity.Item.Item;
 import Entity.Player.Player;
 
 public class WaterType extends Monster {
-
+    List<ElementalAttack> choices = new ArrayList<ElementalAttack>();
     public WaterType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "WATER", maxMonsterPhase, image);
+        choices.add(new ElementalAttack("Bubble", 40, ElementType.WATER));
+        choices.add(new ElementalAttack("Water Gun", 40, ElementType.WATER));
+        choices.add(new ElementalAttack("Aqua Jet", 60, ElementType.WATER));
+        choices.add(new ElementalAttack("Surf", 90, ElementType.WATER));
+        choices.add(new ElementalAttack("Hydro Pump", 110, ElementType.WATER));
+        choices.add(new ElementalAttack("Waterfall", 80, ElementType.WATER));
+        choices.add(new ElementalAttack("Aqua Tail", 90, ElementType.WATER));
+        choices.add(new ElementalAttack("Scald", 80, ElementType.WATER));
     }
 
     public WaterType(String name, int monsterPhase, int maxMonsterPhase) {
