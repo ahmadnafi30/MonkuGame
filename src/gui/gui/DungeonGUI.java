@@ -128,7 +128,17 @@ public class DungeonGUI extends JFrame {
         };
 
         configureGuard();
-        panelBG.add(Template.mapButton(panelBG, this));
+        JButton mapButton = Template.mapButton(panelBG, this);
+        mapButton.addActionListener(e -> {
+            try {
+                new MapGUI();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            dispose();
+        });
+        panelBG.add(mapButton);
 
         createDialogCards();
 

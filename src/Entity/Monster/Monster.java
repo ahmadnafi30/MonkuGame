@@ -377,11 +377,13 @@ public abstract class Monster implements Battle, Serializable {
         setImage("asset/" + name.toLowerCase() + "/"+ name.toLowerCase() + monsterPhase + ".gif");
         experiencePoint = 0;
         level = 0;
+        String[] splitedImg = image.split(".gif");
+        this.imgBack = splitedImg[0] + "-back.gif";
         return true;
     }
 
     public Monster changeMonsterClass(){
-        switch (this.getELementTypeStr()){
+        switch (this.getELementTypeStr().toUpperCase()){
         case "FIRE":
             return new FireType(this);
         case "WATER":
@@ -712,4 +714,5 @@ public abstract class Monster implements Battle, Serializable {
     public void setImgBack(String imgBack) {
         this.imgBack = imgBack;
     }
+
 }

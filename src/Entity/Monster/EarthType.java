@@ -12,7 +12,7 @@ public class EarthType extends Monster {
     }
 
     public EarthType(String name, int monsterPhase, int maxMonsterPhase) {
-        super(name, monsterPhase, "AIR", maxMonsterPhase);
+        super(name, monsterPhase, "EARTH", maxMonsterPhase);
     }
 
     public EarthType(Monster earthType){

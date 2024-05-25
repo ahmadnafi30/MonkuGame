@@ -1,6 +1,5 @@
 package gui;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -41,7 +40,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        
+
         frame.setContentPane(panelBG);
         Template.showNameLoc(Monku.player.getLocationPlayer(), panelBG, 100, 700, 900, 340, 10);
 
@@ -73,18 +72,19 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             createDialogCard("Selamat Berpetualang!");
             dialogText.next(dialogTextPanel);
             Timer timer = new Timer(100, new ActionListener() {
-               @Override
-               public void actionPerformed(ActionEvent e) {
-                   try{
-                       new MapGUI();
-                       frame.dispose();
-                   } catch (IOException ex) {
-                       ex.printStackTrace();
-                   }
-               } 
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        new MapGUI();
+                        frame.dispose();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             });
             timer.start();
-            timer.setRepeats(false);;
+            timer.setRepeats(false);
+            ;
         });
 
         dialogBox.setBounds(3, 450, 980, 265);
@@ -94,9 +94,11 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         panelBG.add(dialogTextPanel);
         panelBG.add(dialogBox);
 
-        createDialogCard("<html><p style=\"margin-left: 39px\">Selamat datang kembali </p><p style=\"margin-left: 39px\">" + Monku.player.getName() + "!</p></html>");        
-        createDialogCard("<html><p style=\"margin-left: 39px\">" + Monku.player.getName() + ",</p><p style=\"margin-left: 39px\">Apa yang ingin</p><p style=\"margin-left: 39px\"> kamu lakukan?</p></html>");
-        
+        createDialogCard(
+                "<html><p style=\"margin-left: 39px\">Selamat datang kembali </p><p style=\"margin-left: 39px\">"
+                        + Monku.player.getName() + "!</p></html>");
+        createDialogCard("<html><p style=\"margin-left: 39px\">" + Monku.player.getName()
+                + ",</p><p style=\"margin-left: 39px\">Apa yang ingin</p><p style=\"margin-left: 39px\"> kamu lakukan?</p></html>");
 
         // Create an invisible button to capture clicks and switch dialogs
         JButton invisibleButton = new JButton();
@@ -107,25 +109,30 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         invisibleButton.addActionListener(e -> {
             int cardCount = getCardPosition();
             dialogText.next(dialogTextPanel);
+
             System.out.println(cardCount);
             System.out.println(isLastCard());
-            if (cardCount == 0 || cardCount == 1) {
-                createDialogCard("<html><p style=\"margin-left: 39px\">" + Monku.player.getName() + ",</p><p style=\"margin-left: 39px\">Apa yang ingin</p><p style=\"margin-left: 39px\"> kamu lakukan?</p></html>");
+
+            if (cardCount == 0) {
+                createDialogCard("<html><p style=\"margin-left: 39px\">" + Monku.player.getName()
+                        + ",</p><p style=\"margin-left: 39px\">Apa yang ingin</p><p style=\"margin-left: 39px\"> kamu lakukan?</p></html>");
                 dialogText.next(dialogTextPanel);
                 showOptions(invisibleButton, panelBG, frame);
-            }
-            if (isLastCard()) {
             } else {
                 dialogText.next(dialogTextPanel);
+                removeAllDialogCards(); // This line removes all dialog cards correctly.
+                createDialogCard("<html><p style=\"margin-left: 39px\">" + Monku.player.getName()
+                        + ",</p><p style=\"margin-left: 39px\">Apa yang ingin</p><p style=\"margin-left: 39px\"> kamu lakukan?</p></html>");
+                dialogText.first(dialogTextPanel); // Reset to the first card
             }
-            removeAllDialogCards();
         });
 
         panelBG.add(invisibleButton);
         frame.setVisible(true);
     }
+
     private void showOptions(JButton invis, JPanel panelBG, JFrame frame) {
-        String[] options = {"Save Game", "Heal Monku", "Evolve Monku", "Cancel"};
+        String[] options = { "Save Game", "Heal Monku", "Evolve Monku", "Cancel" };
         int choice = JOptionPane.showOptionDialog(
                 this,
                 "Apa yang ingin kamu lakukan?",
@@ -134,8 +141,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 options,
-                options[0]
-        );
+                options[0]);
 
         switch (choice) {
             case 0:
@@ -151,12 +157,15 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 timer.setRepeats(false);
                 break;
             case 1:
-                createDialogCard("Pilih monster yang ingin kamu heal");
-                
+                createDialogCard(
+                        "<html><p style=\"margin-left: 39px\">Pilih monster yang </p><p style=\"margin-left: 39px\">ingin kamu heal</p></html>");
+                dialogText.next(dialogTextPanel);
                 monkuChoicesHeal(panelBG, frame, invis);
                 break;
             case 2:
-                createDialogCard("<html><p style=\"margin-left: 39px\">Pilih monster yang </p><p style=\"margin-left: 39px\">ingin kamu evolve</p></html>");
+                createDialogCard(
+                        "<html><p style=\"margin-left: 39px\">Pilih monster yang </p><p style=\"margin-left: 39px\">ingin kamu evolve</p></html>");
+                dialogText.next(dialogTextPanel);
                 monkuChoicesEvolve(panelBG, frame, invis);
                 break;
             default:
@@ -166,9 +175,9 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
     }
 
     public void saveGame(JPanel panelBG, JFrame frame, JButton invis) {
-        ((HomeBase)Monku.player.getLocationPlayer()).interactWithPlayer(Monku.player, 3, null);
+        ((HomeBase) Monku.player.getLocationPlayer()).interactWithPlayer(Monku.player, 3, null);
         createDialogCard("<html><p style=\"margin-left: 39px\">Game berhasil disimpan!</p></html>");
-        
+
         dialogText.next(dialogTextPanel);
     }
 
@@ -176,19 +185,18 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         int middle = 450;
         int i = 0;
         ArrayList<JButton> monsters = new ArrayList<>();
-    
+
         for (int j = 0; j < Monku.player.getMonsters().size(); j++) {
             Monster monsterPlyr = Monku.player.getMonsters().get(j);
-            String name = Monku.player.getMonsters().get(j).getName();
             System.out.println(monsterPlyr.getImage());
-            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, monsterPlyr.getImage(), 140, 140, middle + i, 250);
+            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, monsterPlyr.getImage(), 140, 140,
+                    middle + i, 250);
             monsters.add(monsterButton.getButton());
             int pos = middle + i;
             i += 50;
             JButton monster = monsters.get(j);
             monster.setVisible(true);
-            int indeksMonku = j;
-    
+
             monsters.get(j).addActionListener(e -> {
                 Monku.professor.healPokemon(Monku.player, monsterPlyr.getName());
                 JLabel heal = new JLabel();
@@ -199,14 +207,18 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 panelBG.setComponentZOrder(heal, 0); // Set heal to be the top component
                 heal.setVisible(true);
                 System.out.println(monsterPlyr.getImage());
-                
+
                 // Timer to remove heal effect after a delay
                 Timer timer = new Timer(2000, event -> {
                     panelBG.remove(heal);
                     panelBG.revalidate();
                     panelBG.repaint();
-                    createDialogCard("<html><p style=\"margin-left: 39px\">Darah "+monsterPlyr.getName()+"</p><p style=\"margin-left: 39px\">telah penuh!</p></html>");
+                    createDialogCard("<html><p style=\"margin-left: 39px\">Darah " + monsterPlyr.getName()
+                            + "</p><p style=\"margin-left: 39px\">telah penuh!</p></html>");
                     dialogText.next(dialogTextPanel);
+                    removeDialogCardByText("<html><p style=\"margin-left: 39px\">Darah " + monsterPlyr.getName()
+                            + "</p><p style=\"margin-left: 39px\">telah penuh!</p></html>\"");
+                    invis.setEnabled(true);
                     monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
                     monster.setVisible(false);
                 });
@@ -223,7 +235,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         Timer timer = new Timer(200, new ActionListener() {
             private boolean visible = false;
             private int count = 0;
-    
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (count >= 10) {
@@ -238,50 +250,77 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         });
         timer.start();
     }
-    
+
     public void monkuChoicesEvolve(JPanel panelBG, JFrame frame, JButton invis) {
         int middle = 450;
         int i = 0;
         ArrayList<JButton> monsters = new ArrayList<>();
-        
+
         for (int j = 0; j < Monku.player.getMonsters().size(); j++) {
             Monster monsterPlyr = Monku.player.getMonsters().get(j);
-            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, monsterPlyr.getImage(), 140, 140, middle + i, 250);
+            Holder<Monster> monsterHolder = new Holder<>(monsterPlyr);
+            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, monsterPlyr.getImage(), 140, 140,
+                    middle + i, 250);
             monsters.add(monsterButton.getButton());
             int pos = middle + i;
             i += 50;
             JButton monster = monsters.get(j);
-            
-            monsters.get(j).addActionListener(e -> {
-                String[] options = {"AIR", "FIRE", "WATER", "EARTH", "ICE"};
-                String choice = (String) JOptionPane.showInputDialog(null, "Pilih element evolve", "Evolve", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-                Monku.professor.evolvePokemon(monsterPlyr, choice);
-                JLabel heal = new JLabel();
-                heal.setIcon(new ImageIcon("asset/evolveFx.gif"));
-                heal.setOpaque(false);
-                panelBG.add(heal);
-                heal.setBounds(pos, 250, 140, 140);
-                panelBG.setComponentZOrder(heal, 0); // Set heal to be the top component
-                heal.setVisible(true);
-                System.out.println(monsterPlyr.getImage());
-                blink(monster);
-                
-                // Timer to remove heal effect after a delay
-                Timer timer = new Timer(2000, event -> {
-                    panelBG.remove(heal);
-                    panelBG.revalidate();
-                    panelBG.repaint();
-                    createDialogCard("<html><p style=\"margin-left: 39px\">"+monsterPlyr.getName()+"</p><p style=\"margin-left: 39px\">telah berevolusi!</p></html>");
-                    dialogText.next(dialogTextPanel);
-                    invis.setEnabled(true);
-                    monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
-                    monster.setVisible(false);
-                });
-                timer.setRepeats(false);
-                timer.start();
-                monsterPlyr.displayDetailMonster();
+            monster.setVisible(true);
+            final int currentIndex = j; // Create a final copy of j
+
+            monsters.get(currentIndex).addActionListener(e -> {
+                String[] options = { "AIR", "FIRE", "WATER", "EARTH", "ICE" };
+                String choice = (String) JOptionPane.showInputDialog(null, "Pilih element evolve", "Evolve",
+                        JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+                if (choice != null) {
+                    boolean success = Monku.professor.evolvePokemon(monsterPlyr, choice);
+                    Monster currentMonster = monsterHolder.getValue();
+                    if (success) {
+                        Monster evolvedMonster = currentMonster.changeMonsterClass(); // Use the final copy index
+                        Monku.player.getMonsters().set(currentIndex, evolvedMonster); // Update the monster in player's list
+                        monsterHolder.setValue(evolvedMonster); // Update the holder with the new monster
+
+                        JLabel evolve = new JLabel();
+
+                        System.out.println(choice);
+                        monsterPlyr.changeMonsterClass();
+                        evolve.setIcon(new ImageIcon("asset/evolveFx.gif"));
+                        evolve.setOpaque(false);
+                        panelBG.add(evolve);
+                        evolve.setBounds(pos, 250, 140, 140);
+                        panelBG.setComponentZOrder(evolve, 0); // Set evolve to be the top component
+                        evolve.setVisible(true);
+                        System.out.println(monsterPlyr.getImage());
+                        System.out.println(monsterPlyr.getClass());
+                        blink(monster);
+
+                        // Timer to remove evolve effect after a delay
+                        Timer timer = new Timer(2000, event -> {
+                            panelBG.remove(evolve);
+                            panelBG.revalidate();
+                            panelBG.repaint();
+                            createDialogCard("<html><p style=\"margin-left: 39px\">" + monsterPlyr.getName()
+                                    + "</p><p style=\"margin-left: 39px\">telah berevolusi!</p></html>");
+                            dialogText.next(dialogTextPanel);
+                            invis.setEnabled(true);
+                            monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
+                            monster.setVisible(false);
+                            System.out.println(Monku.player.getMonsters());
+                        });
+                        timer.setRepeats(false);
+                        timer.start();
+                        monsterPlyr.displayDetailMonster();
+                    } else {
+                        invis.setEnabled(true);
+                        monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
+                        monster.setVisible(false);
+                        createDialogCard("<html><p style=\"margin-left: 39px\">Evolusi gagal. Coba lagi.</p></html>");
+                        dialogText.next(dialogTextPanel);
+                    }
+                }
             });
-    
+
             panelBG.add(monsters.get(j));
         }
     }
@@ -296,7 +335,6 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         return false;
     }
 
-    
     private void removeDialogCard(int index) {
         if (index >= 0 && index < dialogTextPanel.getComponentCount()) {
             Component componentToRemove = dialogTextPanel.getComponent(index);
@@ -309,7 +347,6 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         }
     }
 
-    
     public void removeDialogCardByText(String text) {
         int index = findDialogCardIndexByText(text);
         if (index != -1) {
@@ -318,10 +355,10 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             System.out.println("Dialog card with the specified text not found.");
         }
     }
-    
+
     public Component getComponent(Component dialog) {
-        for(Component comp : dialogues){
-            if(comp == dialog){
+        for (Component comp : dialogues) {
+            if (comp == dialog) {
                 return comp;
             }
         }
@@ -343,7 +380,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         panel.setOpaque(false);
         JLabel label = new JLabel(text, SwingConstants.CENTER);
         label.setFont(new Font("Public Pixel", Font.BOLD, 27));
-        label.setForeground(Color.BLACK); 
+        label.setForeground(Color.BLACK);
         label.setVisible(true);
         panel.add(label);
         dialogTextPanel.add(panel);
@@ -367,7 +404,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         }
         return -1;
     }
-    
+
     public void removeAllDialogCards() {
         dialogTextPanel.removeAll();
         dialogues.clear();
@@ -385,6 +422,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         SwingUtilities.invokeLater(HomeBaseGUI::new);
         Monku.player.catchMonster(new FireType("Charmander", 2, 3));
         Monku.player.getMonsters().get(0).setLevel(40);
+        System.out.println(Monku.player.getMonsters().get(0).getClass());
     }
 
 }

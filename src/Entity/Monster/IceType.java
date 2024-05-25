@@ -12,7 +12,7 @@ public class IceType extends Monster{
     }
 
     public IceType(String name, int monsterPhase, int maxMonsterPhase) {
-        super(name, monsterPhase, "AIR", maxMonsterPhase);
+        super(name, monsterPhase, "ICE", maxMonsterPhase);
     }
 
     public IceType(Monster iceType){
