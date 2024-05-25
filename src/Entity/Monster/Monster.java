@@ -344,6 +344,7 @@ public abstract class Monster implements Battle, Serializable {
         }
         setAttributesMax(monsterPhase);
         monsterPhase++;
+        setImage(getImage().split(".gif")[0] + monsterPhase + ".gif");
         experiencePoint = 0;
         level = 0;
         return true;

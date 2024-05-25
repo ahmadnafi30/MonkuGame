@@ -26,7 +26,7 @@ public class ProfessorPokemon extends NPC {
         System.out.println("Professor " + name + ": No such monster in your inventory.");
     }
 
-    public void evolvePokemon(Monster monster, String element) {
+    public boolean evolvePokemon(Monster monster, String element) {
         if (monster.evolution(element)) {
             monster = monster.changeMonsterClass();
             System.out.println(monster.getMonster());
@@ -106,10 +106,13 @@ public class ProfessorPokemon extends NPC {
                     default:
                         break;
                 }
+                return true;
             }
         } else {
             System.out.println("Professor " + name + ": This monster cannot evolve.");
+            return false;
         }
+        return false;
     }
 
     // @Override

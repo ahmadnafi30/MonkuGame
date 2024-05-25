@@ -11,7 +11,7 @@ import java.util.Collections;
 
 import Entity.Locations.HomeBase;
 import Entity.Locations.Shop;
-import Entity.Monster.Monster;
+import Entity.Monster.*;
 import Entity.NPC.NPC;
 import Entity.Player.Player;
 import app.Monku;
@@ -177,8 +177,10 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         ArrayList<JButton> monsters = new ArrayList<>();
     
         for (int j = 0; j < Monku.player.getMonsters().size(); j++) {
+            Monster monsterPlyr = Monku.player.getMonsters().get(j);
             String name = Monku.player.getMonsters().get(j).getName();
-            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, "asset/" + name + ".gif", 140, 140, middle + i, 250);
+            System.out.println(monsterPlyr.getImage());
+            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, monsterPlyr.getImage(), 140, 140, middle + i, 250);
             monsters.add(monsterButton.getButton());
             int pos = middle + i;
             i += 50;
@@ -189,7 +191,6 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             monsters.get(j).addActionListener(e -> {
                 ((HomeBase)Monku.player.getLocationPlayer()).interactWithPlayer(Monku.player, 1, Monku.player.getMonsters().get(indeksMonku));
                 JLabel heal = new JLabel();
-                heal.setIcon(new ImageIcon("asset/healEffect.gif"));
                 heal.setOpaque(false);
                 panelBG.add(heal);
                 heal.setBounds(pos, 250, 140, 140);
@@ -214,22 +215,44 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         }
     }
 
+    public void blink(JButton monster) {
+        // Create a timer to handle the blinking effect
+        Timer timer = new Timer(200, new ActionListener() {
+            private boolean visible = false;
+            private int count = 0;
+    
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (count >= 10) {
+                    ((Timer) e.getSource()).stop();
+                    monster.setVisible(true);
+                    return;
+                }
+                monster.setVisible(visible);
+                visible = !visible;
+                count++;
+            }
+        });
+        timer.start();
+    }
+    
     public void monkuChoicesEvolve(JPanel panelBG, JFrame frame, JButton invis) {
         int middle = 450;
         int i = 0;
         ArrayList<JButton> monsters = new ArrayList<>();
-    
+        
         for (int j = 0; j < Monku.player.getMonsters().size(); j++) {
-            String name = Monku.player.getMonsters().get(j).getName();
-            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, "asset/" + name + ".gif", 140, 140, middle + i, 250);
+            Monster monsterPlyr = Monku.player.getMonsters().get(j);
+            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, monsterPlyr.getImage(), 140, 140, middle + i, 250);
             monsters.add(monsterButton.getButton());
             int pos = middle + i;
             i += 50;
             JButton monster = monsters.get(j);
-            Monster monsterPlyr = Monku.player.getMonsters().get(j);
-    
+            
             monsters.get(j).addActionListener(e -> {
-                Monku.professor.evolvePokemon(monsterPlyr, "AIR");
+                String[] options = {"AIR", "FIRE", "WATER", "EARTH", "ICE"};
+                String choice = (String) JOptionPane.showInputDialog(null, "Pilih element evolve", "Evolve", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                Monku.professor.evolvePokemon(monsterPlyr, choice);
                 JLabel heal = new JLabel();
                 heal.setIcon(new ImageIcon("asset/healEffect.gif"));
                 heal.setOpaque(false);
@@ -237,16 +260,18 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 heal.setBounds(pos, 250, 140, 140);
                 panelBG.setComponentZOrder(heal, 0); // Set heal to be the top component
                 heal.setVisible(true);
-    
+                System.out.println(monsterPlyr.getImage());
+                blink(monster);
+                
                 // Timer to remove heal effect after a delay
                 Timer timer = new Timer(2000, event -> {
                     panelBG.remove(heal);
                     panelBG.revalidate();
                     panelBG.repaint();
-                    createDialogCard("Darah "+name + " telah penuh!");
+                    createDialogCard(monsterPlyr.getName() + " \ntelah berevolusi!");
                     dialogText.next(dialogTextPanel);
-                    dialogText.removeLayoutComponent(getComponent(getCardPosition() - 1));
                     invis.setEnabled(true);
+                    monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
                     monster.setVisible(false);
                 });
                 timer.setRepeats(false);
@@ -316,6 +341,12 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JOptionPane.showMessageDialog(this, "Action performed!", "Peringatan", JOptionPane.INFORMATION_MESSAGE);
         throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(HomeBaseGUI::new);
+        Monku.player.catchMonster(new FireType("Charmander", 1, 4, "asset/Charmander/charmander.gif"));
+        Monku.player.getMonsters().get(0).setLevel(20);
     }
 
 }
