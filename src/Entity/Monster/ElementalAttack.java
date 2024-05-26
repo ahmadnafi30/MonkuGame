@@ -48,5 +48,8 @@ public class ElementalAttack implements Serializable {
 
     // @Override
     // public void toString(){}
+    public String detailAttack(){
+        return "<html>" + this.nama + "("+ this.element+")<br>" + "Power: " + this.power + "\n" + "</br></html>";
+    }
 
 }

@@ -3,6 +3,7 @@ package gui;
 import Entity.Locations.Dungeon;
 import Entity.Locations.HomeBase;
 import Entity.Monster.AirType;
+import Entity.Monster.ElementalAttack;
 import Entity.Monster.Monster;
 import Entity.NPC.ItemSeller;
 import Entity.Player.Player;
@@ -831,6 +832,7 @@ private void addBattleButtons() throws IOException {
 
     speAttackButton.addActionListener(e -> {
         checkItem();
+
         System.out.println("Special attack button pressed");
         monsterBattle.getAttacked("special", monsterPlayer, null);
         updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(),1,2);
@@ -855,20 +857,42 @@ private void addBattleButtons() throws IOException {
         timer.setRepeats(false);
     });
 
+
     eleAttackButton.addActionListener(e -> {
         checkItem();
+    
+        JPanel charPanel = new JPanel();
+        charPanel.setLayout(new GridLayout(0, 1, 10, 10));
+    
+        int index = 0;
+        for (ElementalAttack s : monsterPlayer.getElementalAttacks()) {
+            JButton button = createElementalButton(s, index++, charPanel);
+            charPanel.add(button);
+        }
+    
+        JScrollPane scrollPane = new JScrollPane(charPanel);
+        scrollPane.setBounds(385, 230, 200, 200);
+    
+        JButton okButton = new JButton("OK");
+        okButton.setBounds((getWidth() - 100) / 2 - 20, 450, 100, 40);
+    
+        // panelBG.removeAll();
+        panelBG.add(scrollPane);
+        panelBG.add(okButton);
+    
         System.out.println("Elemental attack button pressed");
-        monsterBattle.getAttacked("elemental", monsterPlayer, null);
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 1,3);
+        //monsterBattle.getAttacked("elemental", monsterPlayer, null);
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 1, 3);
         System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
         popUp();
-        if(isDead(monsterBattle))return;
-        monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,3);
+        if (isDead(monsterBattle)) return;
+        //monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
+        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(), 0, 3);
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
         popUp();
-        if(isDead(monsterPlayer))return;
+        if (isDead(monsterPlayer)) return;
     });
+    
 
     usePotionButton.addActionListener(e -> {
         checkItem();
@@ -970,6 +994,53 @@ private void addBattleButtons() throws IOException {
     panelBG.revalidate();
     panelBG.repaint();
 }
+
+private JButton createElementalButton(ElementalAttack s, int i, JPanel panel) {
+    JButton elementalButton = new JButton();
+    elementalButton.setLayout(new BorderLayout());
+
+    String details = s.getNama() + "x"+ s.getQuantity(); 
+    JLabel detailsLabel = new JLabel("<html>" + details.replace("\n", "<br>") + "</html>");
+
+    elementalButton.add(detailsLabel, BorderLayout.CENTER);
+    elementalButton.setOpaque(false);
+    elementalButton.setBorder(BorderFactory.createEmptyBorder());
+    elementalButton.setContentAreaFilled(false);
+    elementalButton.setFocusable(false);
+
+    elementalButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            if (selectedItemButton != elementalButton) {
+                elementalButton.setBackground(Color.LIGHT_GRAY);
+                elementalButton.setOpaque(true);
+            }
+        }
+
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            if (selectedItemButton != elementalButton) {
+                elementalButton.setBackground(null);
+                elementalButton.setOpaque(false);
+            }
+        }
+    });
+
+    elementalButton.addActionListener(e -> {
+        System.out.println("Elemental button clicked: " + details);
+        indeksItem = i;
+        if (selectedItemButton != null) {
+            selectedItemButton.setBackground(null);
+            selectedItemButton.setOpaque(false);
+        }
+        selectedItemButton = elementalButton;
+        elementalButton.setBackground(Color.WHITE);
+        elementalButton.setOpaque(true);
+    });
+
+    return elementalButton;
+}
+
 
 private JButton createItemButton(Item item, String details, int i, JPanel panel) {
     JButton itemButton = new JButton();

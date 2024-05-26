@@ -19,8 +19,16 @@ public class MapGUI {
     private BufferedImage homeIconPressed;
     private BufferedImage shopIcon;
     private BufferedImage shopIconPressed;
-    private BufferedImage dungeonIcon;
-    private BufferedImage dungeonIconPressed;
+    private BufferedImage dungeonCrypt;
+    private BufferedImage dungeonCryptPressed;
+    private BufferedImage dungeonEternalIcon;
+    private BufferedImage dungeonEternalPressed;
+    private BufferedImage dungeonInfernocon;
+    private BufferedImage dungeonInfernoPressed;
+    private BufferedImage dungeonObsidian;
+    private BufferedImage dungeonObsidianPressed;
+    private BufferedImage dungeonDoom;
+    private BufferedImage dungeonDoomPressed;
 
 
     public MapGUI() throws IOException {
@@ -38,8 +46,16 @@ public class MapGUI {
             homeIconPressed = ImageIO.read(new File("asset/home_pressed.png"));
             shopIcon = ImageIO.read(new File("asset/shop1.png"));
             shopIconPressed = ImageIO.read(new File("asset/shop1-pressed.png"));
-            dungeonIcon = ImageIO.read(new File("asset/Pixel_Dungeon_logo.png"));
-            dungeonIconPressed = ImageIO.read(new File("asset/Pixel_Dungeon_logo_pressed.png"));
+            dungeonCrypt = ImageIO.read(new File("asset/Untitled design/3.png"));
+            dungeonCryptPressed = ImageIO.read(new File("asset/Untitled design/4.png"));
+            dungeonEternalIcon = ImageIO.read(new File("asset/Untitled design/5.png"));
+            dungeonEternalPressed = ImageIO.read(new File("asset/Untitled design/6.png"));
+            dungeonDoom = ImageIO.read(new File("asset/Untitled design/1.png"));
+            dungeonDoomPressed = ImageIO.read(new File("asset/Untitled design/2.png"));
+            dungeonInfernocon = ImageIO.read(new File("asset/Untitled design/7.png"));
+            dungeonInfernoPressed = ImageIO.read(new File("asset/Untitled design/8.png"));
+            dungeonObsidian = ImageIO.read(new File("asset/Untitled design/9.png"));
+            dungeonObsidianPressed = ImageIO.read(new File("asset/Untitled design/9.png"));
         } catch (IOException e) {
             System.err.println("Error loading icons: " + e.getMessage());
             return; // Exit the constructor if the icons can't be loaded
@@ -51,8 +67,23 @@ public class MapGUI {
         shopIcon = resize(shopIcon, 70+40, 63+40);
         shopIconPressed = resize(shopIconPressed, 70+40, 63+40);
 
-        dungeonIcon = resize(dungeonIcon, 68, 68);
-        dungeonIconPressed = resize(dungeonIconPressed, 90, 90);
+        dungeonCrypt = resize(dungeonCrypt, 100, 100);
+        dungeonCryptPressed = resize(dungeonCryptPressed, 150, 150);
+
+        dungeonEternalIcon = resize(dungeonEternalIcon, 100, 100);
+        dungeonEternalPressed = resize(dungeonEternalPressed, 150, 150);
+
+        dungeonInfernocon = resize(dungeonInfernocon, 150, 150);
+        dungeonInfernoPressed = resize(dungeonInfernoPressed, 100, 100);
+
+        dungeonObsidian = resize(dungeonObsidian, 100, 100);
+        dungeonObsidianPressed = resize(dungeonObsidianPressed, 150, 150);
+
+        dungeonDoom = resize(dungeonDoom, 100, 100);
+        dungeonDoomPressed = resize(dungeonDoomPressed, 150, 150);
+
+
+
 
         JPanel panelBG = new JPanel(null) {
             @Override
@@ -89,8 +120,8 @@ public class MapGUI {
             }
         });
 
-        Image scaledDungeonIcon = dungeonIcon.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
-        Image scaledDungeonIconPressed = dungeonIconPressed.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        Image scaledDungeonIcon = dungeonCrypt.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        Image scaledDungeonIconPressed = dungeonCryptPressed.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
         JButton dungeonButton = new JButton(new ImageIcon(scaledDungeonIcon));
         dungeonButton.addActionListener(new ActionListener() {
             @Override
@@ -114,7 +145,7 @@ public class MapGUI {
         dungeonButton.setFocusable(false);
         addHoverEffect(shopButton, shopIcon);
         addHoverEffect(homeButton, homeIcon);
-        addHoverEffect(dungeonButton, dungeonIcon);
+        addHoverEffect(dungeonButton, dungeonCrypt);
         panelBG.setBounds(0, 0, 1000, 750);
         panelBG.add(homeButton);
         panelBG.add(shopButton);
