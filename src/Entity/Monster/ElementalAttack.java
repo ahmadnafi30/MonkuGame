@@ -4,9 +4,11 @@
  */
 package Entity.Monster;
 
+import java.io.Serializable;
+
 import Entity.Monster.Monster.ElementType;
 
-public class ElementalAttack {
+public class ElementalAttack implements Serializable {
     protected String nama;
     protected int power;
     protected ElementType element;

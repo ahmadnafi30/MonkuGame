@@ -8,6 +8,7 @@ import java.util.Map;
 
 import Entity.Item.Item;
 import Entity.Locations.Locations;
+import Entity.Monster.ElementalAttack;
 import Entity.Monster.Monster;
 
 public class DataStorage implements Serializable {
@@ -19,6 +20,7 @@ public class DataStorage implements Serializable {
     public ArrayList<Monster> monsters;
     public Duration timePlayed;
     public Instant startTime;
-    public Locations locationPlayer;
+    public ElementalAttack elementalAttack;
+    // public Locations locationPlayer;
     public String image;
 }
