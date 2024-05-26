@@ -24,6 +24,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
     // private JScrollPane scrollPane = new JScrollPane(monsterPanel);
     
     public HomeBaseGUI() {
+        Template.stopMusic();
         //monsterPanel.setLayout(new BoxLayout(monsterPanel, BoxLayout.X_AXIS));
         JFrame frame = new JFrame("Monku Games");
         Monku.player.setLocation(Monku.homeBase);

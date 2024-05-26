@@ -35,6 +35,7 @@ public class Homepage {
     private JPanel panel;
 
     public Homepage() throws IOException {
+        Template.stopMusic();
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
