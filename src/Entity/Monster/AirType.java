@@ -27,6 +27,7 @@ public class AirType extends Monster {
         for (int i = 0; i < choices.size(); i++) {
             if (choices.get(i).getNama().equalsIgnoreCase(name)) {
                 this.elementalAttacks.add(choices.get(i));
+                System.out.println("Elemental attack berhasil ditambahkan");
                 return choices.get(i).getNama() + " berhasil ditambahkan";
             }
         }

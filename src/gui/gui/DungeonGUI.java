@@ -863,34 +863,56 @@ private void addBattleButtons() throws IOException {
     
         JPanel charPanel = new JPanel();
         charPanel.setLayout(new GridLayout(0, 1, 10, 10));
-    
         int index = 0;
-        for (ElementalAttack s : monsterPlayer.getElementalAttacks()) {
-            JButton button = createElementalButton(s, index++, charPanel);
-            charPanel.add(button);
-        }
-    
         JScrollPane scrollPane = new JScrollPane(charPanel);
         scrollPane.setBounds(385, 230, 200, 200);
     
-        JButton okButton = new JButton("OK");
-        okButton.setBounds((getWidth() - 100) / 2 - 20, 450, 100, 40);
-    
         // panelBG.removeAll();
         panelBG.add(scrollPane);
-        panelBG.add(okButton);
-    
-        System.out.println("Elemental attack button pressed");
-        //monsterBattle.getAttacked("elemental", monsterPlayer, null);
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 1, 3);
-        System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
-        popUp();
-        if (isDead(monsterBattle)) return;
-        //monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(), 0, 3);
-        System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
-        popUp();
-        if (isDead(monsterPlayer)) return;
+        for (ElementalAttack s : monsterPlayer.getElementalAttacks()) {
+            JButton button = createElementalButton(s, index++, charPanel);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int option = JOptionPane.showConfirmDialog(
+                        null, 
+                        s.detailAttack(), 
+                        s.getNama(), 
+                        JOptionPane.OK_CANCEL_OPTION);
+                    if (option == JOptionPane.OK_OPTION) {
+                        
+                        System.out.println("Elemental attack button pressed");
+                        monsterBattle.getAttacked("elemental", monsterPlayer, s);
+                        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 1, 3);
+                        System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
+                        panelBG.remove(scrollPane);
+                        panelBG.revalidate();
+                        panelBG.repaint();
+                        popUp();
+
+                        if (isDead(monsterBattle)) return;
+                        
+                        Timer timer = new Timer(1000, new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
+                                updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(), 0, 3);
+                                System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
+                                popUp();
+                                if (isDead(monsterPlayer)) return;
+                    }});
+                        timer.start();
+                        timer.setRepeats(false);
+                    } else if (option == JOptionPane.CANCEL_OPTION) {
+                        panelBG.remove(scrollPane);
+                        panelBG.revalidate();
+                        panelBG.repaint();
+                    }           
+                }
+            });
+            charPanel.add(button);
+        }
+        
     });
     
 
@@ -999,7 +1021,7 @@ private JButton createElementalButton(ElementalAttack s, int i, JPanel panel) {
     JButton elementalButton = new JButton();
     elementalButton.setLayout(new BorderLayout());
 
-    String details = s.getNama() + "x"+ s.getQuantity(); 
+    String details = s.getNama() + " x"+ s.getQuantity(); 
     JLabel detailsLabel = new JLabel("<html>" + details.replace("\n", "<br>") + "</html>");
 
     elementalButton.add(detailsLabel, BorderLayout.CENTER);
@@ -1546,6 +1568,8 @@ private JButton createPokemonButton(String image, String details, int i) {
         monster2.setAttackPower(900);
         player.catchMonster(monster);
         player.catchMonster(monster2);
+        ((AirType)player.getMonsters().get(1)).setElementalSkills("Gust");
+        ((AirType)player.getMonsters().get(1)).setElementalSkills("Air Slash");
         player.catchMonster(monster3);
         player.catchMonster(monster4);
         ItemSeller itemSeller = new ItemSeller("p", "p",  new HomeBase("p"));
