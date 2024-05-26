@@ -32,6 +32,7 @@ public class MapGUI {
 
 
     public MapGUI() throws IOException {
+        Template.stopMusic();
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -226,6 +227,7 @@ public class MapGUI {
         panelBG.add(shopButton);
         frame.setContentPane(panelBG);
         frame.setVisible(true);
+        Template.playMusic("asset/Music/TV Station.wav");
     }
 
     public BufferedImage resize(BufferedImage img, int newW, int newH) { 
