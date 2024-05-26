@@ -199,7 +199,9 @@ public class Awalan extends JFrame implements ActionListener {
         vanillite.addActionListener(e -> {
             Monku.player.catchMonster(new IceType("vanillite", 1, 3, "asset/vanillite/vanillite.gif"));
             
-            ((IceType)Monku.player.getMonsters().get(0)).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+            String elemental = skillsIceName[new Random().nextInt(skillsIceName.length)];
+            ((IceType)Monku.player.getMonsters().get(0)).setElementalSkills(elemental);
+            
             dialogText.next(dialogTextPanel);
             charmander.setVisible(false);
             rhyhorn.setVisible(false);
@@ -209,6 +211,8 @@ public class Awalan extends JFrame implements ActionListener {
         });
         charmander.addActionListener(e -> {
             Monku.player.catchMonster(new FireType("charmander", 1, 3, "asset/Charmander/charmander.gif"));
+            String elemental = skillsFireName[new Random().nextInt(skillsFireName.length)];
+            ((FireType)Monku.player.getMonsters().get(0)).setElementalSkills(elemental);
             dialogText.next(dialogTextPanel);
             vanillite.setVisible(false);
             rhyhorn.setVisible(false);
@@ -218,6 +222,8 @@ public class Awalan extends JFrame implements ActionListener {
         });
         rhyhorn.addActionListener(e -> {
             Monku.player.catchMonster(new EarthType("rhyhorn", 1, 3, "asset/rhyhorn/rhyhorn.gif"));
+            String elemental = skillsEarthName[new Random().nextInt(skillsEarthName.length)];
+            ((EarthType)Monku.player.getMonsters().get(0)).setElementalSkills(elemental);
             dialogText.next(dialogTextPanel);
             vanillite.setVisible(false);
             charmander.setVisible(false);
@@ -227,6 +233,8 @@ public class Awalan extends JFrame implements ActionListener {
         });
         squirtle.addActionListener(e -> {
             Monku.player.catchMonster(new WaterType("squirtle", 1, 3, "asset/Squirtle/squirtle.gif"));
+            String elemental = skillsWaterName[new Random().nextInt(skillsWaterName.length)];
+            ((WaterType)Monku.player.getMonsters().get(0)).setElementalSkills(elemental);
             dialogText.next(dialogTextPanel);
             vanillite.setVisible(false);
             charmander.setVisible(false);
@@ -236,6 +244,8 @@ public class Awalan extends JFrame implements ActionListener {
         });
         zubat.addActionListener(e -> {
             Monku.player.catchMonster(new AirType("zubat", 1, 3, "asset/Zubat/zubat.gif"));
+            String elemental = skillsAirName[new Random().nextInt(skillsAirName.length)];
+            ((AirType)Monku.player.getMonsters().get(0)).setElementalSkills(elemental);
             dialogText.next(dialogTextPanel);
             vanillite.setVisible(false);
             charmander.setVisible(false);

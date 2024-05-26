@@ -23,6 +23,9 @@ public class WaterType extends Monster {
     public WaterType(String name, int monsterPhase, int maxMonsterPhase) {
         super(name, monsterPhase, "WATER", maxMonsterPhase);
     }
+    public List<ElementalAttack> getChoices() {
+        return choices;
+    }
 
     public void setElementalSkills(String name){
 

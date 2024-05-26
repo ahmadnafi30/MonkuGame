@@ -33,6 +33,9 @@ public class IceType extends Monster{
         }
         return "Elemental attack tidak ditemukan";
     }
+    public List<ElementalAttack> getChoices() {
+        return choices;
+    }
 
     public IceType(String name, int monsterPhase, int maxMonsterPhase) {
         super(name, monsterPhase, "ICE", maxMonsterPhase);

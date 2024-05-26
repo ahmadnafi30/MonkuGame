@@ -40,6 +40,9 @@ public class EarthType extends Monster {
     public EarthType(Monster earthType){
         super(earthType);
     }
+    public List<ElementalAttack> getChoices() {
+        return choices;
+    }
     
     @Override
     public void basicAttack(Monster enemy) {

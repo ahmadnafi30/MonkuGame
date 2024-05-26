@@ -34,6 +34,9 @@ public class AirType extends Monster {
         return "Elemental attack tidak ditemukan";
     }
 
+    public List<ElementalAttack> getChoices() {
+        return choices;
+    }
     public AirType(Monster monster){ 
         super(monster);
     }

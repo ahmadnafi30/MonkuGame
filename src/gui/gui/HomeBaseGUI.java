@@ -20,6 +20,9 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
     private JPanel dialogTextPanel;
     private ArrayList<Component> dialogues = new ArrayList<>();
     private ArrayList<JButton> monsters = new ArrayList<>();
+    private JButton selectedItemButton = null;
+    private int indeksItem = -1;
+
     // private JPanel monsterPanel = new JPanel();
     // private JScrollPane scrollPane = new JScrollPane(monsterPanel);
     
@@ -329,6 +332,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                         Monku.player.getMonsters().get(currentIndex).getElementalAttacks().forEach(l ->{
                             l.setQuantity(l.getMaxQuantity());
                         });
+                        
                         JLabel evolve = new JLabel();
                         System.out.println(choice);
                         monsterPlyr.changeMonsterClass();
@@ -340,6 +344,22 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                         evolve.setVisible(true);
                         System.out.println(monsterPlyr.getImage());
                         System.out.println(monsterPlyr.getClass());
+                        int choice2 = JOptionPane.showOptionDialog(null, "Apakah mau menambah/mengganti elemental skill?", "Pergantian atau Pertambahan", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] { "Pertambahan", "Pergantian" }, "Pertambahan");
+                        System.out.println(choice);
+                            if (choice2 == 0) {
+                                if(monsterPlyr.getElementalAttacks().size() < 2) {
+                                    JPanel elePanel = new JPanel();
+                                    elePanel.setLayout(new GridLayout(0, 1, 10, 10));
+                                    JScrollPane scrollPanel = new JScrollPane(elePanel);
+                                    scrollPanel.setBounds(385, 230, 200, 200);
+                                    createElementalSkillPanel(elePanel, monsterPlyr, frame);
+                                    panelBG.add(scrollPanel);
+                                    panelBG.revalidate();
+                                    panelBG.repaint();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Tidak bisa menambah elemental skill","Gagal", JOptionPane.WARNING_MESSAGE);
+                                }
+                            }
                         blink(monster);
                         
                         // Timer to remove evolve effect after a delay
@@ -347,13 +367,13 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                             panelBG.remove(evolve);
                             panelBG.revalidate();
                             panelBG.repaint();
-                            createDialogCard("<html><p style=\"margin-left: 39px\">" + monsterPlyr.getName()
-                                    + "</p><p style=\"margin-left: 39px\">telah berevolusi!</p></html>");
                             dialogText.next(dialogTextPanel);
                             invis.setEnabled(true);
                             monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
                             monster.setVisible(false);
                             System.out.println(Monku.player.getMonsters());
+                            createDialogCard("<html><p style=\"margin-left: 39px\">" + monsterPlyr.getName()
+                                    + "</p><p style=\"margin-left: 39px\">telah berevolusi!</p></html>");
                         });
                         timer.setRepeats(false);
                         timer.start();
@@ -373,6 +393,147 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         }
         panelBG.revalidate();
         panelBG.repaint();
+    }
+
+    private void createElementalSkillPanel(JPanel elePanel, Monster monsterPlyr, JFrame frame) {
+        int index = 0;
+        if(monsterPlyr instanceof AirType){
+            for (ElementalAttack s : ((AirType)monsterPlyr).getChoices()) {
+                JButton button = createElementalButton(s, index++, elePanel);
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int option = JOptionPane.showConfirmDialog(
+                            null, 
+                            s.detailAttack(), 
+                            s.getNama(), 
+                            JOptionPane.OK_CANCEL_OPTION);
+                        if (option == JOptionPane.OK_OPTION) {}
+                    }
+                });
+                elePanel.add(button);
+                elePanel.revalidate();
+                elePanel.repaint();
+            }
+        } else if(monsterPlyr instanceof FireType){
+            for (ElementalAttack s : ((FireType)monsterPlyr).getChoices()) {
+                JButton button = createElementalButton(s, index++, elePanel);
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int option = JOptionPane.showConfirmDialog(
+                            null, 
+                            s.detailAttack(), 
+                            s.getNama(), 
+                            JOptionPane.OK_CANCEL_OPTION);
+                        if (option == JOptionPane.OK_OPTION) {}
+                    }
+                });
+                elePanel.add(button);
+                elePanel.revalidate();
+                elePanel.repaint();
+            }
+        } else if(monsterPlyr instanceof WaterType){
+            for (ElementalAttack s : ((WaterType)monsterPlyr).getChoices()) {
+                JButton button = createElementalButton(s, index++, elePanel);
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int option = JOptionPane.showConfirmDialog(
+                            null, 
+                            s.detailAttack(), 
+                            s.getNama(), 
+                            JOptionPane.OK_CANCEL_OPTION);
+                        if (option == JOptionPane.OK_OPTION) {}
+                    }
+                });
+                elePanel.add(button);
+                elePanel.revalidate();
+                elePanel.repaint();
+            }
+        } else if(monsterPlyr instanceof EarthType){
+            for (ElementalAttack s : ((EarthType)monsterPlyr).getChoices()) {
+                JButton button = createElementalButton(s, index++, elePanel);
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int option = JOptionPane.showConfirmDialog(
+                            null, 
+                            s.detailAttack(), 
+                            s.getNama(), 
+                            JOptionPane.OK_CANCEL_OPTION);
+                        if (option == JOptionPane.OK_OPTION) {}
+                    }
+                });
+                elePanel.add(button);
+                elePanel.revalidate();
+                elePanel.repaint();
+            }
+        } else if(monsterPlyr instanceof IceType){
+            for (ElementalAttack s : ((IceType)monsterPlyr).getChoices()) {
+                JButton button = createElementalButton(s, index++, elePanel);
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int option = JOptionPane.showConfirmDialog(
+                            null, 
+                            s.detailAttack(), 
+                            s.getNama(), 
+                            JOptionPane.OK_CANCEL_OPTION);
+                        if (option == JOptionPane.OK_OPTION) {}
+                    }
+                });
+                elePanel.add(button);
+                elePanel.revalidate();
+                elePanel.repaint();
+            }
+        }
+    }
+
+    private JButton createElementalButton(ElementalAttack s, int i, JPanel panel) {
+        JButton elementalButton = new JButton();
+        elementalButton.setLayout(new BorderLayout());
+    
+        String details = s.getNama() + " x"+ s.getQuantity(); 
+        JLabel detailsLabel = new JLabel("<html>" + details.replace("\n", "<br>") + "</html>");
+    
+        elementalButton.add(detailsLabel, BorderLayout.CENTER);
+        elementalButton.setOpaque(false);
+        elementalButton.setBorder(BorderFactory.createEmptyBorder());
+        elementalButton.setContentAreaFilled(false);
+        elementalButton.setFocusable(false);
+    
+        elementalButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if (selectedItemButton != elementalButton) {
+                    elementalButton.setBackground(Color.LIGHT_GRAY);
+                    elementalButton.setOpaque(true);
+                }
+            }
+    
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                if (selectedItemButton != elementalButton) {
+                    elementalButton.setBackground(null);
+                    elementalButton.setOpaque(false);
+                }
+            }
+        });
+    
+        elementalButton.addActionListener(e -> {
+            System.out.println("Elemental button clicked: " + details);
+            indeksItem = i;
+            if (selectedItemButton != null) {
+                selectedItemButton.setBackground(null);
+                selectedItemButton.setOpaque(false);
+            }
+            selectedItemButton = elementalButton;
+            elementalButton.setBackground(Color.WHITE);
+            elementalButton.setOpaque(true);
+        });
+    
+        return elementalButton;
     }
 
     private boolean isLastCard() {

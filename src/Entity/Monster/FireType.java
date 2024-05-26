@@ -40,6 +40,10 @@ public class FireType extends Monster {
     public FireType(Monster fireType){
         super(fireType);
     }
+    
+    public List<ElementalAttack> getChoices() {
+        return choices;
+    }
 
     @Override
     public void basicAttack(Monster enemy) {
