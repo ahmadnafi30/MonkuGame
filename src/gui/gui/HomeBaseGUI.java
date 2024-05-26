@@ -340,7 +340,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                         System.out.println(monsterPlyr.getImage());
                         System.out.println(monsterPlyr.getClass());
                         blink(monster);
-
+                        
                         // Timer to remove evolve effect after a delay
                         Timer timer = new Timer(2000, event -> {
                             panelBG.remove(evolve);
