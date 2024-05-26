@@ -60,7 +60,6 @@ public class ShopGUI extends JFrame implements ActionListener {
         dialogTextPanel.setOpaque(false);
         createDialogCard("<html><p style=\"margin-left: 99px\">Halo " + Monku.player.getName() + "!</p>Apa yang ingin kamu lakukan?</html>");
         createDialogCard("Pleasure doing business with you!");
-        createDialogCard("Ini adalah dialog 3");
         
         // Create an invisible button to capture clicks and switch dialogs
         invisibleButton = new JButton();
@@ -73,9 +72,9 @@ public class ShopGUI extends JFrame implements ActionListener {
             if (cardCount == 0) {
                 String result = getInputKegiatan(frame);
                 if (result.equalsIgnoreCase("beli")) {
-                    potionButtons(panelBG, frame);
+                    potionButtons(panelBG, frame, "beli");
                 } else if (result.equalsIgnoreCase("jual")) {
-                    
+                    potionButtons(panelBG, frame, "jual");
                 }
             }
             if (isLastCard()) {
@@ -95,7 +94,7 @@ public class ShopGUI extends JFrame implements ActionListener {
         frame.requestFocusInWindow();
     }
 
-    private void potionButtons(JPanel panelBG, JFrame frame) {
+    private void potionButtons(JPanel panelBG, JFrame frame, String buyOrSell) {
         JButton healButton = addButtons(panelBG, null, "asset/potions/HealPotion.png", 200, 200, 200, 200, 110, 20, "Heal Potion");
         JButton defButton = addButtons(panelBG, null, "asset/potions/DefensePotion.png", 200, 200, 200, 200, 150 + 110 + 10, 20, "Defense Potion");
         JButton buffButton = addButtons(panelBG, null, "asset/potions/BuffPotion.png", 200, 200, 200, 200, (150 * 2) + 110 + 10, 20, "Buff Potion");
@@ -113,33 +112,46 @@ public class ShopGUI extends JFrame implements ActionListener {
         panelBG.add(teleButton);
         
         healButton.addActionListener(e -> {
-            options(panelBG, frame, "Jamu Kencur");
+            options(panelBG, frame, "Jamu Kencur", buyOrSell);
+        });
+        defButton.addActionListener(e -> {
+            options(panelBG, frame, "Susu Kambing", buyOrSell);
         });
         buffButton.addActionListener(e -> {
-            options(panelBG, frame, "Jamu Kuat");
+            options(panelBG, frame, "Jamu Kuat", buyOrSell);
         });
         poisonButton.addActionListener(e -> {
-            options(panelBG, frame, "Ludah Buzzer");
+            options(panelBG, frame, "Ludah Buzzer", buyOrSell);
         });
         teleButton.addActionListener(e -> {
-            options(panelBG, frame, "BECAK");
+            options(panelBG, frame, "BECAK", buyOrSell);
         });
         
         JButton mapButton = Template.mapButton(panelBG, frame);
         mapButton.addActionListener(e -> {
-            createDialogCard("Senang berbisnis denganmu!");
+            dialogBox.setVisible(true);
+            dialogTextPanel.setVisible(true);
+            mapButton.setVisible(false);
+            createDialogCard("<html><br>Senang berbisnis denganmu!</br></html>");
             dialogText.next(dialogTextPanel);
-            try {
-                new MapGUI();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            } finally{
-                frame.dispose();
-            }
+            Timer timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        new MapGUI();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    } finally{
+                        frame.dispose();
+                    }
+                } 
+            });
+            timer.setRepeats(false);
+            timer.start();
         });
     }
 
-    private void options(JPanel panelBG, JFrame frame, String potionName) {
+    private void options(JPanel panelBG, JFrame frame, String potionName, String buyOrSell) {
         String[] rarityOptions = { "COMMON", "RARE", "EPIC" };
         int rarityChoice = JOptionPane.showOptionDialog(
             frame,
@@ -151,11 +163,15 @@ public class ShopGUI extends JFrame implements ActionListener {
             rarityOptions, 
             rarityOptions[0]
         );
+        if(rarityChoice == -1){
+            return;
+        }
         String input = JOptionPane.showInputDialog(
             frame,
-            "Masukkan jumlah potion yang ingin kamu beli",
+            "Masukkan jumlah potion yang ingin kamu "+ buyOrSell,
             "Input jumlah", JOptionPane.QUESTION_MESSAGE
         );
+        if(input == null) return;
 
     // Get the selected rarity as a String
         String selectedRarity = (rarityChoice >= 0) ? rarityOptions[rarityChoice] : null;
@@ -164,12 +180,32 @@ public class ShopGUI extends JFrame implements ActionListener {
             // Attempt to parse input as an integer
             int quantity = Integer.parseInt(input);
             if (quantity > 0) {
-                Monku.player.buyItem(Monku.shopKeeper.getItem(potionName, selectedRarity), quantity, Monku.shopKeeper);
-                System.out.println(Monku.player.getCoin());
-                Monku.player.getInventory().forEach((k, v) -> {
-                    System.out.println(k.getName() + " = " + v);
-                });
-
+                if(buyOrSell.equals("beli")){
+                    int confirmation = JOptionPane.showConfirmDialog(null, "Harga Total: " + Monku.shopKeeper.getItem(potionName, selectedRarity).getPrice() * quantity, "Pembelian Potion", JOptionPane.OK_CANCEL_OPTION);
+                    if(confirmation != JOptionPane.OK_OPTION) {
+                        return;
+                    }
+                    String msg = Monku.player.buyItem(Monku.shopKeeper.getItem(potionName, selectedRarity), quantity, Monku.shopKeeper);
+                    System.out.println(msg);
+                    if(msg.equalsIgnoreCase("Tidak ada koin yang cukup untuk membeli item ini.")){
+                        JOptionPane.showMessageDialog(panelBG, msg, "Tidak cukup", JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
+                    System.out.println(Monku.player.getCoin());
+                    Monku.player.getInventory().forEach((k, v) -> {
+                        System.out.println(k.getName() + " = " + v);
+                    });
+                } else if(buyOrSell.equals("jual")){
+                    int confirmation = JOptionPane.showConfirmDialog(null, "Harga Total: " + Monku.shopKeeper.getItem(potionName, selectedRarity).getPrice() * quantity, "Penjualan Potion", JOptionPane.OK_CANCEL_OPTION);
+                    if(confirmation != JOptionPane.OK_OPTION) {
+                        return;
+                    }
+                    Monku.player.sellItem(Monku.shopKeeper.getItem(potionName, selectedRarity), quantity, Monku.shopKeeper);
+                    System.out.println(Monku.player.getCoin());
+                    Monku.player.getInventory().forEach((k, v) -> {
+                        System.out.println(k.getName() + " = " + v);
+                    });
+                }
             }
             panelBG.remove(coin);
             panelBG.repaint();

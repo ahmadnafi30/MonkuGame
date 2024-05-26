@@ -11,23 +11,26 @@ public class AirType extends Monster {
     List<ElementalAttack> choices = new ArrayList<ElementalAttack>();    
     public AirType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "AIR", maxMonsterPhase, image);
-        choices.add(new ElementalAttack("Gust", 40, ElementType.AIR));
-        choices.add(new ElementalAttack("Air Slash", 75, ElementType.AIR));
-        choices.add(new ElementalAttack("Hurricane", 110, ElementType.AIR));
-        choices.add(new ElementalAttack("Aerial Ace", 60, ElementType.AIR));
-        choices.add(new ElementalAttack("Sky Attack", 140, ElementType.AIR));
-        choices.add(new ElementalAttack("Air Cutter", 60, ElementType.AIR));
-        choices.add(new ElementalAttack("Fly", 90, ElementType.AIR));
+        choices.add(new ElementalAttack("Gust", 40, ElementType.AIR, 3));
+        choices.add(new ElementalAttack("Air Slash", 75, ElementType.AIR, 1));
+        choices.add(new ElementalAttack("Hurricane", 110, ElementType.AIR, 1));
+        choices.add(new ElementalAttack("Aerial Ace", 60, ElementType.AIR, 2));
+        choices.add(new ElementalAttack("Sky Attack", 140, ElementType.AIR, 1));
+        choices.add(new ElementalAttack("Air Cutter", 60, ElementType.AIR, 2));
+        choices.add(new ElementalAttack("Fly", 90, ElementType.AIR, 1));
     }
-    public AirType(String name, int monsterPhase, int maxMonsterPhase) {
-        super(name, monsterPhase, "AIR", maxMonsterPhase);
-        choices.add(new ElementalAttack("Gust", 40, ElementType.AIR));
-        choices.add(new ElementalAttack("Air Slash", 75, ElementType.AIR));
-        choices.add(new ElementalAttack("Hurricane", 110, ElementType.AIR));
-        choices.add(new ElementalAttack("Aerial Ace", 60, ElementType.AIR));
-        choices.add(new ElementalAttack("Sky Attack", 140, ElementType.AIR));
-        choices.add(new ElementalAttack("Air Cutter", 60, ElementType.AIR));
-        choices.add(new ElementalAttack("Fly", 90, ElementType.AIR));
+
+    public String setElementalSkills(String name){
+        if (this.elementalAttacks.size() == 2) {
+            return "Elemental attack sudah penuh";
+        }
+        for (int i = 0; i < choices.size(); i++) {
+            if (choices.get(i).getNama().equalsIgnoreCase(name)) {
+                this.elementalAttacks.add(choices.get(i));
+                return choices.get(i).getNama() + " berhasil ditambahkan";
+            }
+        }
+        return "Elemental attack tidak ditemukan";
     }
 
     public AirType(Monster monster){ 
@@ -36,41 +39,6 @@ public class AirType extends Monster {
 
     public void changeElement(){
 
-    }
-
-    // New ability: Gust
-    public void gust() {
-        choices.add(new ElementalAttack("Gust", 40, ElementType.AIR));
-    }
-
-    // New ability: Air Slash
-    public void airSlash() {
-        choices.add(new ElementalAttack("Air Slash", 75, ElementType.AIR));
-    }
-
-    // New ability: Hurricane
-    public void hurricane() {
-        choices.add(new ElementalAttack("Hurricane", 110, ElementType.AIR));
-    }
-
-    // New ability: Aerial Ace
-    public void aerialAce() {
-        choices.add(new ElementalAttack("Aerial Ace", 60, ElementType.AIR));
-    }
-
-    // New ability: Sky Attack
-    public void skyAttack() {
-        choices.add(new ElementalAttack("Sky Attack", 140, ElementType.AIR));
-    }
-
-    // New ability: Air Cutter
-    public void airCutter() {
-        choices.add(new ElementalAttack("Air Cutter", 60, ElementType.AIR));
-    }
-
-    // New ability: Fly
-    public void fly() {
-        choices.add(new ElementalAttack("Fly", 90, ElementType.AIR));
     }
 
     @Override

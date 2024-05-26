@@ -108,21 +108,21 @@ public class Player implements ItemInteract, Battle {
     }
 
     @Override
-    public void buyItem(Item itembuy, int quantity, Object seller) {
+    public String buyItem(Item itembuy, int quantity, Object seller) {
         if (itembuy.price * quantity > coin) {
             BuyException.throwItemBuyException("Tidak ada koin yang cukup untuk membeli item ini.");
-            return;
+            return "Tidak ada koin yang cukup untuk membeli item ini.";
         } else if (inventoryIsFull() || inventorySize() + quantity > MAX_CAPACITY) {
             BuyException.throwFullInventoryException(" Inventory penuh. Tidak bisa membeli item.");
             int availableSpace = MAX_CAPACITY - inventorySize();
             System.out.println("Hanya bisa membeli " + availableSpace + " item.");
-            return;
+            return "Hanya bisa membeli " + availableSpace + " item.";
         }
         if(seller instanceof ItemSeller) {
             ItemSeller itemSeller = (ItemSeller) seller;
             if(!itemSeller.hasItem(itembuy)) {
                 BuyException.throwEmptyItemException("Tidak ada item yang tersedia untuk dibeli.");
-                return;
+                return "Tidak ada item yang tersedia untuk dibeli.";
             }
             itemSeller.setItemQuantity(itembuy, -quantity);
             coin -= itembuy.price * quantity;
@@ -132,7 +132,9 @@ public class Player implements ItemInteract, Battle {
     
             printItemDetails(itembuy);
             incrementExp(5); // Add exp for buying item
+            return "Terima kasih telah membeli!";
         }
+        return null;
     }
 
     private void printItemDetails(Item item) {

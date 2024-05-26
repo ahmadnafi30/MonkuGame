@@ -10,15 +10,28 @@ public class IceType extends Monster{
     List<ElementalAttack> choices = new ArrayList<>();
     public IceType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "ICE", maxMonsterPhase, image);
-        elementalAttacks.add(new ElementalAttack("Ice Beam", 90, ElementType.ICE));
-        elementalAttacks.add(new ElementalAttack("Hydro Pump", 110, ElementType.ICE));
-        elementalAttacks.add(new ElementalAttack("Blizzard", 120, ElementType.ICE));
-        elementalAttacks.add(new ElementalAttack("Frost Breath", 60, ElementType.ICE));
-        elementalAttacks.add(new ElementalAttack("Icicle Spear", 25, ElementType.ICE)); // Typically hits 2-5 times
-        elementalAttacks.add(new ElementalAttack("Avalanche", 60, ElementType.ICE)); // Power doubles if the user has taken damage in the same turn
-        elementalAttacks.add(new ElementalAttack("Ice Fang", 65, ElementType.ICE));
-        elementalAttacks.add(new ElementalAttack("Icy Wind", 55, ElementType.ICE));
-        elementalAttacks.add(new ElementalAttack("Ice Shard", 40, ElementType.ICE)); // Typically a priority move
+        elementalAttacks.add(new ElementalAttack("Ice Beam", 90, ElementType.ICE, 1));
+        elementalAttacks.add(new ElementalAttack("Hydro Pump", 110, ElementType.ICE, 1));
+        elementalAttacks.add(new ElementalAttack("Blizzard", 120, ElementType.ICE, 1));
+        elementalAttacks.add(new ElementalAttack("Frost Breath", 60, ElementType.ICE, 3));
+        elementalAttacks.add(new ElementalAttack("Icicle Spear", 25, ElementType.ICE, 4));
+        elementalAttacks.add(new ElementalAttack("Avalanche", 60, ElementType.ICE, 2));
+        elementalAttacks.add(new ElementalAttack("Ice Fang", 65, ElementType.ICE, 2));
+        elementalAttacks.add(new ElementalAttack("Icy Wind", 55, ElementType.ICE, 3));
+        elementalAttacks.add(new ElementalAttack("Ice Shard", 40, ElementType.ICE, 3)); 
+    }
+
+    public String setElementalSkills(String name){
+        if (this.elementalAttacks.size() == 2) {
+            return "Elemental attack sudah penuh";
+        }
+        for (int i = 0; i < choices.size(); i++) {
+            if (choices.get(i).getNama().equalsIgnoreCase(name)) {
+                this.elementalAttacks.add(choices.get(i));
+                return choices.get(i).getNama() + " berhasil ditambahkan";
+            }
+        }
+        return "Elemental attack tidak ditemukan";
     }
 
     public IceType(String name, int monsterPhase, int maxMonsterPhase) {
@@ -28,50 +41,7 @@ public class IceType extends Monster{
     public IceType(Monster iceType){
         super(iceType);
     }
-    //Glalie
-    public void iceBeam(){
-        elementalAttacks.add(new ElementalAttack("Ice Beam", 90, ElementType.ICE));
-    }
 
-    //Cloyster
-    public void hydroPump(){
-        elementalAttacks.add(new ElementalAttack("Hydro Pump", 110, ElementType.ICE));
-    }
-
-    // New ability: Blizzard
-    public void blizzard() {
-        elementalAttacks.add(new ElementalAttack("Blizzard", 120, ElementType.ICE));
-    }
-
-    // New ability: Frost Breath
-    public void frostBreath() {
-        elementalAttacks.add(new ElementalAttack("Frost Breath", 60, ElementType.ICE));
-    }
-
-    // New ability: Icicle Spear
-    public void icicleSpear() {
-        elementalAttacks.add(new ElementalAttack("Icicle Spear", 25, ElementType.ICE)); // Typically hits 2-5 times
-    }
-
-    // New ability: Avalanche
-    public void avalanche() {
-        elementalAttacks.add(new ElementalAttack("Avalanche", 60, ElementType.ICE)); // Power doubles if the user has taken damage in the same turn
-    }
-
-    // New ability: Ice Fang
-    public void iceFang() {
-        elementalAttacks.add(new ElementalAttack("Ice Fang", 65, ElementType.ICE));
-    }
-
-    // New ability: Icy Wind
-    public void icyWind() {
-        elementalAttacks.add(new ElementalAttack("Icy Wind", 55, ElementType.ICE));
-    }
-
-    // New ability: Ice Shard
-    public void iceShard() {
-        elementalAttacks.add(new ElementalAttack("Ice Shard", 40, ElementType.ICE)); // Typically a priority move
-    }
     @Override
     public void basicAttack(Monster enemy) {
         enemy.getAttacked("basic", this, null);

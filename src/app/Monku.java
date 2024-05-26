@@ -1,6 +1,7 @@
 package app;
 
 import java.io.*;
+import java.util.Random;
 
 import javax.swing.SwingUtilities;
 
@@ -59,6 +60,113 @@ public class Monku {
 
     public static void main(String[] args) throws IOException {
         //TODO: bikin konstruktor kosong buat setiap kelas
+        String[] skillsAirName = {
+            "Gust",
+            "Air Slash",
+            "Hurricane",
+            "Aerial Ace",
+            "Sky Attack",
+            "Air Cutter",
+            "Fly"
+        };
+        String[] skillsFireName = {
+            "Ember",
+            "Flame Thrower",
+            "Fire Blast",
+            "Fire Spin",
+            "Heat Wave",
+            "Inferno",
+            "Flame Charge",
+            "Overheat"
+        };
+        String[] skillsEarthName = {
+            "Tackle",
+            "Mud-Slap",
+            "Earthquake",
+            "Dig",
+            "Mud Shot",
+            "Sand Tomb",
+            "Magnitude",
+            "Earth Power"
+        };
+        String[] skillsIceName = {
+            "Ice Beam",
+            "Hydro Pump",
+            "Blizzard",
+            "Frost Breath",
+            "Icicle Spear",
+            "Avalanche",
+            "Ice Fang",
+            "Icy Wind",
+            "Ice Shard"
+        };
+        String[] skillsWaterName = {
+            "Bubble",
+            "Water Gun",
+            "Aqua Jet",
+            "Surf",
+            "Hydro Pump",
+            "Waterfall",
+            "Aqua Tail",
+            "Scald"
+        };
+        for(int i = 0; i < 5; i++){
+            if(monsters1[i] instanceof AirType){
+                ((AirType)monsters1[i]).setElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+            } else if(monsters1[i] instanceof FireType){
+                ((FireType)monsters1[i]).setElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+            } else if(monsters1[i] instanceof EarthType){
+                ((EarthType)monsters1[i]).setElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+            } else if(monsters1[i] instanceof IceType){
+                ((IceType)monsters1[i]).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+            } else if(monsters1[i] instanceof WaterType){
+                ((WaterType)monsters1[i]).setElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+            }
+            if(monsters2[i] instanceof AirType){
+                ((AirType)monsters2[i]).setElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+            } else if(monsters2[i] instanceof FireType){
+                ((FireType)monsters2[i]).setElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+            } else if(monsters2[i] instanceof EarthType){
+                ((EarthType)monsters2[i]).setElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+            } else if(monsters2[i] instanceof IceType){
+                ((IceType)monsters2[i]).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+            } else if(monsters2[i] instanceof WaterType){
+                ((WaterType)monsters2[i]).setElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+            }
+            if(monsters3[i] instanceof AirType){
+                ((AirType)monsters3[i]).setElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+            } else if(monsters3[i] instanceof FireType){
+                ((FireType)monsters3[i]).setElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+            } else if(monsters3[i] instanceof EarthType){
+                ((EarthType)monsters3[i]).setElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+            } else if(monsters3[i] instanceof IceType){
+                ((IceType)monsters3[i]).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+            } else if(monsters3[i] instanceof WaterType){
+                ((WaterType)monsters3[i]).setElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+            }
+            if(monsters4[i] instanceof AirType){
+                ((AirType)monsters4[i]).setElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+            } else if(monsters4[i] instanceof FireType){
+                ((FireType)monsters4[i]).setElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+            } else if(monsters4[i] instanceof EarthType){
+                ((EarthType)monsters4[i]).setElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+            } else if(monsters4[i] instanceof IceType){
+                ((IceType)monsters4[i]).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+            } else if(monsters4[i] instanceof WaterType){
+                ((WaterType)monsters4[i]).setElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+            }
+            if(monsters5[i] instanceof AirType){
+                ((AirType)monsters5[i]).setElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+            } else if(monsters5[i] instanceof FireType){
+                ((FireType)monsters5[i]).setElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+            } else if(monsters5[i] instanceof EarthType){
+                ((EarthType)monsters5[i]).setElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+            } else if(monsters5[i] instanceof IceType){
+                ((IceType)monsters5[i]).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+            } else if(monsters5[i] instanceof WaterType){
+                ((WaterType)monsters5[i]).setElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+            }
+        }
         SwingUtilities.invokeLater(() -> {
             try {
                 new Homepage();

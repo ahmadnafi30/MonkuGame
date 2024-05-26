@@ -187,16 +187,16 @@ public abstract class Monster implements Battle, Serializable {
 
     //Si monster di kelas ini yang terkena damage
     //return true jika monster meninggal
-    public boolean getAttacked(String attackType, Monster attacker, ElementalAttack elementalAttack) {
+    public String getAttacked(String attackType, Monster attacker, ElementalAttack elementalAttack) {
         /*
          * "basic" for basic attack
          * "special" for special attack
          * "elemental" for elemental attack
          */
+        String msg = "";
         if(healthPoint <= 0) {
-            System.out.println(name + " is already dead!");
             this.healthPoint = 0;
-            return true;
+            return name + " sudah mati!";
         }
         int dmg = 0;
         int critical = 1;
@@ -222,15 +222,15 @@ public abstract class Monster implements Battle, Serializable {
                 break;
         }
         if(critical == 2) {
-            System.out.println("Critical hit!");
+            msg += "Critical Hit!";
         }
         System.out.println(name + " took " + dmg + " damage!");
         if(healthPoint <= 0) {
             System.out.println(name + " has been defeated!");
             this.healthPoint = 0;
-            return true;
+            return name + " sudah mati!";
         }
-        return false;
+        return msg;
     }
 
     private void setAttributesMax(int monsterPhase){

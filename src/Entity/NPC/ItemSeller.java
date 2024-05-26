@@ -69,7 +69,9 @@ public class ItemSeller extends NPC implements ItemInteract {
     
     // Method to buy an item
     @Override
-    public void buyItem(Item item, int quantity, Object seller) {}
+    public String buyItem(Item item, int quantity, Object seller) {
+        return null;
+    }
 
     @Override
     public void checkInventory() {

@@ -10,11 +10,17 @@ public class ElementalAttack {
     protected String nama;
     protected int power;
     protected ElementType element;
+    protected int quantity;
 
-    public ElementalAttack(String nama, int power, ElementType element) {
+    public ElementalAttack(String nama, int power, ElementType element, int quantity) {
         this.nama = nama;
         this.power = power;
         this.element = element;
+        this.quantity = quantity;
+    }
+
+    public int getQuantity(){
+        return quantity;
     }
 
     public String getNama() {

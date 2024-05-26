@@ -11,60 +11,34 @@ public class FireType extends Monster {
     List<ElementalAttack> choices = new ArrayList<ElementalAttack>();
     public FireType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "FIRE", maxMonsterPhase, image);
-        choices.add(new ElementalAttack("Ember", 40, ElementType.FIRE));
-        choices.add(new ElementalAttack("Flame Thrower", 90, ElementType.FIRE));
-        choices.add(new ElementalAttack("Fire Blast", 110, ElementType.FIRE));
-        choices.add(new ElementalAttack("Fire Spin", 35, ElementType.FIRE));
-        choices.add(new ElementalAttack("Heat Wave", 95, ElementType.FIRE));
-        choices.add(new ElementalAttack("Inferno", 100, ElementType.FIRE));
-        choices.add(new ElementalAttack("Flame Charge", 50, ElementType.FIRE));
-        choices.add(new ElementalAttack("Overheat", 130, ElementType.FIRE));
+        choices.add(new ElementalAttack("Ember", 40, ElementType.FIRE, 3));
+        choices.add(new ElementalAttack("Flame Thrower", 90, ElementType.FIRE, 1));
+        choices.add(new ElementalAttack("Fire Blast", 110, ElementType.FIRE, 1));
+        choices.add(new ElementalAttack("Fire Spin", 35, ElementType.FIRE, 4));
+        choices.add(new ElementalAttack("Heat Wave", 95, ElementType.FIRE, 2));
+        choices.add(new ElementalAttack("Inferno", 100, ElementType.FIRE, 1));
+        choices.add(new ElementalAttack("Flame Charge", 50, ElementType.FIRE, 2));
+        choices.add(new ElementalAttack("Overheat", 130, ElementType.FIRE, 1));
     }
+
+    public String setElementalSkills(String name){
+        if (this.elementalAttacks.size() == 2) {
+            return "Elemental attack sudah penuh";
+        }
+        for (int i = 0; i < choices.size(); i++) {
+            if (choices.get(i).getNama().equalsIgnoreCase(name)) {
+                this.elementalAttacks.add(choices.get(i));
+                return choices.get(i).getNama() + " berhasil ditambahkan";
+            }
+        }
+        return "Elemental attack tidak ditemukan";
+    }
+    
     public FireType(String name, int monsterPhase, int maxMonsterPhase) {
         super(name, monsterPhase, "FIRE", maxMonsterPhase);
     }
     public FireType(Monster fireType){
         super(fireType);
-    }
-
-    // New ability: Ember
-    public void ember() {
-        elementalAttacks.add(new ElementalAttack("Ember", 40, ElementType.FIRE));
-    }
-
-    // New ability: Flame Thrower
-    public void flameThrower() {
-        elementalAttacks.add(new ElementalAttack("Flame Thrower", 90, ElementType.FIRE));
-    }
-
-    // New ability: Fire Blast
-    public void fireBlast() {
-        elementalAttacks.add(new ElementalAttack("Fire Blast", 110, ElementType.FIRE));
-    }
-
-    // New ability: Fire Spin
-    public void fireSpin() {
-        elementalAttacks.add(new ElementalAttack("Fire Spin", 35, ElementType.FIRE));
-    }
-
-    // New ability: Heat Wave
-    public void heatWave() {
-        elementalAttacks.add(new ElementalAttack("Heat Wave", 95, ElementType.FIRE));
-    }
-
-    // New ability: Inferno
-    public void inferno() {
-        elementalAttacks.add(new ElementalAttack("Inferno", 100, ElementType.FIRE));
-    }
-
-    // New ability: Flame Charge
-    public void flameCharge() {
-        elementalAttacks.add(new ElementalAttack("Flame Charge", 50, ElementType.FIRE));
-    }
-
-    // New ability: Overheat
-    public void overheat() {
-        elementalAttacks.add(new ElementalAttack("Overheat", 130, ElementType.FIRE));
     }
 
     @Override
