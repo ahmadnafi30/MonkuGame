@@ -216,6 +216,7 @@ public abstract class Monster implements Battle, Serializable {
             
             case "elemental":
                 healthPoint -= dmg = dmgFormula(attacker, critical, attackType, elementalAttack);
+                elementalAttack.quantity--;
                 break;
 
             default:
@@ -467,7 +468,7 @@ public abstract class Monster implements Battle, Serializable {
             System.out.println("Element: "+attribute.element);
         });
     }
-
+    
     public String displayDetailMonsterReturn() {
         StringBuilder details = new StringBuilder();
         details.append("Name: ").append(name).append(" (").append(elementType[0]).append(")\n");

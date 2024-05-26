@@ -11,14 +11,23 @@ public class ElementalAttack {
     protected int power;
     protected ElementType element;
     protected int quantity;
+    protected int maxQuantity;
 
-    public ElementalAttack(String nama, int power, ElementType element, int quantity) {
+    public ElementalAttack(String nama, int power, ElementType element, int maxQuantity) {
         this.nama = nama;
         this.power = power;
         this.element = element;
+        this.maxQuantity = quantity;
+        this.quantity = maxQuantity;
+    }
+
+    public void setQuantity(int quantity){
         this.quantity = quantity;
     }
 
+    public int getMaxQuantity(){
+        return maxQuantity;
+    }
     public int getQuantity(){
         return quantity;
     }

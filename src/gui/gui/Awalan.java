@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Random;
 
 import Entity.Locations.HomeBase;
 import Entity.Monster.*;
@@ -142,8 +143,62 @@ public class Awalan extends JFrame implements ActionListener {
         charmander.setVisible(true);
         rhyhorn.setVisible(true);
         zubat.setVisible(true);
+
+        String[] skillsAirName = {
+            "Gust",
+            "Air Slash",
+            "Hurricane",
+            "Aerial Ace",
+            "Sky Attack",
+            "Air Cutter",
+            "Fly"
+        };
+        String[] skillsFireName = {
+            "Ember",
+            "Flame Thrower",
+            "Fire Blast",
+            "Fire Spin",
+            "Heat Wave",
+            "Inferno",
+            "Flame Charge",
+            "Overheat"
+        };
+        String[] skillsEarthName = {
+            "Tackle",
+            "Mud-Slap",
+            "Earthquake",
+            "Dig",
+            "Mud Shot",
+            "Sand Tomb",
+            "Magnitude",
+            "Earth Power"
+        };
+        String[] skillsIceName = {
+            "Ice Beam",
+            "Hydro Pump",
+            "Blizzard",
+            "Frost Breath",
+            "Icicle Spear",
+            "Avalanche",
+            "Ice Fang",
+            "Icy Wind",
+            "Ice Shard"
+        };
+        String[] skillsWaterName = {
+            "Bubble",
+            "Water Gun",
+            "Aqua Jet",
+            "Surf",
+            "Hydro Pump",
+            "Waterfall",
+            "Aqua Tail",
+            "Scald"
+        };
+
         vanillite.addActionListener(e -> {
             Monku.player.catchMonster(new IceType("vanillite", 1, 3, "asset/vanillite/vanillite.gif"));
+            
+            ((IceType)Monku.player.getMonsters().get(0)).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
             dialogText.next(dialogTextPanel);
             charmander.setVisible(false);
             rhyhorn.setVisible(false);
