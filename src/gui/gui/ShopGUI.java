@@ -92,6 +92,7 @@ public class ShopGUI extends JFrame implements ActionListener {
         frame.setVisible(true);
         // Request focus for the frame to ensure it receives key events
         frame.requestFocusInWindow();
+        Template.playMusic("asset/Music/Jubilife City (Day).wav");
     }
 
     private void potionButtons(JPanel panelBG, JFrame frame, String buyOrSell) {

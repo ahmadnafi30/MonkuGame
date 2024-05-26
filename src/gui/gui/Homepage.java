@@ -15,6 +15,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+
+
 public class Homepage {
     private String[] imageChar = {
             "asset/Char/acetrainer-gen3jp.png",
@@ -37,7 +42,7 @@ public class Homepage {
         frame.setLocationRelativeTo(null);
         ImageIcon icon = new ImageIcon("asset/Screenshot 2024-05-15 192702.png");
         frame.setIconImages(Collections.singletonList(icon.getImage()));
-
+    
         panel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -48,25 +53,25 @@ public class Homepage {
             }
         };
         panel.setBackground(new Color(135, 206, 235));
-
+    
         int buttonWidth = 150;
         int buttonHeight = 40;
         int spacing = 20;
         int totalButtonWidth = buttonWidth * 2 + spacing;
         int xStart = (frame.getWidth() - totalButtonWidth) / 2;
         int yPosition = frame.getHeight() - buttonHeight - 200;
-
+    
         BufferedImage buttonIcon = ImageIO.read(new File("asset/text-box.png"));
         Image scaledButtonImage = buttonIcon.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
         BufferedImage buttonPressedIcon = ImageIO.read(new File("asset/toppng.com-text-box-pixel-art-cupcake-601x211.png"));
         Image scaledButtonPressedImage = buttonPressedIcon.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
-
+    
         JButton newGameButton = createStyledButton("NEW GAME", scaledButtonImage, xStart, yPosition - 30, buttonWidth, buttonHeight);
         panel.add(newGameButton);
-
+    
         JButton loadGameButton = createStyledButton("LOAD GAME", scaledButtonImage, xStart + buttonWidth + spacing, yPosition - 30, buttonWidth, buttonHeight);
         panel.add(loadGameButton);
-
+    
         JButton aboutUsButton = new JButton("ABOUT US");
         int xAboutUs = frame.getWidth() - 150;
         int yAboutUs = 20;
@@ -75,7 +80,7 @@ public class Homepage {
         aboutUsButton.setBackground(Color.WHITE);
         aboutUsButton.setForeground(Color.BLACK);
         panel.add(aboutUsButton);
-
+    
         addAboutUsActionListener(aboutUsButton, frame);
         addPlayGameActionListener(newGameButton, scaledButtonPressedImage, frame);
         addPlayGameActionListenerByLoadGames(loadGameButton, scaledButtonPressedImage, frame);
@@ -85,10 +90,13 @@ public class Homepage {
         addButtonPressedEffect(newGameButton);
         addButtonPressedEffect(loadGameButton);
         addButtonPressedEffect(aboutUsButton);
-
+    
         frame.setContentPane(panel);
         frame.setVisible(true);
+        Template.playMusic("asset/Music/Introduction.wav");
+        
     }
+    
 
     private JButton createButton(BufferedImage charImage, String imagePath) {
         JButton button = new JButton(new ImageIcon(charImage));
@@ -174,6 +182,7 @@ public class Homepage {
                         if (Monku.player.getImage() == null) {
                             JOptionPane.showMessageDialog(frame, "Please select a character", "Error", JOptionPane.WARNING_MESSAGE);
                         } else {
+                            Template.stopMusic();
                             frame.dispose();
                             new Awalan(1);
                         }
@@ -191,6 +200,7 @@ public class Homepage {
         loadGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Template.stopMusic();
                 Monku.loadGame();
                 handleButtonPress(loadGameButton, buttonPressed, frame, () -> new HomeBaseGUI());
             }
@@ -309,6 +319,7 @@ public class Homepage {
         timer.setRepeats(false);
         timer.start();
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

@@ -44,9 +44,6 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        //scrollPane.setBounds(340, 160, 300, 250);
-        //scrollPane.setOpaque(false);
-        
         //panelBG.add(scrollPane);
         frame.setContentPane(panelBG);
         Template.showNameLoc(Monku.player.getLocationPlayer(), panelBG, 100, 700, 900, 340, 10);
@@ -150,6 +147,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         });
         panelBG.add(invisibleButton);
         frame.setVisible(true);
+        Template.playMusic("asset/Music/The Pokémon Lab.wav");
     }
 
     private void showOptions(JButton invis, JPanel panelBG, JFrame frame) {

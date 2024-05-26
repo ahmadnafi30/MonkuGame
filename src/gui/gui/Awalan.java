@@ -115,6 +115,7 @@ public class Awalan extends JFrame implements ActionListener {
 
         panelBG.add(invisibleButton);
         frame.setVisible(true);
+        Template.playMusic("asset/Music/TV Station.wav");
     }
 
     public void monkuChoices(JPanel panelBG, JFrame frame, JButton invisibleButton){
