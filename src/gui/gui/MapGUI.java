@@ -55,7 +55,7 @@ public class MapGUI {
             dungeonInfernocon = ImageIO.read(new File("asset/Untitled design/7.png"));
             dungeonInfernoPressed = ImageIO.read(new File("asset/Untitled design/8.png"));
             dungeonObsidian = ImageIO.read(new File("asset/Untitled design/9.png"));
-            dungeonObsidianPressed = ImageIO.read(new File("asset/Untitled design/9.png"));
+            dungeonObsidianPressed = ImageIO.read(new File("asset/Untitled design/10.png"));
         } catch (IOException e) {
             System.err.println("Error loading icons: " + e.getMessage());
             return; // Exit the constructor if the icons can't be loaded
@@ -81,9 +81,6 @@ public class MapGUI {
 
         dungeonDoom = resize(dungeonDoom, 100, 100);
         dungeonDoomPressed = resize(dungeonDoomPressed, 150, 150);
-
-
-
 
         JPanel panelBG = new JPanel(null) {
             @Override
@@ -120,16 +117,101 @@ public class MapGUI {
             }
         });
 
-        Image scaledDungeonIcon = dungeonCrypt.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
-        Image scaledDungeonIconPressed = dungeonCryptPressed.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
-        JButton dungeonButton = new JButton(new ImageIcon(scaledDungeonIcon));
-        dungeonButton.addActionListener(new ActionListener() {
+        Image scaleDungeonCrypt = dungeonCrypt.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        Image scaledDungeonCryptPressed = dungeonCryptPressed.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        JButton dungeonCryptButton = new JButton(new ImageIcon(scaleDungeonCrypt));
+        dungeonCryptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleButtonPress(dungeonButton, scaledDungeonIconPressed, frame, () -> new DungeonGUI((Dungeon)Monku.infernoDungeon, Monku.player));
+                handleButtonPress(dungeonCryptButton, scaledDungeonCryptPressed, frame, () -> new DungeonGUI((Dungeon)Monku.cryptDungeon, Monku.player));
             }
             }
         );
+
+        dungeonCryptButton.setFocusable(false);
+        dungeonCryptButton.setBounds(422, 101, 68, 68);
+        dungeonCryptButton.setBorder(BorderFactory.createEmptyBorder());
+        dungeonCryptButton.setContentAreaFilled(false);
+        dungeonCryptButton.setFocusable(false);
+        addHoverEffect(dungeonCryptButton, dungeonCrypt);
+        panelBG.add(dungeonCryptButton);
+
+        Image scaleDungeonEternal = dungeonEternalIcon.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        Image scaledDungeonEternalPressed = dungeonEternalPressed.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        JButton dungeonEternalButton = new JButton(new ImageIcon(scaleDungeonEternal));
+        dungeonEternalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleButtonPress(dungeonEternalButton, scaledDungeonEternalPressed, frame, () -> new DungeonGUI((Dungeon)Monku.eternalDungeon, Monku.player));
+            }
+            }
+        );
+
+        dungeonEternalButton.setFocusable(false);
+        dungeonEternalButton.setBounds(840, 131, 68, 68);
+        dungeonEternalButton.setBorder(BorderFactory.createEmptyBorder());
+        dungeonEternalButton.setContentAreaFilled(false);
+        dungeonEternalButton.setFocusable(false);
+        addHoverEffect(dungeonEternalButton, dungeonEternalIcon);
+        panelBG.add(dungeonEternalButton);
+
+        Image scaledDungeonInferno = dungeonInfernocon.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        Image scaledDungeonInfernoPressed = dungeonInfernoPressed.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        JButton dungeonInfernoButton = new JButton(new ImageIcon(scaledDungeonInferno));
+        dungeonInfernoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleButtonPress(dungeonInfernoButton, scaledDungeonInfernoPressed, frame, () -> new DungeonGUI((Dungeon)Monku.infernoDungeon, Monku.player));
+            }
+            }
+        );
+
+        dungeonInfernoButton.setFocusable(false);
+        dungeonInfernoButton.setBounds(190, 90, 68, 68);
+        dungeonInfernoButton.setBorder(BorderFactory.createEmptyBorder());
+        dungeonInfernoButton.setContentAreaFilled(false);
+        dungeonInfernoButton.setFocusable(false);
+        addHoverEffect(dungeonInfernoButton, dungeonInfernocon);
+        panelBG.add(dungeonInfernoButton);
+
+        Image scaledObsidian = dungeonObsidian.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        Image scaledObsidianPressed = dungeonObsidianPressed.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        JButton dungeonObsidianButton = new JButton(new ImageIcon(scaledObsidian));
+        dungeonObsidianButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleButtonPress(dungeonObsidianButton, scaledObsidianPressed, frame, () -> new DungeonGUI((Dungeon)Monku.obsidianDungeon, Monku.player));
+            }
+            }
+        );
+
+        dungeonObsidianButton.setFocusable(false);
+        dungeonObsidianButton.setBounds(615, 480, 68, 68);
+        dungeonObsidianButton.setBorder(BorderFactory.createEmptyBorder());
+        dungeonObsidianButton.setContentAreaFilled(false);
+        dungeonObsidianButton.setFocusable(false);
+        addHoverEffect(dungeonObsidianButton, dungeonObsidian);
+        panelBG.add(dungeonObsidianButton);
+
+        Image scaleDoom = dungeonDoom.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        Image scaledDoomPressed = dungeonDoomPressed.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        JButton dungeonDoomButton = new JButton(new ImageIcon(scaleDoom));
+        dungeonDoomButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleButtonPress(dungeonDoomButton, scaledDoomPressed, frame, () -> new DungeonGUI((Dungeon)Monku.doomDungeon, Monku.player));
+            }
+            }
+        );
+
+        dungeonDoomButton.setFocusable(false);
+        dungeonDoomButton.setBounds(720, 230, 68, 68);
+        dungeonDoomButton.setBorder(BorderFactory.createEmptyBorder());
+        dungeonDoomButton.setContentAreaFilled(false);
+        dungeonDoomButton.setFocusable(false);
+        addHoverEffect(dungeonDoomButton, dungeonDoom);
+        panelBG.add(dungeonDoomButton);
+
         homeButton.setBounds(279, 502, 90, 90);
         homeButton.setBorder(BorderFactory.createEmptyBorder());
         homeButton.setContentAreaFilled(false);
@@ -138,18 +220,10 @@ public class MapGUI {
         shopButton.setBorder(BorderFactory.createEmptyBorder());
         shopButton.setContentAreaFilled(false);
         shopButton.setFocusable(false);
-        dungeonButton.setFocusable(false);
-        dungeonButton.setBounds(422, 101, 68, 68);
-        dungeonButton.setBorder(BorderFactory.createEmptyBorder());
-        dungeonButton.setContentAreaFilled(false);
-        dungeonButton.setFocusable(false);
         addHoverEffect(shopButton, shopIcon);
         addHoverEffect(homeButton, homeIcon);
-        addHoverEffect(dungeonButton, dungeonCrypt);
-        panelBG.setBounds(0, 0, 1000, 750);
         panelBG.add(homeButton);
         panelBG.add(shopButton);
-        panelBG.add(dungeonButton);
         frame.setContentPane(panelBG);
         frame.setVisible(true);
     }
