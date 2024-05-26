@@ -3,8 +3,12 @@ package gui;
 import Entity.Locations.Dungeon;
 import Entity.Locations.HomeBase;
 import Entity.Monster.AirType;
+import Entity.Monster.EarthType;
 import Entity.Monster.ElementalAttack;
+import Entity.Monster.FireType;
+import Entity.Monster.IceType;
 import Entity.Monster.Monster;
+import Entity.Monster.WaterType;
 import Entity.NPC.ItemSeller;
 import Entity.Player.Player;
 import app.Monku;
@@ -538,6 +542,7 @@ private void setMonsterDungeon(){
 public void popUp() {
     if (isDead(monsterBattle)) {
         player.addCoin(15*dungeon.getLevel());
+        player.incrementExp(15*dungeon.getLevel());
         int buttonWidth = 600;
         int buttonHeight = 300;
         monsterBattle.setHealthPoint(monsterBattle.getCurrentMaxHealthPoint());
@@ -585,8 +590,6 @@ public void popUp() {
             goToDungeon.setBounds((buttonBackgroundPanel.getWidth() - 150) / 2, 200- 20, 150, 50);
             buttonBackgroundPanel.add(goToDungeon);
             player.catchMonster(monsterBattle);
-            
-            // buttonBackgroundPanel.remove(defeatLabel);
         });
 
         tangkap.setBounds((buttonBackgroundPanel.getWidth() - 150) / 2 - 100, 200 - 20, 150, 50);
@@ -728,6 +731,7 @@ public void checkItem(){
 }
 
 private void addBattleButtons() throws IOException {
+    Template.playMusic("asset/Music/Battle! (Gym Leader).wav");
     monsterPlayer = player.deployMonster(indeksMonku);
     BufferedImage bcAttackImage;
     BufferedImage speAttackImage;
@@ -802,13 +806,7 @@ private void addBattleButtons() throws IOException {
         popUp();
         System.out.println("Monster musuh mati "+isDead(monsterBattle));
         if(isDead(monsterBattle)) return;
-        // try {
-        //     Thread.sleep(7000); // Menunda selama 7 detik
-        // } catch (InterruptedException e3) {
-        //     // Tangani pengecualian jika diperlukan
-        //     e3.printStackTrace();
-        // }
-        
+
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1267,8 +1265,19 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
 
             break;
             case 2:
-                Image uhuy2 = new ImageIcon("path").getImage();
-                Image afterAttack2 = new ImageIcon("path").getImage();
+                Image uhuy2 = null;
+                if (monsterPlayer instanceof AirType) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff.gif").getImage();
+                } else if (monsterPlayer instanceof WaterType) {
+                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee.gif").getImage();
+                } else if (monsterPlayer instanceof EarthType) {
+                    uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1.gif").getImage();
+                } else if (monsterPlayer instanceof FireType) {
+                    uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
+                } else if (monsterPlayer instanceof IceType) {
+                    uhuy2 = new ImageIcon("asset/Elemental/Ice_Explosion_Effect.gif").getImage();
+                }
+                Image afterAttack2 = new ImageIcon("asset/BattleEffect/bam.gif").getImage();
                 int scaledWidth2 = 200;
                 int scaledHeight2 = 200;
 
@@ -1354,8 +1363,21 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
                 }
                 break;
             case 3:
-            Image uhuy3 = new ImageIcon("path").getImage();
-            Image afterAttack3 = new ImageIcon("path").getImage();
+            Image uhuy3 = null;
+
+            if (monsterPlayer instanceof AirType) {
+                uhuy3 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff.gif").getImage();
+            } else if (monsterPlayer instanceof WaterType) {
+                uhuy3 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee.gif").getImage();
+            } else if (monsterPlayer instanceof EarthType) {
+                uhuy3 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1.gif").getImage();
+            } else if (monsterPlayer instanceof FireType) {
+                uhuy3 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
+            } else if (monsterPlayer instanceof IceType) {
+                uhuy3 = new ImageIcon("asset/Elemental/Ice_Explosion_Effect.gif").getImage();
+            }
+
+            Image afterAttack3 = new ImageIcon("asset/BattleEffect/bam.gif").getImage();
             int scaledWidth3 = 200;
             int scaledHeight3 = 200;
 

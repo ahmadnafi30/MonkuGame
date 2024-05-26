@@ -93,7 +93,7 @@ public class Player implements ItemInteract, Battle {
         return inventorySize() >= MAX_CAPACITY;
     }
 
-    private void incrementExp(int amount) {
+    public void incrementExp(int amount) {
         this.exp += amount;
         System.out.println("EXP bertambah " + amount + ", total EXP: " + exp);
         while (exp >= 100) {
