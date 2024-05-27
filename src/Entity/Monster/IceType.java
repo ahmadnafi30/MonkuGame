@@ -25,15 +25,15 @@ public class IceType extends Monster {
     }
 
     public void addChoices() {
-        elementalAttacks.add(new ElementalAttack("Ice Beam", 90, ElementType.ICE, 1));
-        elementalAttacks.add(new ElementalAttack("Hydro Pump", 110, ElementType.ICE, 1));
-        elementalAttacks.add(new ElementalAttack("Blizzard", 120, ElementType.ICE, 1));
-        elementalAttacks.add(new ElementalAttack("Frost Breath", 60, ElementType.ICE, 3));
-        elementalAttacks.add(new ElementalAttack("Icicle Spear", 25, ElementType.ICE, 4));
-        elementalAttacks.add(new ElementalAttack("Avalanche", 60, ElementType.ICE, 2));
-        elementalAttacks.add(new ElementalAttack("Ice Fang", 65, ElementType.ICE, 2));
-        elementalAttacks.add(new ElementalAttack("Icy Wind", 55, ElementType.ICE, 3));
-        elementalAttacks.add(new ElementalAttack("Ice Shard", 40, ElementType.ICE, 3));
+        choices.add(new ElementalAttack("Ice Beam", 90, ElementType.ICE, 1));
+        choices.add(new ElementalAttack("Hydro Pump", 110, ElementType.ICE, 1));
+        choices.add(new ElementalAttack("Blizzard", 120, ElementType.ICE, 1));
+        choices.add(new ElementalAttack("Frost Breath", 60, ElementType.ICE, 3));
+        choices.add(new ElementalAttack("Icicle Spear", 25, ElementType.ICE, 4));
+        choices.add(new ElementalAttack("Avalanche", 60, ElementType.ICE, 2));
+        choices.add(new ElementalAttack("Ice Fang", 65, ElementType.ICE, 2));
+        choices.add(new ElementalAttack("Icy Wind", 55, ElementType.ICE, 3));
+        choices.add(new ElementalAttack("Ice Shard", 40, ElementType.ICE, 3));
     }
 
     public List<ElementalAttack> getChoices() {

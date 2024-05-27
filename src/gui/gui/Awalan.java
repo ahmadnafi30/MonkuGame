@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
@@ -124,7 +125,8 @@ public class Awalan extends JFrame implements ActionListener {
         ButtonWithIcon rhyhornPair = Template.createButtonWithGIF(panelBG,"asset/rhyhorn/rhyhorn.gif" , 140, 140, 460 + 44-75, 250);
         ButtonWithIcon squirtlePair = Template.createButtonWithGIF(panelBG,"asset/squirtle/squirtle.gif" , 140, 140, 620 + 80-75, 250);
         ButtonWithIcon zubatPair = Template.createButtonWithGIF(panelBG, "asset/Zubat/zubat.gif", 140, 140, 620 + 240-75, 250);
-
+        invisibleButton.setEnabled(false);
+        invisibleButton.setVisible(false);
         JButton vanillite = vanillitePair.getButton();
         // ImageIcon vanilliteIcon = vanillitePair.getIcon();
         JButton charmander = charmanderPair.getButton();
@@ -144,7 +146,7 @@ public class Awalan extends JFrame implements ActionListener {
         charmander.setVisible(true);
         rhyhorn.setVisible(true);
         zubat.setVisible(true);
-
+        ArrayList<Integer> count = new ArrayList<>();
         String[] skillsAirName = {
             "Gust",
             "Air Slash",
@@ -195,64 +197,94 @@ public class Awalan extends JFrame implements ActionListener {
             "Aqua Tail",
             "Scald"
         };
-
+        System.out.println("total monku : "+count.size());
         vanillite.addActionListener(e -> {
             Monku.player.catchMonster(new IceType("vanillite", 1, 3, "asset/vanillite/vanillite.gif"));
             
             String elemental = skillsIceName[new Random().nextInt(skillsIceName.length)];
-            ((IceType)Monku.player.getMonsters().get(0)).addElementalSkills(elemental);
-            
-            dialogText.next(dialogTextPanel);
-            charmander.setVisible(false);
-            rhyhorn.setVisible(false);
-            squirtle.setVisible(false);
-            zubat.setVisible(false);
-            invisibleButton.setEnabled(true);
+            ((IceType)Monku.player.searchMonsterByName("vanillite")).addElementalSkills(elemental);
+            System.out.println("terpencet");
+            count.add(1);
+            System.out.println("total monku : "+count.size());
+            vanillite.setEnabled(false);
+            if(count.size() == 3){
+                dialogText.next(dialogTextPanel);
+                vanillite.setVisible(false);
+                charmander.setVisible(false);
+                rhyhorn.setVisible(false);
+                squirtle.setVisible(false);
+                zubat.setVisible(false);
+                invisibleButton.setEnabled(true);
+            }
         });
         charmander.addActionListener(e -> {
             Monku.player.catchMonster(new FireType("charmander", 1, 3, "asset/Charmander/charmander.gif"));
             String elemental = skillsFireName[new Random().nextInt(skillsFireName.length)];
-            ((FireType)Monku.player.getMonsters().get(0)).addElementalSkills(elemental);
-            dialogText.next(dialogTextPanel);
-            vanillite.setVisible(false);
-            rhyhorn.setVisible(false);
-            squirtle.setVisible(false);
-            zubat.setVisible(false);
-            invisibleButton.setEnabled(true);
+            ((FireType)Monku.player.searchMonsterByName("charmander")).addElementalSkills(elemental);
+            count.add(1);
+            System.out.println("total monku : "+count.size());
+            charmander.setEnabled(false);
+            if(count.size() == 3){
+                dialogText.next(dialogTextPanel);
+                vanillite.setVisible(false);
+                charmander.setVisible(false);
+                rhyhorn.setVisible(false);
+                squirtle.setVisible(false);
+                zubat.setVisible(false);
+                invisibleButton.setEnabled(true);
+            }
         });
         rhyhorn.addActionListener(e -> {
             Monku.player.catchMonster(new EarthType("rhyhorn", 1, 3, "asset/rhyhorn/rhyhorn.gif"));
             String elemental = skillsEarthName[new Random().nextInt(skillsEarthName.length)];
-            ((EarthType)Monku.player.getMonsters().get(0)).addElementalSkills(elemental);
-            dialogText.next(dialogTextPanel);
-            ((EarthType)Monku.player.getMonsters().get(0)).setLevel(100);
-            vanillite.setVisible(false);
-            charmander.setVisible(false);
-            squirtle.setVisible(false);
-            zubat.setVisible(false);
-            invisibleButton.setEnabled(true);
+            ((EarthType)Monku.player.searchMonsterByName("rhyhorn")).addElementalSkills(elemental);
+            count.add(1);
+            System.out.println("total monku : "+count.size());
+            ((EarthType)Monku.player.searchMonsterByName("rhyhorn")).setLevel(100);
+            rhyhorn.setEnabled(false);
+            if(count.size() == 3){
+                dialogText.next(dialogTextPanel);
+                vanillite.setVisible(false);
+                charmander.setVisible(false);
+                rhyhorn.setVisible(false);
+                squirtle.setVisible(false);
+                zubat.setVisible(false);
+                invisibleButton.setEnabled(true);
+            }
         });
         squirtle.addActionListener(e -> {
             Monku.player.catchMonster(new WaterType("squirtle", 1, 3, "asset/Squirtle/squirtle.gif"));
             String elemental = skillsWaterName[new Random().nextInt(skillsWaterName.length)];
-            ((WaterType)Monku.player.getMonsters().get(0)).addElementalSkills(elemental);
-            dialogText.next(dialogTextPanel);
-            vanillite.setVisible(false);
-            charmander.setVisible(false);
-            rhyhorn.setVisible(false);
-            zubat.setVisible(false);
-            invisibleButton.setEnabled(true);
+            count.add(1);
+            System.out.println("total monku : "+count.size());
+            ((WaterType)Monku.player.searchMonsterByName("squirtle")).addElementalSkills(elemental);
+            squirtle.setEnabled(false);
+            if(count.size() == 3){
+                dialogText.next(dialogTextPanel);
+                vanillite.setVisible(false);
+                charmander.setVisible(false);
+                rhyhorn.setVisible(false);
+                squirtle.setVisible(false);
+                zubat.setVisible(false);
+                invisibleButton.setEnabled(true);
+            }
         });
         zubat.addActionListener(e -> {
             Monku.player.catchMonster(new AirType("zubat", 1, 3, "asset/Zubat/zubat.gif"));
             String elemental = skillsAirName[new Random().nextInt(skillsAirName.length)];
-            ((AirType)Monku.player.getMonsters().get(0)).addElementalSkills(elemental);
-            dialogText.next(dialogTextPanel);
-            vanillite.setVisible(false);
-            charmander.setVisible(false);
-            rhyhorn.setVisible(false);
-            squirtle.setVisible(false);
-            invisibleButton.setEnabled(true);
+            ((AirType)Monku.player.searchMonsterByName("zubat")).addElementalSkills(elemental);
+            count.add(1);
+            System.out.println("total monku : "+count.size());
+            zubat.setEnabled(false);
+            if(count.size() == 3){
+                dialogText.next(dialogTextPanel);
+                vanillite.setVisible(false);
+                charmander.setVisible(false);
+                rhyhorn.setVisible(false);
+                squirtle.setVisible(false);
+                zubat.setVisible(false);
+                invisibleButton.setEnabled(true);
+            }
             System.out.println("zubat");
         });
         panelBG.add(squirtle);

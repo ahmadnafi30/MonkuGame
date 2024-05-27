@@ -822,7 +822,7 @@ public class DungeonGUI extends JFrame {
             checkItem();
             monsterBattle.getAttacked("basic", monsterPlayer, null);
             updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0,
-                    1);
+                    1, null);
             System.out.println("Updating enemy HP panel");
             System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/"
                     + monsterBattle.getCurrentMaxHealthPoint());
@@ -837,10 +837,18 @@ public class DungeonGUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Basic attack button pressed");
-                    monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
+                    String randomSkill = skills[new Random().nextInt(2)];
+                    if (randomSkill.equalsIgnoreCase("elemental")) {
+                        ElementalAttack enemyElementAtt = monsterBattle.getElementalAttacks().get(new Random().nextInt(monsterBattle.getElementalAttacks().size()));
+                        monsterPlayer.getAttacked(randomSkill, monsterPlayer, enemyElementAtt);
+                        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(),
+                            monsterPlayer.getCurrentMaxHealthPoint(), 1, 1, enemyElementAtt.getNama());
+                    } else {
+                        monsterPlayer.getAttacked(randomSkill, monsterPlayer, null);
+                        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(),
+                            monsterPlayer.getCurrentMaxHealthPoint(), 1, 1, null);
+                    }
                     System.out.println("Updating player HP panel");
-                    updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(),
-                            monsterPlayer.getCurrentMaxHealthPoint(), 1, 1);
                     popUp();
                     System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/"
                             + monsterBattle.getCurrentMaxHealthPoint());
@@ -863,14 +871,14 @@ public class DungeonGUI extends JFrame {
             System.out.println("Special attack button pressed");
             monsterBattle.getAttacked("special", monsterPlayer, null);
             updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 1,
-                    2);
+                    2, null);
             System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/"
                     + monsterBattle.getCurrentMaxHealthPoint());
             System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/"
                     + monsterPlayer.getCurrentMaxHealthPoint());
 
             popUp();
-            if (isDead(monsterBattle)){
+            if (isDead(monsterBattle)) {
                 System.out.println("Monster musuh mati " + isDead(monsterBattle));
                 return;
             }
@@ -878,9 +886,17 @@ public class DungeonGUI extends JFrame {
             Timer timer = new Timer(1000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-                    updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(),
-                            monsterPlayer.getCurrentMaxHealthPoint(), 0, 2);
+                    String randomSkill = skills[new Random().nextInt(2)];
+                    if (randomSkill.equalsIgnoreCase("elemental")) {
+                        ElementalAttack enemyElementAtt = monsterBattle.getElementalAttacks().get(new Random().nextInt(monsterBattle.getElementalAttacks().size()));
+                        monsterPlayer.getAttacked(randomSkill, monsterPlayer, enemyElementAtt);
+                        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(),
+                            monsterPlayer.getCurrentMaxHealthPoint(), 1, 1, enemyElementAtt.getNama());
+                    } else {
+                        monsterPlayer.getAttacked(randomSkill, monsterPlayer, null);
+                        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(),
+                            monsterPlayer.getCurrentMaxHealthPoint(), 1, 1, null);
+                    }
                     popUp();
                     if (isDead(monsterPlayer))
                         return;
@@ -897,8 +913,10 @@ public class DungeonGUI extends JFrame {
         eleAttackButton.addActionListener(e -> {
             checkItem();
             String[] elements = new String[monsterPlayer.getElementalAttacks().size()];
+            String[] elementType = new String[monsterPlayer.getElementalAttacks().size()];
             for (int k = 0; k < monsterPlayer.getElementalAttacks().size(); k++) {
                 elements[k] = monsterPlayer.getElementalAttacks().get(k).getNama();
+                elementType[k] = monsterPlayer.getElementalAttacks().get(k).getElement().toString();
             }
             int option = JOptionPane.showOptionDialog(null,
                     "Pilih Elemental Skill Yang Ingin Digunakan", "Pilih Elemental Skill",
@@ -906,7 +924,7 @@ public class DungeonGUI extends JFrame {
             System.out.println("Elemental attack button pressed");
             monsterBattle.getAttacked("elemental", monsterPlayer, monsterPlayer.getElementalAttacks().get(option));
             updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 1,
-                    3);
+                    3, elementType[option]);
             System.out.println("Enemy health point: " + monsterBattle.getHealthPoint() + "/"
                     + monsterBattle.getCurrentMaxHealthPoint());
 
@@ -920,9 +938,17 @@ public class DungeonGUI extends JFrame {
             Timer timer = new Timer(1000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
-                    updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(),
-                            monsterPlayer.getCurrentMaxHealthPoint(), 0, 3);
+                    String randomSkill = skills[new Random().nextInt(2)];
+                    if (randomSkill.equalsIgnoreCase("elemental")) {
+                        ElementalAttack enemyElementAtt = monsterBattle.getElementalAttacks().get(new Random().nextInt(monsterBattle.getElementalAttacks().size()));
+                        monsterPlayer.getAttacked(randomSkill, monsterPlayer, enemyElementAtt);
+                        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(),
+                            monsterPlayer.getCurrentMaxHealthPoint(), 1, 1, enemyElementAtt.getNama());
+                    } else {
+                        monsterPlayer.getAttacked(randomSkill, monsterPlayer, null);
+                        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(),
+                            monsterPlayer.getCurrentMaxHealthPoint(), 1, 1, null);
+                    }
                     System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/"
                             + monsterPlayer.getCurrentMaxHealthPoint());
                     popUp();
@@ -993,9 +1019,9 @@ public class DungeonGUI extends JFrame {
                     Item selectedItem = inventoryItems.get(indeksItem);
                     useItem(selectedItem, turn, player);
                     updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(),
-                            monsterBattle.getCurrentMaxHealthPoint(), 0, 4);
+                            monsterBattle.getCurrentMaxHealthPoint(), 0, 4, null);
                     updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(),
-                            monsterPlayer.getCurrentMaxHealthPoint(), 0, 4);
+                            monsterPlayer.getCurrentMaxHealthPoint(), 0, 4, null);
                     System.out.println("Using item: " + selectedItem.getName());
                     listPanel.setVisible(false);
                     panelBG.remove(listPanel);
@@ -1154,8 +1180,8 @@ public class DungeonGUI extends JFrame {
                 break;
         }
 
-        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, 4);
-        updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(), 0, 4);
+        updateHpPanel(monsterHpPanel, monsterBattle.getHealthPoint(), monsterBattle.getCurrentMaxHealthPoint(), 0, 4,
+                null);
     }
 
     private JPanel createHpPanel(String name, int currentHp, int maxHp, int color, Monster monster) {
@@ -1191,7 +1217,8 @@ public class DungeonGUI extends JFrame {
         return hpPanel;
     }
 
-    private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monsterOrPlayer, int attackType) {
+    private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monsterOrPlayer, int attackType,
+            String elementalType) {
         ImageIcon[] effectIcons = new ImageIcon[2]; // Array untuk menyimpan dua ikon efek
         JLabel effectLabel = new JLabel();
 
@@ -1292,23 +1319,27 @@ public class DungeonGUI extends JFrame {
                 if (monsterPlayer instanceof AirType && monsterOrPlayer == 1) {
                     uhuy2 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
                 } else if (monsterPlayer instanceof WaterType && monsterOrPlayer == 1) {
-                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
+                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif")
+                            .getImage();
                 } else if (monsterPlayer instanceof EarthType && monsterOrPlayer == 1) {
-                    uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
+                    uhuy2 = new ImageIcon("asset/Elemental/rock.gif").getImage();
                 } else if (monsterPlayer instanceof FireType && monsterOrPlayer == 1) {
                     uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
                 } else if (monsterPlayer instanceof IceType && monsterOrPlayer == 1) {
-                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
+                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif")
+                            .getImage();
                 } else if (monsterBattle instanceof AirType && monsterOrPlayer == 0) {
                     uhuy2 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
                 } else if (monsterBattle instanceof WaterType && monsterOrPlayer == 0) {
-                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
+                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif")
+                            .getImage();
                 } else if (monsterBattle instanceof EarthType && monsterOrPlayer == 0) {
-                    uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
+                    uhuy2 = new ImageIcon("asset/Elemental/rock.gif").getImage();
                 } else if (monsterBattle instanceof FireType && monsterOrPlayer == 0) {
                     uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
                 } else if (monsterBattle instanceof IceType && monsterOrPlayer == 0) {
-                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
+                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif")
+                            .getImage();
                 }
                 Image afterAttack2 = new ImageIcon("asset/BattleEffect/bam.gif").getImage();
                 int scaledWidth2 = 200;
@@ -1400,43 +1431,50 @@ public class DungeonGUI extends JFrame {
                 break;
             case 3:
                 Image uhuy3 = null;
-                if (monsterPlayer instanceof AirType && monsterOrPlayer == 1) {
-                    uhuy2 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof WaterType && monsterOrPlayer == 1) {
-                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof EarthType && monsterOrPlayer == 1) {
-                    uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof FireType && monsterOrPlayer == 1) {
-                    uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
-                } else if (monsterPlayer instanceof IceType && monsterOrPlayer == 1) {
-                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterBattle instanceof AirType && monsterOrPlayer == 0) {
-                    uhuy2 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterBattle instanceof WaterType && monsterOrPlayer == 0) {
-                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterBattle instanceof EarthType && monsterOrPlayer == 0) {
-                    uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterBattle instanceof FireType && monsterOrPlayer == 0) {
-                    uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
-                } else if (monsterBattle instanceof IceType && monsterOrPlayer == 0) {
-                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
+                if (elementalType.equalsIgnoreCase("AIR") && monsterOrPlayer == 1) {
+                    uhuy3 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif")
+                            .getImage();
+                } else if (elementalType.equalsIgnoreCase("WATER") && monsterOrPlayer == 1) {
+                    uhuy3 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif")
+                            .getImage();
+                } else if (elementalType.equalsIgnoreCase("EARTH") && monsterOrPlayer == 1) {
+                    uhuy3 = new ImageIcon("asset/Elemental/rock.gif").getImage();
+                } else if (elementalType.equalsIgnoreCase("FIRE") && monsterOrPlayer == 1) {
+                    uhuy3 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
+                } else if (elementalType.equalsIgnoreCase("ICE") && monsterOrPlayer == 1) {
+                    uhuy3 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif")
+                            .getImage();
+                } else if (elementalType.equalsIgnoreCase("AIR") && monsterOrPlayer == 0) {
+                    uhuy3 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif")
+                            .getImage();
+                } else if (elementalType.equalsIgnoreCase("WATER") && monsterOrPlayer == 0) {
+                    uhuy3 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif")
+                            .getImage();
+                } else if (elementalType.equalsIgnoreCase("EARTH") && monsterOrPlayer == 0) {
+                    uhuy3 = new ImageIcon("asset/Elemental/rock.gif").getImage();
+                } else if (elementalType.equalsIgnoreCase("FIRE") && monsterOrPlayer == 0) {
+                    uhuy3 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
+                } else if (elementalType.equalsIgnoreCase("ICE") && monsterOrPlayer == 0) {
+                    uhuy3 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif")
+                            .getImage();
                 }
+
                 int X, Y;
                 if (monsterOrPlayer == 0) { // Player attacks Monster
-                    X = monsterDungeonPanel.getX();
-                    Y = monsterDungeonPanel.getY();
-                } else { // Monster attacks Player
                     X = monsterPlayerPanel.getX();
                     Y = monsterPlayerPanel.getY();
+                } else { // Monster attacks Player
+                    X = monsterDungeonPanel.getX();
+                    Y = monsterDungeonPanel.getY();
                 }
 
                 final JLabel fxLabel = new JLabel();
                 fxLabel.setIcon(new ImageIcon(uhuy3));
                 fxLabel.setBounds(X, Y, fxLabel.getIcon().getIconWidth(),
                         fxLabel.getIcon().getIconHeight());
-                panelBG.add(fxLabel, JLayeredPane.PALETTE_LAYER);
+                panelBG.add(fxLabel);
                 panelBG.revalidate();
-                panelBG.repaint();     
+                panelBG.repaint();
                 Timer timer = new Timer(2000, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -1573,7 +1611,7 @@ public class DungeonGUI extends JFrame {
         player.catchMonster(monster2);
         ((AirType) player.getMonsters().get(1)).addElementalSkills("Gust");
         ((AirType) player.getMonsters().get(1)).addElementalSkills("Air Slash");
-        
+
         player.catchMonster(monster3);
         player.catchMonster(monster4);
         ItemSeller itemSeller = new ItemSeller("p", "p", new HomeBase("p"));

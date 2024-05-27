@@ -30,13 +30,16 @@ public class Player implements ItemInteract, Battle {
     private Locations locationPlayer;
     private String image;
 
-    public void setImage(String s){
+    public void setImage(String s) {
         this.image = s;
     }
 
-    public Player() {}
+    public Player() {
+    }
+
     // constructor buat load game
-    public Player(String name, int level, int exp, Map<Item,Integer> inventory, int coin, ArrayList<Monster> monsters, Duration timePlayed, Instant startTime, Locations locationPlayer, String image) {
+    public Player(String name, int level, int exp, Map<Item, Integer> inventory, int coin, ArrayList<Monster> monsters,
+            Duration timePlayed, Instant startTime, Locations locationPlayer, String image) {
         this.name = name;
         this.level = level;
         this.exp = exp;
@@ -63,22 +66,29 @@ public class Player implements ItemInteract, Battle {
         this.image = image;
     }
 
-    public void enterLocation(Locations enter){
+    public void enterLocation(Locations enter) {
         this.locationPlayer = enter;
     }
 
+    public void getReward(Item reward) {
+        if (inventoryIsFull() || inventorySize() + 1 > MAX_CAPACITY) {
+            System.out.println("Inventory penuh. Tidak bisa mendapatkan item.");
+        } else {
+            inventory.put(reward, inventory.getOrDefault(reward, 0) + 1);
+            System.out.println("Item " + reward.name + " berhasil ditambahkan ke inventory.");
+            printItemDetails(reward);
+        }
+    }
 
-        public void getReward(Item reward) {
-            if (inventoryIsFull() || inventorySize() + 1 > MAX_CAPACITY) {
-                System.out.println("Inventory penuh. Tidak bisa mendapatkan item.");
-            } else {
-                inventory.put(reward, inventory.getOrDefault(reward, 0) + 1);
-                System.out.println("Item " + reward.name + " berhasil ditambahkan ke inventory.");
-                printItemDetails(reward);
+    public Monster searchMonsterByName(String name) {
+        for (Monster monster : monsters) {
+            if (monster.getName().equalsIgnoreCase(name)) {
+                return monster;
             }
         }
-        
-    
+        System.out.println("Monster with name " + name + " not found.");
+        return null;
+    }
 
     public Duration updateTimePlayed() {
         this.timePlayed = Duration.between(this.startTime, Instant.now());
@@ -118,9 +128,9 @@ public class Player implements ItemInteract, Battle {
             System.out.println("Hanya bisa membeli " + availableSpace + " item.");
             return "Hanya bisa membeli " + availableSpace + " item.";
         }
-        if(seller instanceof ItemSeller) {
+        if (seller instanceof ItemSeller) {
             ItemSeller itemSeller = (ItemSeller) seller;
-            if(!itemSeller.hasItem(itembuy)) {
+            if (!itemSeller.hasItem(itembuy)) {
                 BuyException.throwEmptyItemException("Tidak ada item yang tersedia untuk dibeli.");
                 return "Tidak ada item yang tersedia untuk dibeli.";
             }
@@ -129,7 +139,7 @@ public class Player implements ItemInteract, Battle {
             inventory.put(itembuy, inventory.getOrDefault(itembuy, 0) + quantity);
             System.out.println("Item " + itembuy.name + " berhasil dibeli dan ditambahkan ke inventory");
             System.out.println("Sisa koin saat ini: " + coin);
-    
+
             printItemDetails(itembuy);
             incrementExp(5); // Add exp for buying item
             return "Terima kasih telah membeli!";
@@ -178,16 +188,16 @@ public class Player implements ItemInteract, Battle {
         }
     }
 
-    public String printMonster(int i){
+    public String printMonster(int i) {
         String detail = monsters.get(i).displayDetailMonsterCurrentReturn();
         return detail;
     }
 
-    public String getImage(int i){
+    public String getImage(int i) {
         return monsters.get(i).getImage();
     }
 
-    public String getImgBack(int i){
+    public String getImgBack(int i) {
         return monsters.get(i).getImgBack();
     }
 
@@ -197,8 +207,8 @@ public class Player implements ItemInteract, Battle {
         monster.displayDetailMonster();
     }
 
-    public Monster deployMonster(int nomor){
-        if(monsters.isEmpty()) {
+    public Monster deployMonster(int nomor) {
+        if (monsters.isEmpty()) {
             System.out.println("Tidak ada monster yang dapat digunakan.");
         } else {
             monsters.forEach(Monster::displayDetailMonster);
@@ -209,25 +219,23 @@ public class Player implements ItemInteract, Battle {
         return depoloy;
     }
 
-
     // // Method untuk memilih aksi oleh player
     // private int chooseAction() {
-    //     Scanner scanner = new Scanner(System.in);
-    //     System.out.println("Choose your action:");
-    //     System.out.println("1. Basic Attack");
-    //     System.out.println("2. Special Attack");
-    //     System.out.println("3. Elemental Attack");
-    //     System.out.println("4. Use Item");
-    //     System.out.println("5. Flee");
-    //     System.out.print("Enter your choice: ");
-    //     return scanner.nextInt();
+    // Scanner scanner = new Scanner(System.in);
+    // System.out.println("Choose your action:");
+    // System.out.println("1. Basic Attack");
+    // System.out.println("2. Special Attack");
+    // System.out.println("3. Elemental Attack");
+    // System.out.println("4. Use Item");
+    // System.out.println("5. Flee");
+    // System.out.print("Enter your choice: ");
+    // return scanner.nextInt();
     // }
 
-    
     @Override
     public void sellItem(Item itemsell, int quantity, Object buyer) {
         if (inventory.containsKey(itemsell) && inventory.get(itemsell) >= quantity) {
-            if(buyer instanceof ItemSeller) {
+            if (buyer instanceof ItemSeller) {
                 ItemSeller itemSeller = (ItemSeller) buyer;
                 itemSeller.setItemQuantity(itemsell, quantity);
                 itemSeller.setCoin(itemsell.price * quantity);
@@ -261,12 +269,9 @@ public class Player implements ItemInteract, Battle {
     public void elementalAttack(Monster enemy, ElementalAttack elementalAttack) {
     }
 
-    
-
-  
-    public void useItem(Item item ) {
+    public void useItem(Item item) {
         if (inventory.containsKey(item) && inventory.get(item) > 0) {
-            System.out.println("Player " + name + " uses " + item.name + "("+ item.rarity +")" + "!");
+            System.out.println("Player " + name + " uses " + item.name + "(" + item.rarity + ")" + "!");
             inventory.put(item, inventory.get(item) - 1);
         } else {
             System.out.println("Item not available in inventory.");
@@ -277,7 +282,7 @@ public class Player implements ItemInteract, Battle {
     public void flee() {
         for (Item item : inventory.keySet()) {
             if (item instanceof Teleportation) {
-                useItem(item, null, 0 ,null);
+                useItem(item, null, 0, null);
                 System.out.println("Player " + name + " flees from the battle!");
                 return;
             }
@@ -297,27 +302,29 @@ public class Player implements ItemInteract, Battle {
         System.out.println("Coins: " + coin);
         System.out.println("Time Played: " + updateTimePlayed().toMinutes() + " minutes");
         System.out.println("Inventory Size: " + inventorySize() + "/" + MAX_CAPACITY);
-        System.out.println("Monsters: " +  monsters.size());
-    
+        System.out.println("Monsters: " + monsters.size());
+
     }
-    
-    public void printDialogWithNPC(NPC npc){
+
+    public void printDialogWithNPC(NPC npc) {
         System.out.println("Player " + name + " is talking to " + npc.getName() + "!");
         if (npc instanceof ProfessorPokemon) {
-            
-        } else if (npc instanceof ItemSeller) {
-            
-        }
-    } 
 
-    public String playerProperty(){
-        return name + "\n" + level + "\n" + exp + "\n" + coin + "\n" + updateTimePlayed().toMinutes() + "\n" + inventorySize() + "\n" + monsters;
+        } else if (npc instanceof ItemSeller) {
+
+        }
+    }
+
+    public String playerProperty() {
+        return name + "\n" + level + "\n" + exp + "\n" + coin + "\n" + updateTimePlayed().toMinutes() + "\n"
+                + inventorySize() + "\n" + monsters;
     }
 
     // Getters
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
@@ -358,17 +365,18 @@ public class Player implements ItemInteract, Battle {
         return locationPlayer;
     }
 
-    public String getImage(){
+    public String getImage() {
         return image;
     }
 
-    public void setLocation(Locations loc){
+    public void setLocation(Locations loc) {
         this.locationPlayer = loc;
     }
 
     public void setCoin(int coin) {
         this.coin += coin;
     }
+
     @Override
     public void useItem(Item item, Monster enemy, int turn, Player player) {
         // TODO Auto-generated method stub
