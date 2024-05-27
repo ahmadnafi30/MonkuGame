@@ -166,6 +166,8 @@ public class DungeonGUI extends JFrame {
                 }
             }
         });
+
+        
     }
 
     private void loadDetailImage() {
@@ -289,6 +291,7 @@ public class DungeonGUI extends JFrame {
     }
 
     private void addButtons() {
+        Template.stopMusic();
         int buttonWidth = 200;
         int buttonHeight = 200;
     
@@ -738,6 +741,7 @@ public void checkItem(){
 }
 
 private void addBattleButtons() throws IOException {
+    
     
     monsterPlayer = player.deployMonster(indeksMonku);
     BufferedImage bcAttackImage;

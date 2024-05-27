@@ -31,15 +31,13 @@ public class Dungeon extends Locations {
         this.images = images;
         this.guardsImages = guardsImages;
         this.guardsName = guardsName;
+        this.music = music;
     }
 
 
     public String getMusic(){
         return this.music;
     }
-
-
-
     public int monsterLenght(){
         int count = -1;
         for (Monster monster : monsters) {
