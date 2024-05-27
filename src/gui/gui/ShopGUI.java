@@ -21,6 +21,7 @@ public class ShopGUI extends JFrame implements ActionListener {
     private JLabel coin;
 
     public ShopGUI() {
+        Template.stopMusic();
         Monku.player.setLocation(Monku.shop);
         JFrame frame = new JFrame("Monku Games");
         frame.setResizable(false);

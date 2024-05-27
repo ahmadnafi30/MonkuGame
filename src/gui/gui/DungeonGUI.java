@@ -77,6 +77,7 @@ public class DungeonGUI extends JFrame {
 
     public DungeonGUI(Dungeon dungeon, Player player) {
         Template.stopMusic();
+        Template.playMusic(dungeon.getMusic());
         this.dungeon = dungeon;
         this.player = player;
         
@@ -543,8 +544,10 @@ private void setMonsterDungeon(){
 
 public void popUp() {
     if (isDead(monsterBattle)) {
+        Template.stopMusic();
         player.addCoin(15*dungeon.getLevel());
         player.incrementExp(15*dungeon.getLevel());
+        Template.playMusic("asset/Music/Contest_ Winner.wav");
         int buttonWidth = 600;
         int buttonHeight = 300;
         monsterBattle.setHealthPoint(monsterBattle.getCurrentMaxHealthPoint());
@@ -639,6 +642,8 @@ public void popUp() {
         panelBG.setComponentZOrder(buttonBackgroundPanel, 0); 
         panelBG.repaint();
     } else if (isDead(monsterPlayer)) {
+        Template.stopMusic();
+        Template.playMusic("asset/Music/Move Deleted.wav");
         int buttonWidth = 600;
         int buttonHeight = 300;
         monsterBattle.setHealthPoint(monsterBattle.getCurrentMaxHealthPoint());
@@ -1586,7 +1591,7 @@ private JButton createPokemonButton(String image, String details, int i) {
         Item item = new BuffPotion("Jamu Kuat", "COMMON");
         Monster[] monsters = {monster};
         Item[] rewards = {item};
-        Dungeon dungeon = new Dungeon("Mystic Cave", monsters, rewards, 1, "asset/den4zwg-45a7fe9e-d38a-417c-815c-3e56972adf62.jpg", "asset/wizard1.gif", "Sapi");
+        Dungeon dungeon = new Dungeon("Mystic Cave", monsters, rewards, 1, "asset/den4zwg-45a7fe9e-d38a-417c-815c-3e56972adf62.jpg", "asset/wizard1.gif", "Sapi", "asset/Music/Hearthome City (Night).wav");
         Player player = new Player("Hero", dungeon, "asset/wizard.gif");
         monster2.setAttackPower(900);
         player.catchMonster(monster);

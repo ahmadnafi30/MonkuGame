@@ -15,8 +15,9 @@ public class Dungeon extends Locations {
     private String images;
     private String guardsImages;
     private String guardsName;
+    private String music;
 
-    public Dungeon(String locationName, Monster[] monsters, Item[] rewards, int level, String images, String guardsImages, String guardsName) {
+    public Dungeon(String locationName, Monster[] monsters, Item[] rewards, int level, String images, String guardsImages, String guardsName, String music) {
         super(locationName);
         this.monsters = new ArrayList<>();
         for (Monster monster : monsters) {
@@ -30,6 +31,11 @@ public class Dungeon extends Locations {
         this.images = images;
         this.guardsImages = guardsImages;
         this.guardsName = guardsName;
+    }
+
+
+    public String getMusic(){
+        return this.music;
     }
 
 
