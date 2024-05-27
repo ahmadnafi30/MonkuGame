@@ -98,7 +98,7 @@ public class DungeonGUI extends JFrame {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        Template.showNameLoc(dungeon, panelBG, 30, 700, 900, 340, 10);
+        Template.showNameLoc(dungeon, panelBG, 30, 700, 900, 260, 10);
         loadDetailImage();
         try {
             buttonBackgroundImage = ImageIO.read(new File("asset/text-box.png"));
@@ -816,12 +816,12 @@ private void addBattleButtons() throws IOException {
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
         popUp();
         System.out.println("Monster musuh mati "+isDead(monsterBattle));
-        if(isDead(monsterBattle)) return;
-
+        
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Basic attack button pressed");
+                if(isDead(monsterPlayer)) return;
                 monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
                 System.out.println("Updating player HP panel");
                 updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),1,1);
@@ -831,9 +831,12 @@ private void addBattleButtons() throws IOException {
             }
         } 
         );    
-        timer.start();
-        timer.setRepeats(false);
-        if(isDead(monsterPlayer)) return;
+        if(!isDead(monsterBattle)){ 
+            timer.start();
+            timer.setRepeats(false);
+        } else{
+            timer.stop();
+        }
             
     // bcAttackButton.setEnabled(false);
         
@@ -849,21 +852,24 @@ private void addBattleButtons() throws IOException {
         System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
 
         popUp();
-        if(isDead(monsterBattle))return;
         
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(isDead(monsterPlayer))return;
                 monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
                 updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(),0,2);
                 popUp();
-                if(isDead(monsterPlayer))return;
                 System.out.println("2Enemy health point: " + monsterBattle.getHealthPoint() + "/" + monsterBattle.getCurrentMaxHealthPoint());
                 System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
             }
         });
-        timer.start();
-        timer.setRepeats(false);
+        if(!isDead(monsterBattle)){
+            timer.start();
+            timer.setRepeats(false);
+        } else{
+            timer.stop();
+        }
     });
 
 
@@ -898,20 +904,23 @@ private void addBattleButtons() throws IOException {
                         panelBG.revalidate();
                         panelBG.repaint();
                         popUp();
-
-                        if (isDead(monsterBattle)) return;
+                        
                         
                         Timer timer = new Timer(1000, new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
+                                if (isDead(monsterPlayer)) return;
                                 monsterPlayer.getAttacked(skills[new Random().nextInt(2)], monsterPlayer, null);
                                 updateHpPanel(playerHpPanel, monsterPlayer.getHealthPoint(), monsterPlayer.getCurrentMaxHealthPoint(), 0, 3);
                                 System.out.println("Monku health point: " + monsterPlayer.getHealthPoint() + "/" + monsterPlayer.getCurrentMaxHealthPoint());
                                 popUp();
-                                if (isDead(monsterPlayer)) return;
-                    }});
-                        timer.start();
-                        timer.setRepeats(false);
+                            }});
+                        if (!isDead(monsterBattle)){ 
+                            timer.start();
+                            timer.setRepeats(false);
+                        } else{
+                            timer.stop();
+                        }
                     } else if (option == JOptionPane.CANCEL_OPTION) {
                         panelBG.remove(scrollPane);
                         panelBG.revalidate();
@@ -1277,17 +1286,28 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
             break;
             case 2:
                 Image uhuy2 = null;
-                if (monsterPlayer instanceof AirType) {
+                if (monsterPlayer instanceof AirType && monsterOrPlayer == 1) {
                     uhuy2 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof WaterType) {
+                } else if (monsterPlayer instanceof WaterType && monsterOrPlayer == 1) {
                     uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof EarthType) {
+                } else if (monsterPlayer instanceof EarthType && monsterOrPlayer == 1) {
                     uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof FireType) {
+                } else if (monsterPlayer instanceof FireType && monsterOrPlayer == 1) {
                     uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
-                } else if (monsterPlayer instanceof IceType) {
+                } else if (monsterPlayer instanceof IceType && monsterOrPlayer == 1) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof AirType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof WaterType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof EarthType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof FireType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
+                } else if (monsterBattle instanceof IceType && monsterOrPlayer == 0) {
                     uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
                 }
+
                 Image afterAttack2 = new ImageIcon("asset/BattleEffect/bam.gif").getImage();
                 int scaledWidth2 = 200;
                 int scaledHeight2 = 200;
@@ -1375,17 +1395,27 @@ private void updateHpPanel(JPanel hpPanel, int currentHp, int maxHp, int monster
                 break;
             case 3:
             Image uhuy3 = null;
-                if (monsterPlayer instanceof AirType) {
-                    uhuy3 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof WaterType) {
-                    uhuy3 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof EarthType) {
-                    uhuy3 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof FireType) {
-                    uhuy3 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
-                } else if (monsterPlayer instanceof IceType) {
-                    uhuy3 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
-                }
+            if (monsterPlayer instanceof AirType && monsterOrPlayer == 1) {
+                uhuy3 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
+            } else if (monsterPlayer instanceof WaterType && monsterOrPlayer == 1) {
+                uhuy3 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
+            } else if (monsterPlayer instanceof EarthType && monsterOrPlayer == 1) {
+                uhuy3 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
+            } else if (monsterPlayer instanceof FireType && monsterOrPlayer == 1) {
+                uhuy3 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
+            } else if (monsterPlayer instanceof IceType && monsterOrPlayer == 1) {
+                uhuy3 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
+            } else if (monsterBattle instanceof AirType && monsterOrPlayer == 0) {
+                uhuy3 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
+            } else if (monsterBattle instanceof WaterType && monsterOrPlayer == 0) {
+                uhuy3 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
+            } else if (monsterBattle instanceof EarthType && monsterOrPlayer == 0) {
+                uhuy3 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
+            } else if (monsterBattle instanceof FireType && monsterOrPlayer == 0) {
+                uhuy3 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
+            } else if (monsterBattle instanceof IceType && monsterOrPlayer == 0) {
+                uhuy3 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
+            }
 
             Image afterAttack3 = new ImageIcon("asset/BattleEffect/bam.gif").getImage();
             int scaledWidth3 = 200;
