@@ -1168,6 +1168,17 @@ public class DungeonGUI extends JFrame {
             item.useItem(monsterBattle, turn, player);
         }
 
+        if(item.getName().equals("Becak")){
+            boolean success = ((Teleportation)item).useItem(player);
+            if(success){
+                panelBG.removeAll();
+                dispose();
+                new DungeonGUI(dungeon, player);
+            } else{
+                return;
+            }
+        }
+
         switch (item.getName()) {
             case "Jamu Kuat":
                 curItem = item;
@@ -1619,6 +1630,7 @@ public class DungeonGUI extends JFrame {
         player.buyItem(itemSeller.getItem("Jamu Kencur", "COMMON"), 3, itemSeller);
         player.buyItem(itemSeller.getItem("Ludah Buzzer", "COMMON"), 3, itemSeller);
         player.buyItem(itemSeller.getItem("Susu Kambing", "RARE"), 3, itemSeller);
+        player.buyItem(itemSeller.getItem("Becak", "EPIC"), 3, itemSeller);
 
         SwingUtilities.invokeLater(() -> new DungeonGUI(dungeon, player));
     }

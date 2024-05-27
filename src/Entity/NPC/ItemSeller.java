@@ -43,7 +43,9 @@ public class ItemSeller extends NPC implements ItemInteract {
         inventory.put(new PoisonPotion("Ludah Buzzer", "COMMON"), 18);
         inventory.put(new PoisonPotion("Ludah Buzzer", "RARE"), 12);
         inventory.put(new PoisonPotion("Ludah Buzzer", "EPIC"), 6);
-        inventory.put(new Teleportation("BECAK", homeBase), 20);
+        inventory.put(new Teleportation("Becak", "COMMON", homeBase), 20);
+        inventory.put(new Teleportation("Becak", "RARE", homeBase), 20);
+        inventory.put(new Teleportation("Becak", "EPIC", homeBase), 20);
     }
     
     public void printInventory() {

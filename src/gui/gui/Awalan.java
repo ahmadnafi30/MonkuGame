@@ -214,6 +214,7 @@ public class Awalan extends JFrame implements ActionListener {
                 rhyhorn.setVisible(false);
                 squirtle.setVisible(false);
                 zubat.setVisible(false);
+                invisibleButton.setVisible(true);
                 invisibleButton.setEnabled(true);
             }
         });
@@ -231,6 +232,7 @@ public class Awalan extends JFrame implements ActionListener {
                 rhyhorn.setVisible(false);
                 squirtle.setVisible(false);
                 zubat.setVisible(false);
+                invisibleButton.setVisible(true);
                 invisibleButton.setEnabled(true);
             }
         });
@@ -249,6 +251,7 @@ public class Awalan extends JFrame implements ActionListener {
                 rhyhorn.setVisible(false);
                 squirtle.setVisible(false);
                 zubat.setVisible(false);
+                invisibleButton.setVisible(true);
                 invisibleButton.setEnabled(true);
             }
         });
@@ -266,6 +269,7 @@ public class Awalan extends JFrame implements ActionListener {
                 rhyhorn.setVisible(false);
                 squirtle.setVisible(false);
                 zubat.setVisible(false);
+                invisibleButton.setVisible(true);
                 invisibleButton.setEnabled(true);
             }
         });
@@ -283,6 +287,7 @@ public class Awalan extends JFrame implements ActionListener {
                 rhyhorn.setVisible(false);
                 squirtle.setVisible(false);
                 zubat.setVisible(false);
+                invisibleButton.setVisible(true);
                 invisibleButton.setEnabled(true);
             }
             System.out.println("zubat");
