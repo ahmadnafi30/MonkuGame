@@ -8,6 +8,7 @@ public abstract class Monster implements Battle, Serializable {
     private String name;
     private int level;
     private int experiencePoint;
+    public static final int EXP_MAX = 100;
     private ElementType[] elementType;
     protected List<ElementalAttack> elementalAttacks;
     private int healthPoint;
@@ -419,10 +420,12 @@ public abstract class Monster implements Battle, Serializable {
     }
 
     // Method to level up
-    public void levelUp(int healthPoint, int attackPower, int spcAttackPower, int elemAttackPower, int defensePower) {
+    public String levelUp(int healthPoint, int attackPower, int spcAttackPower, int elemAttackPower, int defensePower) {
+        if(experiencePoint < EXP_MAX){
+            return "EXP Monster Anda tidak cukup!";
+        }
         if (level % 20 == 0) {
-            System.out.println("Level sudah maksimal. Monster anda sudah bisa berevolusi!");
-            return;
+            return"Level sudah maksimal. Monster anda sudah bisa berevolusi!"; 
         }
         this.healthPoint += healthPoint;
         this.attackPower += attackPower;
@@ -430,7 +433,7 @@ public abstract class Monster implements Battle, Serializable {
         this.elemAttackPower += elemAttackPower;
         this.defensePower += defensePower;
         this.level++;
-        this.experiencePoint = 0;
+        this.experiencePoint -= EXP_MAX;
 
         // Ensure attributes do not exceed their respective maximums
         this.healthPoint = Math.min(this.healthPoint, maxHealthPoint);
@@ -439,6 +442,7 @@ public abstract class Monster implements Battle, Serializable {
         this.elemAttackPower = Math.min(this.elemAttackPower, maxElemAttackPower);
         this.defensePower = Math.min(this.defensePower, maxDefensePower);
         setcurrentMaxHpLevel();
+        return "Level up berhasil!";
     }
 
     public int returnMacHpLevel(){
@@ -471,17 +475,17 @@ public abstract class Monster implements Battle, Serializable {
     
     public String displayDetailMonsterReturn() {
         StringBuilder details = new StringBuilder();
-        details.append("Name: ").append(name).append(" (").append(elementType[0]).append(")\n");
+        details.append("Name: ").append(name).append(" (").append(elementType[0]).append(")\n").append("\nPhase :").append(monsterPhase).append("/").append(maxMonsterPhase).append("\n");
         details.append("Level: ").append(level).append("\n");
         details.append("Experience Point: ").append(experiencePoint).append("\n");
-        details.append("Health Point: ").append(healthPoint).append("\n");
-        details.append("Attack Power: ").append(attackPower).append("\n");
-        details.append("Special Attack Power: ").append(spcAttackPower).append("\n");
-        details.append("Defense Power: ").append(defensePower).append("\n");
+        details.append("Health Point: ").append(healthPoint).append("/").append(currentMaxHealthPoint).append("\n");
+        details.append("Attack Power: ").append(attackPower).append("/").append(maxAttackPower).append("\n");
+        details.append("Special Attack Power: ").append(spcAttackPower).append("/").append(currentMaxSpcAttackPower).append("\n");
+        details.append("Defense Power: ").append(defensePower).append("/").append(maxDefensePower).append("\n");
     
         elementalAttacks.forEach(attribute -> {
             details.append("\n");
-            details.append(attribute.nama).append("\n");
+            details.append(attribute.nama).append("\n").append("(").append(attribute.element).append(")\n");
             details.append("Power: ").append(attribute.power).append("\n");
             details.append("Element: ").append(attribute.element).append("\n");
         });

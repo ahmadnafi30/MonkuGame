@@ -1,4 +1,5 @@
 package Entity.Monster;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,8 +8,23 @@ import Entity.Player.Player;
 
 public class WaterType extends Monster {
     private List<ElementalAttack> choices = new ArrayList<ElementalAttack>();
+
     public WaterType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "WATER", maxMonsterPhase, image);
+        addChoices();
+    }
+
+    public WaterType(String name, int monsterPhase, int maxMonsterPhase) {
+        super(name, monsterPhase, "WATER", maxMonsterPhase);
+        addChoices();
+    }
+
+    public WaterType(Monster waterType) {
+        super(waterType);
+        addChoices();
+    }
+
+    public void addChoices() {
         choices.add(new ElementalAttack("Bubble", 40, ElementType.WATER, 3));
         choices.add(new ElementalAttack("Water Gun", 40, ElementType.WATER, 3));
         choices.add(new ElementalAttack("Aqua Jet", 60, ElementType.WATER, 2));
@@ -18,23 +34,35 @@ public class WaterType extends Monster {
         choices.add(new ElementalAttack("Aqua Tail", 90, ElementType.WATER, 1));
         choices.add(new ElementalAttack("Scald", 80, ElementType.WATER, 2));
     }
-    
 
-    public WaterType(String name, int monsterPhase, int maxMonsterPhase) {
-        super(name, monsterPhase, "WATER", maxMonsterPhase);
-    }
     public List<ElementalAttack> getChoices() {
         return choices;
     }
 
-    public void setElementalSkills(String name){
-
+    public String addElementalSkills(String name) {
+        if (this.elementalAttacks.size() == 2) {
+            return "Elemental attack sudah penuh";
+        }
+        for (int i = 0; i < choices.size(); i++) {
+            if (choices.get(i).getNama().equalsIgnoreCase(name)) {
+                this.elementalAttacks.add(choices.get(i));
+                return choices.get(i).getNama() + " berhasil ditambahkan";
+            }
+        }
+        return "Elemental attack tidak ditemukan";
     }
 
-    public WaterType(Monster waterType) {
-        super(waterType);
+    public String changeElementalSkills(int indexToBeChanged, String nameChange){
+        for (int i = 0; i < choices.size(); i++) {
+            if (choices.get(i).getNama().equalsIgnoreCase(nameChange)) {
+                this.elementalAttacks.set(indexToBeChanged, choices.get(i));
+                System.out.println("Elemental attack berhasil diganti");
+                return elementalAttacks.get(indexToBeChanged) + " berhasil diganti";
+            }
+        }
+        return "Elemental attack tidak ditemukan";
     }
-    
+
     @Override
     public void basicAttack(Monster enemy) {
         enemy.getAttacked("basic", this, null);

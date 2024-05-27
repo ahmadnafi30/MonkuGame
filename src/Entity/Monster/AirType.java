@@ -11,6 +11,23 @@ public class AirType extends Monster {
     List<ElementalAttack> choices = new ArrayList<ElementalAttack>();    
     public AirType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "AIR", maxMonsterPhase, image);
+        addChoices();
+    }
+
+    public AirType(String name, int monsterPhase, int maxMonsterPhase) {
+        super(name, monsterPhase, "AIR", maxMonsterPhase);
+        addChoices();
+    }
+    
+    public AirType(Monster monster){ 
+        super(monster);
+        addChoices();
+    }
+    public List<ElementalAttack> getChoices() {
+        return choices;
+    }
+
+    public void addChoices(){
         choices.add(new ElementalAttack("Gust", 40, ElementType.AIR, 3));
         choices.add(new ElementalAttack("Air Slash", 75, ElementType.AIR, 1));
         choices.add(new ElementalAttack("Hurricane", 110, ElementType.AIR, 1));
@@ -19,8 +36,7 @@ public class AirType extends Monster {
         choices.add(new ElementalAttack("Air Cutter", 60, ElementType.AIR, 2));
         choices.add(new ElementalAttack("Fly", 90, ElementType.AIR, 1));
     }
-
-    public String setElementalSkills(String name){
+    public String addElementalSkills(String name){
         if (this.elementalAttacks.size() == 2) {
             return "Elemental attack sudah penuh";
         }
@@ -34,15 +50,15 @@ public class AirType extends Monster {
         return "Elemental attack tidak ditemukan";
     }
 
-    public List<ElementalAttack> getChoices() {
-        return choices;
-    }
-    public AirType(Monster monster){ 
-        super(monster);
-    }
-
-    public void changeElement(){
-
+    public String changeElementalSkills(int indexToBeChanged, String nameChange){
+        for (int i = 0; i < choices.size(); i++) {
+            if (choices.get(i).getNama().equalsIgnoreCase(nameChange)) {
+                this.elementalAttacks.set(indexToBeChanged, choices.get(i));
+                System.out.println("Elemental attack berhasil diganti");
+                return elementalAttacks.get(indexToBeChanged) + " berhasil diganti";
+            }
+        }
+        return "Elemental attack tidak ditemukan";
     }
 
     @Override

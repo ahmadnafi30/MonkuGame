@@ -11,6 +11,18 @@ public class FireType extends Monster {
     List<ElementalAttack> choices = new ArrayList<ElementalAttack>();
     public FireType(String name, int monsterPhase, int maxMonsterPhase, String image) {
         super(name, monsterPhase, "FIRE", maxMonsterPhase, image);
+        addChoices();
+    }
+    
+    public FireType(String name, int monsterPhase, int maxMonsterPhase) {
+        super(name, monsterPhase, "FIRE", maxMonsterPhase);
+        addChoices();
+    }
+    public FireType(Monster fireType){
+        super(fireType);
+        addChoices();
+    }
+    public void addChoices(){
         choices.add(new ElementalAttack("Ember", 40, ElementType.FIRE, 3));
         choices.add(new ElementalAttack("Flame Thrower", 90, ElementType.FIRE, 1));
         choices.add(new ElementalAttack("Fire Blast", 110, ElementType.FIRE, 1));
@@ -20,12 +32,13 @@ public class FireType extends Monster {
         choices.add(new ElementalAttack("Flame Charge", 50, ElementType.FIRE, 2));
         choices.add(new ElementalAttack("Overheat", 130, ElementType.FIRE, 1));
     }
-
-    public String setElementalSkills(String name){
+    public String addElementalSkills(String name){
+        System.out.println(choices.size());
         if (this.elementalAttacks.size() == 2) {
             return "Elemental attack sudah penuh";
         }
         for (int i = 0; i < choices.size(); i++) {
+            System.out.println(choices.get(i).getNama());
             if (choices.get(i).getNama().equalsIgnoreCase(name)) {
                 this.elementalAttacks.add(choices.get(i));
                 return choices.get(i).getNama() + " berhasil ditambahkan";
@@ -34,11 +47,15 @@ public class FireType extends Monster {
         return "Elemental attack tidak ditemukan";
     }
     
-    public FireType(String name, int monsterPhase, int maxMonsterPhase) {
-        super(name, monsterPhase, "FIRE", maxMonsterPhase);
-    }
-    public FireType(Monster fireType){
-        super(fireType);
+    public String changeElementalSkills(int indexToBeChanged, String nameChange){
+        for (int i = 0; i < choices.size(); i++) {
+            if (choices.get(i).getNama().equalsIgnoreCase(nameChange)) {
+                this.elementalAttacks.set(indexToBeChanged, choices.get(i));
+                System.out.println("Elemental attack berhasil diganti");
+                return elementalAttacks.get(indexToBeChanged) + " berhasil diganti";
+            }
+        }
+        return "Elemental attack tidak ditemukan";
     }
     
     public List<ElementalAttack> getChoices() {

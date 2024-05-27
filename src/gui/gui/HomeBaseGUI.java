@@ -1,12 +1,16 @@
 package gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 import Entity.Locations.HomeBase;
 import Entity.Locations.Shop;
@@ -21,14 +25,64 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
     private ArrayList<Component> dialogues = new ArrayList<>();
     private ArrayList<JButton> monsters = new ArrayList<>();
     private JButton selectedItemButton = null;
-    private int indeksItem = -1;
+    // private int indeksItem = -1;
+    String[] skillsAirName = {
+            "Gust",
+            "Air Slash",
+            "Hurricane",
+            "Aerial Ace",
+            "Sky Attack",
+            "Air Cutter",
+            "Fly"
+    };
+    String[] skillsFireName = {
+            "Ember",
+            "Flame Thrower",
+            "Fire Blast",
+            "Fire Spin",
+            "Heat Wave",
+            "Inferno",
+            "Flame Charge",
+            "Overheat"
+    };
+    String[] skillsEarthName = {
+            "Tackle",
+            "Mud-Slap",
+            "Earthquake",
+            "Dig",
+            "Mud Shot",
+            "Sand Tomb",
+            "Magnitude",
+            "Earth Power"
+    };
+    String[] skillsIceName = {
+            "Ice Beam",
+            "Hydro Pump",
+            "Blizzard",
+            "Frost Breath",
+            "Icicle Spear",
+            "Avalanche",
+            "Ice Fang",
+            "Icy Wind",
+            "Ice Shard"
+    };
+    String[] skillsWaterName = {
+            "Bubble",
+            "Water Gun",
+            "Aqua Jet",
+            "Surf",
+            "Hydro Pump",
+            "Waterfall",
+            "Aqua Tail",
+            "Scald"
+    };
 
     // private JPanel monsterPanel = new JPanel();
     // private JScrollPane scrollPane = new JScrollPane(monsterPanel);
-    
+
     public HomeBaseGUI() {
         Template.stopMusic();
-        //monsterPanel.setLayout(new BoxLayout(monsterPanel, BoxLayout.X_AXIS));
+        // monsterPanel.setLayout(new BoxLayout(monsterPanel, BoxLayout.X_AXIS));
         JFrame frame = new JFrame("Monku Games");
         Monku.player.setLocation(Monku.homeBase);
         frame.setResizable(false);
@@ -38,7 +92,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         ImageIcon icon = new ImageIcon("asset/Screenshot 2024-05-15 192702.png");
         frame.setIconImages(Collections.singletonList(icon.getImage()));
         frame.setVisible(true);
-        //monsterPanel.setVisible(true);
+        // monsterPanel.setVisible(true);
         JPanel panelBG = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -48,7 +102,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 g.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        //panelBG.add(scrollPane);
+        // panelBG.add(scrollPane);
         frame.setContentPane(panelBG);
         Template.showNameLoc(Monku.player.getLocationPlayer(), panelBG, 100, 700, 900, 340, 10);
 
@@ -135,7 +189,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             } else {
                 dialogText.next(dialogTextPanel);
                 removeAllDialogCards(); // This line removes all dialog cards correctly.
-                
+
                 createDialogCard("<html><p style=\"margin-left: 39px\">" + Monku.player.getName()
                         + ",</p><p style=\"margin-left: 39px\">Apa yang ingin</p><p style=\"margin-left: 39px\"> kamu lakukan?</p></html>");
                 dialogText.first(dialogTextPanel); // Reset to the first card
@@ -155,7 +209,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
     }
 
     private void showOptions(JButton invis, JPanel panelBG, JFrame frame) {
-        String[] options = { "Save Game", "Heal Monku", "Evolve Monku", "Cancel" };
+        String[] options = { "Save Game", "Heal Monku", "Evolve Monku", "Level Up Monku", "Cancel" };
         int choice = JOptionPane.showOptionDialog(
                 this,
                 "Apa yang ingin kamu lakukan?",
@@ -191,6 +245,12 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                 dialogText.next(dialogTextPanel);
                 monkuChoicesEvolve(panelBG, frame, invis);
                 break;
+            case 3:
+                createDialogCard(
+                        "<html><p style=\"margin-left: 39px\">Pilih monster yang </p><p style=\"margin-left: 39px\">ingin kamu level up</p></html>");
+                dialogText.next(dialogTextPanel);
+                monkuChoicesLevelUp(panelBG, frame, invis);
+                break;
             default:
                 // Cancel or closed dialog
                 break;
@@ -204,16 +264,120 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         dialogText.next(dialogTextPanel);
     }
 
-    public void monkuChoicesHeal(JPanel panelBG, JFrame frame, JButton invis) {
-        //monsterPanel.setVisible(true);
+    public void monkuChoicesLevelUp(JPanel panelBG, JFrame frame, JButton invis) {
         int middle = 450;
         int i = 0;
-        
+
         for (int j = 0; j < Monku.player.getMonsters().size(); j++) {
             final int curIndex = j;
             Monster monsterPlyr = Monku.player.getMonsters().get(curIndex);
             System.out.println(monsterPlyr.getImage());
-            int pos = middle + (i*100);
+            int pos = middle + (i * 100);
+            ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, monsterPlyr.getImage(), 140, 140,
+                    pos, 250);
+            monsters.add(monsterButton.getButton());
+            i++;
+            JButton monster = monsters.get(curIndex);
+            monster.setText(monsterPlyr.getName());
+            monster.setVisible(true);
+            System.out.println(monster);
+            panelBG.add(monster);
+            panelBG.revalidate();
+            panelBG.repaint();
+            String[] attributes = {
+                    "Health Point",
+                    "Attack Power",
+                    "Special Attack Power",
+                    "Elemental Attack Power",
+                    "Defense Power"
+            };
+            monster.addActionListener(e -> {
+                int desc = JOptionPane.showConfirmDialog(panelBG, monsterPlyr.displayDetailMonsterReturn(), "Detail",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, monsterButton.getIcon());
+                if (desc != JOptionPane.OK_OPTION) {
+                    return;
+                }
+                if (monsterPlyr.getExperiencePoint() < Monster.EXP_MAX) {
+                    createDialogCard(
+                            "<html><p style=\"margin-left: 39px\">Anda tidak punya exp</p><p style=\"margin-left: 39px\">yang cukup!</p></html>");
+                    dialogText.next(dialogTextPanel);
+                    return;
+                }
+                BufferedImage originalImage = null;
+                try {
+                    originalImage = ImageIO.read(new File("asset/lvlup.jpg"));
+                } catch (IOException er) {
+                    er.printStackTrace();
+                    return;
+                }
+
+                // Resize the image
+                int newWidth = 100; // desired width
+                int newHeight = 100; // desired height
+                Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
+                // Create a new ImageIcon with the resized image
+                ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+                int choice = JOptionPane.showOptionDialog(null, "Pilih atribut yang ingin di level up",
+                        "Level Up", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                        resizedIcon, attributes,
+                        attributes[0]);
+                boolean success = Monku.professor.levelUpMonku(Monku.player.getMonsters().get(curIndex),
+                        attributes[choice]);
+                if (!success)
+                    return;
+                Monku.player.getMonsters().get(curIndex).getElementalAttacks().forEach(l -> {
+                    l.setQuantity(l.getMaxQuantity());
+                });
+                JLabel heal = new JLabel();
+                heal.setIcon(new ImageIcon("asset/healEffect.gif"));
+                heal.setOpaque(false);
+                panelBG.add(heal);
+                heal.setBounds(pos, 250, 140, 140);
+                panelBG.setComponentZOrder(heal, 0); // Set heal to be the top component
+                heal.setVisible(true);
+                System.out.println(monsterPlyr.getImage());
+
+                // Timer to remove heal effect after a delay
+                Timer timer = new Timer(2000, event -> {
+                    panelBG.remove(heal);
+                    panelBG.revalidate();
+                    panelBG.repaint();
+                    createDialogCard("<html><p style=\"margin-left: 39px\">" + monsterPlyr.getName()
+                            + "</p><p style=\"margin-left: 39px\">berhasil di level up!</p></html>");
+                    dialogText.next(dialogTextPanel);
+                    invis.setEnabled(true);
+                    monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
+                    monster.setVisible(false);
+                    monsters.forEach(f -> {
+                        f.setVisible(false);
+                    });
+                    int display = JOptionPane.showConfirmDialog(panelBG,
+                            Monku.player.getMonsters().get(curIndex).displayDetailMonsterReturn(),
+                            "Detail", JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE,
+                            new ImageIcon(Monku.player.getMonsters().get(curIndex).getImage()));
+                    monsters.removeAll(monsters);
+                });
+                timer.setRepeats(false);
+                timer.start();
+                monsterPlyr.displayDetailMonster();
+            });
+        }
+        panelBG.revalidate();
+        panelBG.repaint();
+    }
+
+    public void monkuChoicesHeal(JPanel panelBG, JFrame frame, JButton invis) {
+        // monsterPanel.setVisible(true);
+        int middle = 450;
+        int i = 0;
+
+        for (int j = 0; j < Monku.player.getMonsters().size(); j++) {
+            final int curIndex = j;
+            Monster monsterPlyr = Monku.player.getMonsters().get(curIndex);
+            System.out.println(monsterPlyr.getImage());
+            int pos = middle + (i * 100);
             ButtonWithIcon monsterButton = Template.createButtonWithGIF(panelBG, monsterPlyr.getImage(), 140, 140,
                     pos, 250);
             monsters.add(monsterButton.getButton());
@@ -226,12 +390,13 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             panelBG.revalidate();
             panelBG.repaint();
             monster.addActionListener(e -> {
-                int desc = JOptionPane.showConfirmDialog(panelBG, monsterPlyr.displayDetailMonsterReturn(), "Detail", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, monsterButton.getIcon());
+                int desc = JOptionPane.showConfirmDialog(panelBG, monsterPlyr.displayDetailMonsterReturn(), "Detail",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, monsterButton.getIcon());
                 if (desc != JOptionPane.OK_OPTION) {
                     return;
                 }
                 Monku.professor.healPokemon(Monku.player, monsterPlyr.getName());
-                Monku.player.getMonsters().get(curIndex).getElementalAttacks().forEach(l ->{
+                Monku.player.getMonsters().get(curIndex).getElementalAttacks().forEach(l -> {
                     l.setQuantity(l.getMaxQuantity());
                 });
                 JLabel heal = new JLabel();
@@ -304,7 +469,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             int pos = middle + i;
             i += 100;
             JButton monster = monsters.get(j);
-            
+
             // monsterPanel.add(monster);
             // monsterPanel.revalidate();
             // monsterPanel.repaint();
@@ -313,7 +478,8 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
             final int currentIndex = j; // Create a final copy of j
 
             monsters.get(currentIndex).addActionListener(e -> {
-                int desc = JOptionPane.showConfirmDialog(panelBG, monsterPlyr.displayDetailMonsterReturn(), "Detail", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, monsterButton.getIcon());
+                int desc = JOptionPane.showConfirmDialog(panelBG, monsterPlyr.displayDetailMonsterReturn(), "Detail",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, monsterButton.getIcon());
                 if (desc != JOptionPane.OK_OPTION) {
                     return;
                 }
@@ -326,59 +492,112 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                     Monster currentMonster = monsterHolder.getValue();
                     if (success) {
                         Monster evolvedMonster = currentMonster.changeMonsterClass(); // Use the final copy index
-                        Monku.player.getMonsters().set(currentIndex, evolvedMonster); // Update the monster in player's list
+                        System.out.println("evolved : " + evolvedMonster.getClass());
+                        Monku.player.getMonsters().set(currentIndex, evolvedMonster); // Update the monster in player's
+                                                                                      // list
                         monsterHolder.setValue(evolvedMonster); // Update the holder with the new monster
+                        System.out.println("player : " + Monku.player.getMonsters().get(currentIndex).getClass());
 
-                        Monku.player.getMonsters().get(currentIndex).getElementalAttacks().forEach(l ->{
+                        Monku.player.getMonsters().get(currentIndex).getElementalAttacks().forEach(l -> {
                             l.setQuantity(l.getMaxQuantity());
                         });
-                        
-                        JLabel evolve = new JLabel();
-                        System.out.println(choice);
-                        monsterPlyr.changeMonsterClass();
-                        evolve.setIcon(new ImageIcon("asset/evolveFx.gif"));
-                        evolve.setOpaque(false);
-                        panelBG.add(evolve);
-                        evolve.setBounds(pos, 250, 140, 140);
-                        panelBG.setComponentZOrder(evolve, 0); // Set evolve to be the top component
-                        evolve.setVisible(true);
-                        System.out.println(monsterPlyr.getImage());
+
                         System.out.println(monsterPlyr.getClass());
-                        int choice2 = JOptionPane.showOptionDialog(null, "Apakah mau menambah/mengganti elemental skill?", "Pergantian atau Pertambahan", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] { "Pertambahan", "Pergantian" }, "Pertambahan");
+                        int choice2 = JOptionPane.showOptionDialog(null,
+                                "Apakah mau menambah/mengganti elemental skill?", "Pergantian atau Pertambahan",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                                new String[] { "Pertambahan", "Pergantian", "Tetap" }, "Pertambahan");
                         System.out.println(choice);
-                            if (choice2 == 0) {
-                                if(monsterPlyr.getElementalAttacks().size() < 2) {
-                                    JPanel elePanel = new JPanel();
-                                    elePanel.setLayout(new GridLayout(0, 1, 10, 10));
-                                    JScrollPane scrollPanel = new JScrollPane(elePanel);
-                                    scrollPanel.setBounds(385, 230, 200, 200);
-                                    createElementalSkillPanel(elePanel, monsterPlyr, frame);
-                                    panelBG.add(scrollPanel);
-                                    panelBG.revalidate();
-                                    panelBG.repaint();
-                                } else {
-                                    JOptionPane.showMessageDialog(null, "Tidak bisa menambah elemental skill","Gagal", JOptionPane.WARNING_MESSAGE);
-                                }
+                        if (choice2 == 0) {
+                            if (monsterPlyr.getElementalAttacks().size() < 2) {
+                                tambahSkill(choice, Monku.player.getMonsters().get(currentIndex));
+                                JLabel newMonster = new JLabel(new ImageIcon(monsterPlyr.getImage()));
+                                animasiEvolve(monsterPlyr, newMonster, monster, panelBG, invis, pos);
+                                Timer timer1 = new Timer(2500, new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        int display = JOptionPane.showConfirmDialog(panelBG,
+                                                Monku.player.getMonsters().get(currentIndex)
+                                                        .displayDetailMonsterReturn(),
+                                                "Detail", JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE,
+                                                new ImageIcon(Monku.player.getMonsters().get(currentIndex).getImage()));
+                                        if (display == JOptionPane.OK_OPTION) {
+                                            panelBG.remove(newMonster);
+                                            panelBG.revalidate();
+                                            panelBG.repaint();
+                                        } else {
+                                            panelBG.remove(newMonster);
+                                            panelBG.revalidate();
+                                            panelBG.repaint();
+                                        }
+                                    }
+                                });
+                                timer1.start();
+                                timer1.setRepeats(false);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Jumlah Elemental Skills Maksimal 2", "Gagal",
+                                        JOptionPane.WARNING_MESSAGE);
                             }
-                        blink(monster);
-                        
-                        // Timer to remove evolve effect after a delay
-                        Timer timer = new Timer(2000, event -> {
-                            panelBG.remove(evolve);
-                            panelBG.revalidate();
-                            panelBG.repaint();
-                            dialogText.next(dialogTextPanel);
-                            invis.setEnabled(true);
-                            monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
-                            monster.setVisible(false);
-                            System.out.println(Monku.player.getMonsters());
-                            createDialogCard("<html><p style=\"margin-left: 39px\">" + monsterPlyr.getName()
-                                    + "</p><p style=\"margin-left: 39px\">telah berevolusi!</p></html>");
-                        });
-                        timer.setRepeats(false);
-                        timer.start();
-                        monsterPlyr.displayDetailMonster();
-                        monsters.removeAll(monsters);
+                        } else if (choice2 == 1) {
+                            String[] changeChoices = new String[monsterPlyr.getElementalAttacks().size()];
+                            for (int k = 0; k < monsterPlyr.getElementalAttacks().size(); k++) {
+                                changeChoices[k] = monsterPlyr.getElementalAttacks().get(k).getNama();
+                            }
+                            int changedSkill = JOptionPane.showOptionDialog(null,
+                                    "Pilih Elemental Skill yang Mau Diubah", "Pilih Elemental Skill",
+                                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, changeChoices, 0);
+                            gantiSkill(changedSkill, Monku.player.getMonsters().get(currentIndex).getELementTypeStr(),
+                                    Monku.player.getMonsters().get(currentIndex));
+                            JLabel newMonster = new JLabel(new ImageIcon(monsterPlyr.getImage()));
+                            animasiEvolve(monsterPlyr, newMonster, monster, panelBG, invis, pos);
+                            Timer timer1 = new Timer(2500, new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    int display = JOptionPane.showConfirmDialog(panelBG,
+                                            Monku.player.getMonsters().get(currentIndex).displayDetailMonsterReturn(),
+                                            "Detail", JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE,
+                                            new ImageIcon(Monku.player.getMonsters().get(currentIndex).getImage()));
+                                    if (display == JOptionPane.OK_OPTION) {
+                                        panelBG.remove(newMonster);
+                                        panelBG.revalidate();
+                                        panelBG.repaint();
+                                    } else {
+                                        panelBG.remove(newMonster);
+                                        panelBG.revalidate();
+                                        panelBG.repaint();
+                                    }
+                                    dialogText.next(dialogTextPanel);
+                                }
+                            });
+                            timer1.start();
+                            timer1.setRepeats(false);
+                        } else {
+                            JLabel newMonster = new JLabel(new ImageIcon(monsterPlyr.getImage()));
+                            animasiEvolve(monsterPlyr, newMonster, monster, panelBG, invis, pos);
+                            Timer timer1 = new Timer(2500, new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    int display = JOptionPane.showConfirmDialog(panelBG,
+                                            Monku.player.getMonsters().get(currentIndex).displayDetailMonsterReturn(),
+                                            "Detail", JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE,
+                                            new ImageIcon(Monku.player.getMonsters().get(currentIndex).getImage()));
+                                    if (display == JOptionPane.OK_OPTION) {
+                                        panelBG.remove(newMonster);
+                                        panelBG.revalidate();
+                                        panelBG.repaint();
+                                    } else {
+                                        panelBG.remove(newMonster);
+                                        panelBG.revalidate();
+                                        panelBG.repaint();
+                                    }
+                                }
+                            });
+                            timer1.start();
+                            timer1.setRepeats(false);
+                        }
+                        createDialogCard("<html><p style=\"margin-left: 39px\">" + monsterPlyr.getName()
+                                + " telah berevolusi!</p></html>");
+                        dialogText.next(dialogTextPanel);
                     } else {
                         invis.setEnabled(true);
                         monster.setIcon(new ImageIcon(monsterPlyr.getImage()));
@@ -395,145 +614,76 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
         panelBG.repaint();
     }
 
-    private void createElementalSkillPanel(JPanel elePanel, Monster monsterPlyr, JFrame frame) {
-        int index = 0;
-        if(monsterPlyr instanceof AirType){
-            for (ElementalAttack s : ((AirType)monsterPlyr).getChoices()) {
-                JButton button = createElementalButton(s, index++, elePanel);
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        int option = JOptionPane.showConfirmDialog(
-                            null, 
-                            s.detailAttack(), 
-                            s.getNama(), 
-                            JOptionPane.OK_CANCEL_OPTION);
-                        if (option == JOptionPane.OK_OPTION) {}
-                    }
-                });
-                elePanel.add(button);
-                elePanel.revalidate();
-                elePanel.repaint();
-            }
-        } else if(monsterPlyr instanceof FireType){
-            for (ElementalAttack s : ((FireType)monsterPlyr).getChoices()) {
-                JButton button = createElementalButton(s, index++, elePanel);
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        int option = JOptionPane.showConfirmDialog(
-                            null, 
-                            s.detailAttack(), 
-                            s.getNama(), 
-                            JOptionPane.OK_CANCEL_OPTION);
-                        if (option == JOptionPane.OK_OPTION) {}
-                    }
-                });
-                elePanel.add(button);
-                elePanel.revalidate();
-                elePanel.repaint();
-            }
-        } else if(monsterPlyr instanceof WaterType){
-            for (ElementalAttack s : ((WaterType)monsterPlyr).getChoices()) {
-                JButton button = createElementalButton(s, index++, elePanel);
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        int option = JOptionPane.showConfirmDialog(
-                            null, 
-                            s.detailAttack(), 
-                            s.getNama(), 
-                            JOptionPane.OK_CANCEL_OPTION);
-                        if (option == JOptionPane.OK_OPTION) {}
-                    }
-                });
-                elePanel.add(button);
-                elePanel.revalidate();
-                elePanel.repaint();
-            }
-        } else if(monsterPlyr instanceof EarthType){
-            for (ElementalAttack s : ((EarthType)monsterPlyr).getChoices()) {
-                JButton button = createElementalButton(s, index++, elePanel);
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        int option = JOptionPane.showConfirmDialog(
-                            null, 
-                            s.detailAttack(), 
-                            s.getNama(), 
-                            JOptionPane.OK_CANCEL_OPTION);
-                        if (option == JOptionPane.OK_OPTION) {}
-                    }
-                });
-                elePanel.add(button);
-                elePanel.revalidate();
-                elePanel.repaint();
-            }
-        } else if(monsterPlyr instanceof IceType){
-            for (ElementalAttack s : ((IceType)monsterPlyr).getChoices()) {
-                JButton button = createElementalButton(s, index++, elePanel);
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        int option = JOptionPane.showConfirmDialog(
-                            null, 
-                            s.detailAttack(), 
-                            s.getNama(), 
-                            JOptionPane.OK_CANCEL_OPTION);
-                        if (option == JOptionPane.OK_OPTION) {}
-                    }
-                });
-                elePanel.add(button);
-                elePanel.revalidate();
-                elePanel.repaint();
-            }
+    public void gantiSkill(int index, String choice, Monster monsterPlyr) {
+        if (choice.equalsIgnoreCase("AIR")) {
+            System.out.println("Air : " + ((AirType) monsterPlyr).changeElementalSkills(index,
+                    skillsAirName[new Random().nextInt(skillsAirName.length)]));
+        } else if (choice.equalsIgnoreCase("FIRE")) {
+            System.out.println("Fire : " + ((FireType) monsterPlyr).changeElementalSkills(index,
+                    skillsFireName[new Random().nextInt(skillsFireName.length)]));
+        } else if (choice.equalsIgnoreCase("WATER")) {
+            ((WaterType) monsterPlyr).changeElementalSkills(index,
+                    skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+        } else if (choice.equalsIgnoreCase("EARTH")) {
+            ((EarthType) monsterPlyr).changeElementalSkills(index,
+                    skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+        } else if (choice.equalsIgnoreCase("ICE")) {
+            ((IceType) monsterPlyr).changeElementalSkills(index,
+                    skillsIceName[new Random().nextInt(skillsIceName.length)]);
         }
     }
 
-    private JButton createElementalButton(ElementalAttack s, int i, JPanel panel) {
-        JButton elementalButton = new JButton();
-        elementalButton.setLayout(new BorderLayout());
-    
-        String details = s.getNama() + " x"+ s.getQuantity(); 
-        JLabel detailsLabel = new JLabel("<html>" + details.replace("\n", "<br>") + "</html>");
-    
-        elementalButton.add(detailsLabel, BorderLayout.CENTER);
-        elementalButton.setOpaque(false);
-        elementalButton.setBorder(BorderFactory.createEmptyBorder());
-        elementalButton.setContentAreaFilled(false);
-        elementalButton.setFocusable(false);
-    
-        elementalButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                if (selectedItemButton != elementalButton) {
-                    elementalButton.setBackground(Color.LIGHT_GRAY);
-                    elementalButton.setOpaque(true);
-                }
-            }
-    
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                if (selectedItemButton != elementalButton) {
-                    elementalButton.setBackground(null);
-                    elementalButton.setOpaque(false);
-                }
-            }
+    public void tambahSkill(String choice, Monster monsterPlyr) {
+        if (choice.equals("AIR")) {
+            ((AirType) monsterPlyr).addElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+        } else if (choice.equals("FIRE")) {
+            ((FireType) monsterPlyr).addElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+        } else if (choice.equals("WATER")) {
+            ((WaterType) monsterPlyr).addElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+        } else if (choice.equals("EARTH")) {
+            ((EarthType) monsterPlyr).addElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+        } else if (choice.equals("ICE")) {
+            ((IceType) monsterPlyr).addElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+        }
+    }
+
+    public void pilihSkills() {
+        JOptionPane.showInputDialog(null, "Pilih skill", "Pilih Skill", JOptionPane.QUESTION_MESSAGE);
+    }
+
+    private void animasiEvolve(Monster monsterPlyr, JLabel newMonster, JButton monster, JPanel panelBG, JButton invis,
+            int pos) {
+        JLabel evolve = new JLabel();
+        evolve.setIcon(new ImageIcon("asset/evolveFx.gif"));
+        evolve.setOpaque(false);
+        panelBG.add(evolve);
+        evolve.setBounds(pos, 250, 140, 140);
+        panelBG.setComponentZOrder(evolve, 0); // Set evolve to be the top component
+        evolve.setVisible(true);
+        blink(monster);
+        // Timer to remove evolve effect after a delay
+        Timer timer = new Timer(2000, event -> {
+            panelBG.remove(evolve);
+            panelBG.revalidate();
+            panelBG.repaint();
+            dialogText.next(dialogTextPanel);
+            invis.setEnabled(true);
+            monster.setVisible(false);
+            panelBG.remove(monster);
+            panelBG.add(newMonster);
+            panelBG.revalidate();
+            panelBG.repaint();
+            newMonster.setVisible(true);
+            newMonster.setBounds(pos, 250, 140, 140);
+            panelBG.setComponentZOrder(newMonster, 0);
+            System.out.println(Monku.player.getMonsters());
+            createDialogCard("<html><p style=\"margin-left: 39px\">" + monsterPlyr.getName()
+                    + "</p><p style=\"margin-left: 39px\">telah berevolusi!</p></html>");
         });
-    
-        elementalButton.addActionListener(e -> {
-            System.out.println("Elemental button clicked: " + details);
-            indeksItem = i;
-            if (selectedItemButton != null) {
-                selectedItemButton.setBackground(null);
-                selectedItemButton.setOpaque(false);
-            }
-            selectedItemButton = elementalButton;
-            elementalButton.setBackground(Color.WHITE);
-            elementalButton.setOpaque(true);
-        });
-    
-        return elementalButton;
+        timer.setRepeats(false);
+        timer.start();
+        monsterPlyr.displayDetailMonster();
+        monsters.removeAll(monsters);
     }
 
     private boolean isLastCard() {
@@ -632,9 +782,13 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(HomeBaseGUI::new);
         Monku.player.catchMonster(new FireType("Charmander", 2, 3));
-        Monku.player.catchMonster(new EarthType("Squirtle", 1, 3));
+        Monku.player.getMonsters().get(0).setExperiencePoint(1000);
         Monku.player.getMonsters().get(0).setLevel(40);
+        Monku.player.getMonsters().get(0).displayDetailMonster();
+        System.out.println(((FireType) Monku.player.getMonsters().get(0)).addElementalSkills("Ember"));
+        Monku.player.catchMonster(new IceType("Squirtle", 1, 3, "asset/squirtle/squirtle.gif"));
         System.out.println(Monku.player.getMonsters().get(0).getClass());
+        Monku.player.getMonsters().get(1).setLevel(40);
     }
 
 }
