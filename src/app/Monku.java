@@ -112,59 +112,59 @@ public class Monku {
         };
         for(int i = 0; i < 5; i++){
             if(monsters1[i] instanceof AirType){
-                ((AirType)monsters1[i]).setElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+                ((AirType)monsters1[i]).addElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
             } else if(monsters1[i] instanceof FireType){
-                ((FireType)monsters1[i]).setElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+                ((FireType)monsters1[i]).addElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
             } else if(monsters1[i] instanceof EarthType){
-                ((EarthType)monsters1[i]).setElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+                ((EarthType)monsters1[i]).addElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
             } else if(monsters1[i] instanceof IceType){
-                ((IceType)monsters1[i]).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+                ((IceType)monsters1[i]).addElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
             } else if(monsters1[i] instanceof WaterType){
-                ((WaterType)monsters1[i]).setElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+                ((WaterType)monsters1[i]).addElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
             }
             if(monsters2[i] instanceof AirType){
-                ((AirType)monsters2[i]).setElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+                ((AirType)monsters2[i]).addElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
             } else if(monsters2[i] instanceof FireType){
-                ((FireType)monsters2[i]).setElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+                ((FireType)monsters2[i]).addElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
             } else if(monsters2[i] instanceof EarthType){
-                ((EarthType)monsters2[i]).setElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+                ((EarthType)monsters2[i]).addElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
             } else if(monsters2[i] instanceof IceType){
-                ((IceType)monsters2[i]).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+                ((IceType)monsters2[i]).addElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
             } else if(monsters2[i] instanceof WaterType){
-                ((WaterType)monsters2[i]).setElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+                ((WaterType)monsters2[i]).addElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
             }
             if(monsters3[i] instanceof AirType){
-                ((AirType)monsters3[i]).setElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+                ((AirType)monsters3[i]).addElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
             } else if(monsters3[i] instanceof FireType){
-                ((FireType)monsters3[i]).setElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+                ((FireType)monsters3[i]).addElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
             } else if(monsters3[i] instanceof EarthType){
-                ((EarthType)monsters3[i]).setElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+                ((EarthType)monsters3[i]).addElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
             } else if(monsters3[i] instanceof IceType){
-                ((IceType)monsters3[i]).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+                ((IceType)monsters3[i]).addElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
             } else if(monsters3[i] instanceof WaterType){
-                ((WaterType)monsters3[i]).setElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+                ((WaterType)monsters3[i]).addElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
             }
             if(monsters4[i] instanceof AirType){
-                ((AirType)monsters4[i]).setElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+                ((AirType)monsters4[i]).addElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
             } else if(monsters4[i] instanceof FireType){
-                ((FireType)monsters4[i]).setElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+                ((FireType)monsters4[i]).addElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
             } else if(monsters4[i] instanceof EarthType){
-                ((EarthType)monsters4[i]).setElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+                ((EarthType)monsters4[i]).addElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
             } else if(monsters4[i] instanceof IceType){
-                ((IceType)monsters4[i]).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+                ((IceType)monsters4[i]).addElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
             } else if(monsters4[i] instanceof WaterType){
-                ((WaterType)monsters4[i]).setElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+                ((WaterType)monsters4[i]).addElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
             }
             if(monsters5[i] instanceof AirType){
-                ((AirType)monsters5[i]).setElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
+                ((AirType)monsters5[i]).addElementalSkills(skillsAirName[new Random().nextInt(skillsAirName.length)]);
             } else if(monsters5[i] instanceof FireType){
-                ((FireType)monsters5[i]).setElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
+                ((FireType)monsters5[i]).addElementalSkills(skillsFireName[new Random().nextInt(skillsFireName.length)]);
             } else if(monsters5[i] instanceof EarthType){
-                ((EarthType)monsters5[i]).setElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
+                ((EarthType)monsters5[i]).addElementalSkills(skillsEarthName[new Random().nextInt(skillsEarthName.length)]);
             } else if(monsters5[i] instanceof IceType){
-                ((IceType)monsters5[i]).setElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
+                ((IceType)monsters5[i]).addElementalSkills(skillsIceName[new Random().nextInt(skillsIceName.length)]);
             } else if(monsters5[i] instanceof WaterType){
-                ((WaterType)monsters5[i]).setElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
+                ((WaterType)monsters5[i]).addElementalSkills(skillsWaterName[new Random().nextInt(skillsWaterName.length)]);
             }
         }
         SwingUtilities.invokeLater(() -> {

@@ -6,7 +6,7 @@ import Entity.Monster.Monster;
 import Entity.Player.Player;
 
 public class ProfessorPokemon extends NPC {
-
+    
     public ProfessorPokemon(String name, String job) {
         super(name, job);
     }
@@ -26,13 +26,34 @@ public class ProfessorPokemon extends NPC {
         System.out.println("Professor " + name + ": No such monster in your inventory.");
     }
 
+    public boolean levelUpMonku(Monster monster, String lvlUpAttribute){
+        if(monster.getExperiencePoint() < 100) return false;
+        if(lvlUpAttribute.equalsIgnoreCase("Health Point")){
+            monster.levelUp(2, 0, 0, 0, 0);
+            return true;
+        } else if (lvlUpAttribute.equalsIgnoreCase("Attack Power")){
+            monster.levelUp(0, 2, 0, 0, 0);
+            return true;
+        } else if (lvlUpAttribute.equalsIgnoreCase("Special Attack Power")){
+            monster.levelUp(0, 0, 2, 0, 0);
+            return true;
+        } else if (lvlUpAttribute.equalsIgnoreCase("Elemental Attack Power")){
+            monster.levelUp(0, 0, 0, 2, 0);
+            return true;
+        } else if (lvlUpAttribute.equalsIgnoreCase("Defense Power")){
+            monster.levelUp(0, 0, 0, 0, 2);
+            return true;
+        }
+        return false;
+    }
+
     public boolean evolvePokemon(Monster monster, String element) {
         if (monster.evolution(element)) {
             monster = monster.changeMonsterClass();
             System.out.println(monster.getMonster());
             System.out.println("Professor " + name + ": Your monster " + monster.getName() + " has evolved!");
             System.out.println("Apakah kamu ingin mengubah skill element-nya? (y/n)");
-            String answer = "y";
+            String answer = "n";
             if(answer.equals("y")){
                 System.out.println("Mau mengubah element attack yang mana?");
                 switch (monster.getELementTypeStr()) {

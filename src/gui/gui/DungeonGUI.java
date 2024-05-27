@@ -1568,8 +1568,8 @@ private JButton createPokemonButton(String image, String details, int i) {
         monster2.setAttackPower(900);
         player.catchMonster(monster);
         player.catchMonster(monster2);
-        ((AirType)player.getMonsters().get(1)).setElementalSkills("Gust");
-        ((AirType)player.getMonsters().get(1)).setElementalSkills("Air Slash");
+        ((AirType)player.getMonsters().get(1)).addElementalSkills("Gust");
+        ((AirType)player.getMonsters().get(1)).addElementalSkills("Air Slash");
         player.catchMonster(monster3);
         player.catchMonster(monster4);
         ItemSeller itemSeller = new ItemSeller("p", "p",  new HomeBase("p"));
