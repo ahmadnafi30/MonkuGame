@@ -503,6 +503,7 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                         });
 
                         System.out.println(monsterPlyr.getClass());
+
                         int choice2 = JOptionPane.showOptionDialog(null,
                                 "Apakah mau menambah/mengganti elemental skill?", "Pergantian atau Pertambahan",
                                 JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
@@ -513,6 +514,10 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                                 tambahSkill(choice, Monku.player.getMonsters().get(currentIndex));
                                 JLabel newMonster = new JLabel(new ImageIcon(monsterPlyr.getImage()));
                                 animasiEvolve(monsterPlyr, newMonster, monster, panelBG, invis, pos);
+                                monsterPlyr.setAttackPower(monsterPlyr.getCurrentMaxAttackPower());
+                        monsterPlyr.setHealthPoint(monsterPlyr.getCurrentMaxHealthPoint());
+                        monsterPlyr.setSpcAttackPower(monsterPlyr.getCurrentMaxSpcAttackPower());
+                        monsterPlyr.setDefensePower(monsterPlyr.getMaxDefensePower());
                                 Timer timer1 = new Timer(2500, new ActionListener() {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
@@ -543,6 +548,10 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                             for (int k = 0; k < monsterPlyr.getElementalAttacks().size(); k++) {
                                 changeChoices[k] = monsterPlyr.getElementalAttacks().get(k).getNama();
                             }
+                            monsterPlyr.setAttackPower(monsterPlyr.getCurrentMaxAttackPower());
+                        monsterPlyr.setHealthPoint(monsterPlyr.getCurrentMaxHealthPoint());
+                        monsterPlyr.setSpcAttackPower(monsterPlyr.getCurrentMaxSpcAttackPower());
+                        monsterPlyr.setDefensePower(monsterPlyr.getMaxDefensePower());
                             int changedSkill = JOptionPane.showOptionDialog(null,
                                     "Pilih Elemental Skill yang Mau Diubah", "Pilih Elemental Skill",
                                     JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, changeChoices, 0);
@@ -574,6 +583,10 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                         } else {
                             JLabel newMonster = new JLabel(new ImageIcon(monsterPlyr.getImage()));
                             animasiEvolve(monsterPlyr, newMonster, monster, panelBG, invis, pos);
+                            monsterPlyr.setAttackPower(monsterPlyr.getCurrentMaxAttackPower());
+                        monsterPlyr.setHealthPoint(monsterPlyr.getCurrentMaxHealthPoint());
+                        monsterPlyr.setSpcAttackPower(monsterPlyr.getCurrentMaxSpcAttackPower());
+                        monsterPlyr.setDefensePower(monsterPlyr.getMaxDefensePower());
                             Timer timer1 = new Timer(2500, new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
@@ -597,6 +610,10 @@ public class HomeBaseGUI extends JFrame implements ActionListener {
                         }
                         createDialogCard("<html><p style=\"margin-left: 39px\">" + monsterPlyr.getName()
                                 + " telah berevolusi!</p></html>");
+                        monsterPlyr.setAttackPower(monsterPlyr.getCurrentMaxAttackPower());
+                        monsterPlyr.setHealthPoint(monsterPlyr.getCurrentMaxHealthPoint());
+                        monsterPlyr.setSpcAttackPower(monsterPlyr.getCurrentMaxSpcAttackPower());
+                        monsterPlyr.setDefensePower(monsterPlyr.getMaxDefensePower());
                         dialogText.next(dialogTextPanel);
                     } else {
                         invis.setEnabled(true);

@@ -147,6 +147,10 @@ public class MapGUI {
         dungeonEternalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(null, "Ini Dungeon Level 4" + Monku.eternalDungeon, "Yakin?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
+                if(result != JOptionPane.YES_OPTION){
+                    return;
+                }
                 handleButtonPress(dungeonEternalButton, scaledDungeonEternalPressed, frame, () -> new DungeonGUI((Dungeon)Monku.eternalDungeon, Monku.player));
             }
             }
@@ -166,6 +170,10 @@ public class MapGUI {
         dungeonInfernoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(null, "Ini Dungeon Level 2", "Yakin?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
+                if(result != JOptionPane.YES_OPTION){
+                    return;
+                }
                 handleButtonPress(dungeonInfernoButton, scaledDungeonInfernoPressed, frame, () -> new DungeonGUI((Dungeon)Monku.infernoDungeon, Monku.player));
             }
             }
@@ -185,6 +193,10 @@ public class MapGUI {
         dungeonObsidianButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(null, "Ini Dungeon Level 1", "Yakin?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
+                if(result != JOptionPane.YES_OPTION){
+                    return;
+                }
                 handleButtonPress(dungeonObsidianButton, scaledObsidianPressed, frame, () -> new DungeonGUI((Dungeon)Monku.obsidianDungeon, Monku.player));
             }
             }
@@ -204,6 +216,10 @@ public class MapGUI {
         dungeonDoomButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(null, "Ini Dungeon Level 5", "Yakin?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
+                if(result != JOptionPane.YES_OPTION){
+                    return;
+                }
                 handleButtonPress(dungeonDoomButton, scaledDoomPressed, frame, () -> new DungeonGUI((Dungeon)Monku.doomDungeon, Monku.player));
             }
             }
