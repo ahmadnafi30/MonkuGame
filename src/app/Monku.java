@@ -57,6 +57,7 @@ public class Monku {
     public static Locations doomDungeon = new Dungeon("Temple of Doom", monsters5, items, 5, "asset/Dungeon/Temple of Doom lvl5/bg-dampcave.jpg", "asset/Dungeon/Temple of Doom lvl5/cueball-gen1rb.png", "Cueball", "asset/Music/Bicycle.wav\"");
 
     public static void main(String[] args) throws IOException {
+        //player.setCoin(99999);
         String[] skillsAirName = {
             "Gust",
             "Air Slash",
