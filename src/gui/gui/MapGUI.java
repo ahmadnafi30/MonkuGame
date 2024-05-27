@@ -124,8 +124,8 @@ public class MapGUI {
         dungeonCryptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int result = JOptionPane.showConfirmDialog(null, "ini Dungeon Level 3", "Yakin?", JOptionPane.YES_NO_OPTION);
-                if(result == JOptionPane.NO_OPTION){
+                int result = JOptionPane.showConfirmDialog(null, "Ini Dungeon Level 3", "Yakin?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
+                if(result != JOptionPane.YES_OPTION){
                     return;
                 }
                 handleButtonPress(dungeonCryptButton, scaledDungeonCryptPressed, frame, () -> new DungeonGUI((Dungeon)Monku.cryptDungeon, Monku.player));
