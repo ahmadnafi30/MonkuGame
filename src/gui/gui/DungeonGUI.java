@@ -1289,19 +1289,26 @@ public class DungeonGUI extends JFrame {
                 break;
             case 2:
                 Image uhuy2 = null;
-                if (monsterPlayer instanceof AirType) {
+                if (monsterPlayer instanceof AirType && monsterOrPlayer == 1) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterPlayer instanceof WaterType && monsterOrPlayer == 1) {
+                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterPlayer instanceof EarthType && monsterOrPlayer == 1) {
                     uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof WaterType) {
-                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif")
-                            .getImage();
-                } else if (monsterPlayer instanceof EarthType) {
-                    uhuy2 = new ImageIcon("asset/Elemental/rock.gif")
-                            .getImage();
-                } else if (monsterPlayer instanceof FireType) {
+                } else if (monsterPlayer instanceof FireType && monsterOrPlayer == 1) {
                     uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
-                } else if (monsterPlayer instanceof IceType) {
-                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif")
-                            .getImage();
+                } else if (monsterPlayer instanceof IceType && monsterOrPlayer == 1) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof AirType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof WaterType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof EarthType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof FireType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
+                } else if (monsterBattle instanceof IceType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
                 }
                 Image afterAttack2 = new ImageIcon("asset/BattleEffect/bam.gif").getImage();
                 int scaledWidth2 = 200;
@@ -1393,19 +1400,26 @@ public class DungeonGUI extends JFrame {
                 break;
             case 3:
                 Image uhuy3 = null;
-                if (monsterPlayer instanceof AirType) {
-                    uhuy3 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
-                } else if (monsterPlayer instanceof WaterType) {
-                    uhuy3 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif")
-                            .getImage();
-                } else if (monsterPlayer instanceof EarthType) {
-                    uhuy3 = new ImageIcon("asset/Elemental/rock.gif")
-                            .getImage();
-                } else if (monsterPlayer instanceof FireType) {
-                    uhuy3 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
-                } else if (monsterPlayer instanceof IceType) {
-                    uhuy3 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif")
-                            .getImage();
+                if (monsterPlayer instanceof AirType && monsterOrPlayer == 1) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterPlayer instanceof WaterType && monsterOrPlayer == 1) {
+                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterPlayer instanceof EarthType && monsterOrPlayer == 1) {
+                    uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterPlayer instanceof FireType && monsterOrPlayer == 1) {
+                    uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
+                } else if (monsterPlayer instanceof IceType && monsterOrPlayer == 1) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof AirType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8j6ghudk1of61-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof WaterType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/jabre-lionel-skill-02epee-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof EarthType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/00dd8a85ebe872350d8ffda6435903a1-ezgif.com-gif-maker.gif").getImage();
+                } else if (monsterBattle instanceof FireType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/airon-bruce-fire-deliver.gif").getImage();
+                } else if (monsterBattle instanceof IceType && monsterOrPlayer == 0) {
+                    uhuy2 = new ImageIcon("asset/Elemental/8f57aca08fddae0694e444477cbb6dff-ezgif.com-gif-maker.gif").getImage();
                 }
                 int X, Y;
                 if (monsterOrPlayer == 0) { // Player attacks Monster
