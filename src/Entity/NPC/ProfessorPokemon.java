@@ -131,7 +131,7 @@ public class ProfessorPokemon extends NPC {
             System.out.println("Professor " + name + ": This monster cannot evolve.");
             return false;
         }
-        return false;
+        return true;
     }
 
     // @Override

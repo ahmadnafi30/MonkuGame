@@ -393,7 +393,6 @@ public abstract class Monster implements Battle, Serializable {
         case "EARTH":
             return new EarthType(this);
         case "AIR":
-            System.out.println("OI");
             return new AirType(this);
         case "ICE":
             return new IceType(this);
@@ -477,11 +476,31 @@ public abstract class Monster implements Battle, Serializable {
         StringBuilder details = new StringBuilder();
         details.append("Name: ").append(name).append(" (").append(elementType[0]).append(")\n").append("\nPhase :").append(monsterPhase).append("/").append(maxMonsterPhase).append("\n");
         details.append("Level: ").append(level).append("\n");
-        details.append("Experience Point: ").append(experiencePoint).append("\n");
-        details.append("Health Point: ").append(healthPoint).append("/").append(currentMaxHealthPoint).append("\n");
+        details.append("Experience Point: ").append(experiencePoint).append("/").append(EXP_MAX).append("\n");
+        details.append("Health Point: ").append(healthPoint).append("/").append(maxHealthPoint).append("\n");
         details.append("Attack Power: ").append(attackPower).append("/").append(maxAttackPower).append("\n");
-        details.append("Special Attack Power: ").append(spcAttackPower).append("/").append(currentMaxSpcAttackPower).append("\n");
+        details.append("Special Attack Power: ").append(spcAttackPower).append("/").append(maxSpcAttackPower).append("\n");
         details.append("Defense Power: ").append(defensePower).append("/").append(maxDefensePower).append("\n");
+    
+        elementalAttacks.forEach(attribute -> {
+            details.append("\n");
+            details.append(attribute.nama).append("\n").append("(").append(attribute.element).append(")\n");
+            details.append("Power: ").append(attribute.power).append("\n");
+            details.append("Element: ").append(attribute.element).append("\n");
+        });
+    
+        return details.toString();
+    }
+
+    public String displayDetailMonsterCurrentReturn() {
+        StringBuilder details = new StringBuilder();
+        details.append("Name: ").append(name).append(" (").append(elementType[0]).append(")\n").append("\nPhase :").append(monsterPhase).append("/").append(maxMonsterPhase).append("\n");
+        details.append("Level: ").append(level).append("\n");
+        details.append("Experience Point: ").append(experiencePoint).append("/").append(EXP_MAX).append("\n");
+        details.append("Health Point: ").append(healthPoint).append("/").append(currentMaxHealthPoint).append("\n");
+        details.append("Attack Power: ").append(attackPower).append("/").append(currentMaxAttackPower).append("\n");
+        details.append("Special Attack Power: ").append(spcAttackPower).append("/").append(currentMaxSpcAttackPower).append("\n");
+        details.append("Defense Power: ").append(defensePower).append("/").append(currentMaxDefensePower).append("\n");
     
         elementalAttacks.forEach(attribute -> {
             details.append("\n");

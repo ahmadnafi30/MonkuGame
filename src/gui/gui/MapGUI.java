@@ -118,12 +118,16 @@ public class MapGUI {
             }
         });
 
-        Image scaleDungeonCrypt = dungeonCrypt.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
+        Image scaleDungeonCrypt = dungeonCrypt.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
         Image scaledDungeonCryptPressed = dungeonCryptPressed.getScaledInstance(68, 68, Image.SCALE_SMOOTH);
         JButton dungeonCryptButton = new JButton(new ImageIcon(scaleDungeonCrypt));
         dungeonCryptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(null, "ini Dungeon Level 3", "Yakin?", JOptionPane.YES_NO_OPTION);
+                if(result == JOptionPane.NO_OPTION){
+                    return;
+                }
                 handleButtonPress(dungeonCryptButton, scaledDungeonCryptPressed, frame, () -> new DungeonGUI((Dungeon)Monku.cryptDungeon, Monku.player));
             }
             }

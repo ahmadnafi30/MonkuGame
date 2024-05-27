@@ -179,7 +179,7 @@ public class Player implements ItemInteract, Battle {
     }
 
     public String printMonster(int i){
-        String detail = monsters.get(i).displayDetailMonsterReturn();
+        String detail = monsters.get(i).displayDetailMonsterCurrentReturn();
         return detail;
     }
 
